@@ -8,6 +8,8 @@ This is a collection of pieces of code and art that are meant to inspire the par
 * [Vizualization](https://en.wikipedia.org/wiki/Data_visualization)
 * [Software art](https://en.wikipedia.org/wiki/Software_art)
 * [Net art](https://en.wikipedia.org/wiki/Net.art)
+* [History of Computer Art](http://iasl.uni-muenchen.de/links/GCA-VI.3e.html)
+* [Code as performative speech act](https://monoskop.org/images/3/32/Arns_Inke_2005_Code_as_Performative_Speech_Act.pdf)
 
 ## Sonified software
 
