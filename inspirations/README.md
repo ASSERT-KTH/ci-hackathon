@@ -5,7 +5,7 @@ This is a collection of pieces of code and art that are meant to inspire the par
 ## Concepts for embodiment
 
 * [Sonification](https://en.wikipedia.org/wiki/Sonification)
-* [Vizualization] (https://en.wikipedia.org/wiki/Data_visualization)
+* [Vizualization](https://en.wikipedia.org/wiki/Data_visualization)
 * [Software art](https://en.wikipedia.org/wiki/Software_art)
 * [Net art](https://en.wikipedia.org/wiki/Net.art)
 
