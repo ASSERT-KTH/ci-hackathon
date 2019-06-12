@@ -35,6 +35,10 @@ Participants:
 
 We use Travis CI as main source  of data. Travis CI provides different API end-points to  listen to their builds. Reference documentation: <https://docs.travis-ci.com/user/developer/>
 
+### WebSocket
+
+A websocket with Travis builds is available at <ws://travis.durieux.me>. 
+
 ### Travis Listener (NodeJS)
 
 [Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
