@@ -31,14 +31,24 @@ Participants:
 
 ## Technology
 
+### Travis API
+
 We use Travis CI as main source  of data. Travis CI provides different API end-points to  listen to their builds. Reference documentation: <https://docs.travis-ci.com/user/developer/>
 
-In addition, CI artist Thomas Durieux provide a websocket server for easier use. Websocket URL: TODO [documentation]()
+### Travis Listener (NodeJS)
 
-Suggestions:
+[Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
 
-* For visualization, [D3.js](https://d3js.org/), [P5.js](https://p5js.org/) or [Vega Lite](https://vega.github.io/vega-lite/)
-* For sonification, one can use the library [tone.js](https://tonejs.github.io/)
+
+### Visualization
+
+* [D3.js](https://d3js.org/)
+* [P5.js](https://p5js.org/)
+* [Vega Lite](https://vega.github.io/vega-lite/)
+
+### Sonification
+
+For sonification, one can use the library [tone.js](https://tonejs.github.io/)
 
 ## Frequently Asked Questions
 
