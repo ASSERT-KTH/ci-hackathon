@@ -39,6 +39,25 @@ We use Travis CI as main source  of data. Travis CI provides different API end-p
 
 A websocket with Travis builds is available at <ws://travis.durieux.me>. 
 
+PYTHON: `pip3 install websocket_client`
+
+```python
+import websocket
+def on_message(ws, message):
+    print(message)
+
+websocket.enableTrace(True)
+ws = websocket.WebSocketApp("wss://travis.durieux.me/",on_message = on_message)
+ws.run_forever()
+```
+
+JAVASCRIPT
+
+```js
+ws = new WebSocket('wss://travis.durieux.me’);
+ws.onmessage = console.log
+```
+
 ### Travis Listener (NodeJS)
 
 [Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
