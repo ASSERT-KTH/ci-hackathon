@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Click page to activate automatic playing</h2>
+    <script src="tone.js"></script>
+    <script>
+        ws = new WebSocket('wss://travis.durieux.me');
+
+        const size = 8;
+        var synth = new Tone.PolySynth(size, Tone.Synth).toMaster();      
+
+        function music(language){
+            console.log(language);
+
+            switch(language){
+                case 'php':
+                    return ['C4', 3];
+                case 'python':
+                    return ['A4', 1];
+                case 'ruby':
+                    return ['F4', 1];
+                case 'perl':
+                    return ['B4', 1];
+                case 'node_js':
+                    return ['G4', 1];
+                case 'scala':
+                    return ['B2', 2];
+                case 'clojure':
+                    return ['A2', 1];
+                case 'java':
+                    return ['E2', 5];
+                case 'cpp':
+                    return ['G2', 1];
+                case 'go':
+                    return ['B1', 1];
+                case 'rust':
+                    return ['A1', 1];
+                case 'bash':
+                    return ['G1', 1];
+                case 'julia':
+                    return ['C5', 1];
+            }
+
+            return ['D4', 1];
+        }
+
+        let buffer = [];
+
+        ws.onmessage = function(event){
+            //play a middle 'C' for the duration of an 8th note
+
+            const message = JSON.parse(event.data); // 
+
+            const note = music(message.data.config.language);
+
+            buffer.push(note[0]);
+            
+            if(buffer.length == size){
+                synth.triggerAttackRelease(buffer, 3);
+                
+                console.log(buffer);
+                buffer = [];
+            }
+
+
+        }
+    </script>
+</body>
+</html>
