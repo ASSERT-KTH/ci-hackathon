@@ -26,7 +26,7 @@
     <script src="collections.min.js"></script>
     <script>
         ws = new WebSocket('wss://travis.durieux.me');
-        const maxNumberTracks = 2; //maximum number of tracks (CI jobs) that we listen to in parallel
+        const maxNumberTracks = 7; //maximum number of tracks (CI jobs) that we listen to in parallel
         const synthPool = []; //array of synth used as a pool to play CI jobs
         var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
         var playingJob = new List(); //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
@@ -35,7 +35,9 @@
         function start(){
           ws.onmessage = function(event){
             const message = JSON.parse(event.data);
-            handleJob(message)
+            console.log(message);
+            changeSize(message);
+//            handleJob(message);
           }
         }
 
@@ -75,6 +77,7 @@
           for( var i = 0; i < synthPool.length; i++){
             if(synthPool[i][1] === sha){
               synthPool[i][0].triggerRelease();
+              synthPool[i][0].triggerAttackRelease('F#3','4n');
               synthPool[i][1] = "no sha";
               document.write("<p>".concat("Synth ").concat(i).concat(" is released from job ").concat(sha).concat("</p>"));
             }
@@ -95,11 +98,15 @@
               console.log(message);
           }
           else{
-            if (playingJob.has(message.data.commit.sha)&&   (message.data.state==="finished" || message.data.state==="errored" || message.data.state==="failed" || message.data.state==="passed")){
+            if (playingJob.has(message.data.commit.sha) &&   (message.data.state==="finished" || message.data.state==="errored" || message.data.state==="failed" || message.data.state==="passed")){
               stopPlayJob(message);
               globalCount = globalCount + 1;
             }
+            else if (playingJob.has(message.data.commit.sha)) {
+              document.write("<p>".concat(message.data.commit.sha).concat(" is updated to ").concat(message.data.state).concat("</p>"));
+            }
           }
+        }
 
           function playJob(message){
             //add the job in the list of jobs being played
@@ -158,8 +165,19 @@
             return 'D4';
           }
 
+          function changeSize(message){
+            const diffURL = message.data.commit.compare_url.concat(".diff");
+            console.log(diffURL);
+            fetch(diffURL, { mode: 'no-cors'})
+            .then(function(data){
+              console.log(data);
+            })
+            .catch(function(error) {
+              console.log("could not fetch diff for ".concat(message.data.commit.sha));
+            });
+          }
 
-        }
+
     </script>
 </body>
 </html>
