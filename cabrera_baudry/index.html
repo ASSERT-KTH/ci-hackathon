@@ -42,7 +42,17 @@
         function initSynthPool() {
           for( var i = 0; i < maxNumberTracks; i++){
             synthPool[i] = [];
-            synthPool[i][0] = new Tone.Synth().toMaster();
+            synthPool[i][0] = new Tone.Synth({
+              oscillator: {
+                type: 'triangle8'
+              },
+              envelope: {
+                attack: 2,
+                decay: 1,
+                sustain: 0.4,
+                release: 4
+              }
+            }).toMaster();
             synthPool[i][1] = "no sha"; // each synth is initially available
             console.log(synthPool[i][0]);
             console.log(synthPool[i][1]);
