@@ -41,7 +41,7 @@ def build_id_consumer():
             if passed_count == 0:
                 logging.info("passed_count: %d, total failure!"%passed_count)
                 action("Left Left Left", 100, 0.1)
-                action("Down+Left Down+Left+KP_1", 35, 3)
+                action("Down+Right Down+Left+KP_1", 35, 3)
             elif passed_count == 1:
                 logging.info("passed_count: %d, big failure!"%passed_count)
                 action("Left Left Left", 100, 0.1)
@@ -61,7 +61,7 @@ def build_id_consumer():
             elif passed_count == 5:
                 logging.info("passed_count: %d, total success!"%passed_count)
                 action("d d d", 100, 0.1)
-                action("s+d s+a+u", 35, 3)
+                action("s+d s+a+u", 35, 4)
         else:
             action("d d d", 100, 0)
             action("Left Left Left", 100, 0)
@@ -88,10 +88,8 @@ def main():
     if len(target_window) > 0:
         WINDOW_ID = int(target_window)
         code = subprocess.call('xdotool windowactivate %d'%WINDOW_ID, shell=True)
-        time.sleep(1)
-        
-        action("d d d", 100, 0)
-        action("Left Left Left", 100, 0)
+
+        time.sleep(8) # wait for the start scene to be finished
 
         websocket_thread = threading.Thread(target=websocket_listener)
         build_id_thread = threading.Thread(target=build_id_consumer)
