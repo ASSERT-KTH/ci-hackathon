@@ -33,6 +33,11 @@ A short video to show such an interesting fight:
 
 The script is written in Python2. Thanks to the nice Travis builds websocket provided by Thomas Durieux, all Travis build events are fetched regularly. Then all `job_finished` events are added into a queue. Another subthread picks 5 builds from the queue every time, then calculates fighters' action based on the rules above. These actions are sent to the game emulator by another subthread. During my testing, KOF-97 is running in a [Wine](https://www.winehq.org/) environment.
 
+Dependencies:  
+- `pip install websocket_client`  
+- `sudo apt-get install xdotool`
+
+
 ## One More Thing
 
 This is just a visualization idea about Travis CI data. No matter a job is `passed` or not, it helps developers to test their project. So don't take the fighting result seriously, just enjoy a KOF-97 fight controlled by CI data :)
