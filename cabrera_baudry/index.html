@@ -9,63 +9,121 @@
 <body>
     <h2>Click page to activate automatic playing</h2>
     <script src="tone.js"></script>
+    <script src="collections.min.js"></script>
     <script>
         ws = new WebSocket('wss://travis.durieux.me');
+        const maxNumberTracks = 8; //maximum number of tracks (CI jobs) that we listen to in parallel
+        const synthPool = []; //array of synth used as a pool to play CI jobs
+        var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
+        var playingJob = new List(); //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
 
-        const size = 8;
-        var synth = new Tone.PolySynth(size, Tone.Synth).toMaster();      
-
-        function music(language){
-            console.log(language);
-
-            switch(language){
-                case 'php':
-                    return ['C4', 3];
-                case 'python':
-                    return ['A4', 1];
-                case 'ruby':
-                    return ['F4', 1];
-                case 'perl':
-                    return ['B4', 1];
-                case 'node_js':
-                    return ['G4', 1];
-                case 'scala':
-                    return ['B2', 2];
-                case 'clojure':
-                    return ['A2', 1];
-                case 'java':
-                    return ['E2', 5];
-                case 'cpp':
-                    return ['G2', 1];
-                case 'go':
-                    return ['B1', 1];
-                case 'rust':
-                    return ['A1', 1];
-                case 'bash':
-                    return ['G1', 1];
-                case 'julia':
-                    return ['C5', 1];
-            }
-
-            return ['D4', 1];
+        window.onload = initSynthPool;
+        ws.onmessage = function(event){
+            const message = JSON.parse(event.data);
+            handleJob(message)
         }
 
-        let buffer = [];
+        function initSynthPool() {
+          for( var i = 0; i < maxNumberTracks; i++){
+            synthPool[i] = [];
+            synthPool[i][0] = new Tone.Synth().toMaster();
+            synthPool[i][1] = "no sha"; // each synth is initially available
+            console.log(synthPool[i][0]);
+            console.log(synthPool[i][1]);
+          }
+        }
 
-        ws.onmessage = function(event){
-            //play a middle 'C' for the duration of an 8th note
+        function assignSynth(sha) {
+          console.log("look for a synth");
+          for( var i = 0; i < synthPool.length; i++){
+            if(synthPool[i][1] === "no sha"){
+              synthPool[i][1] = sha;
+              document.write("<p>".concat("Synth ").concat(i).concat(" is assigned to job ").concat(sha).concat("</p>"));
+              return synthPool[i][0];
+            }
+          }
+        }
 
-            const message = JSON.parse(event.data); // 
+        function releaseSynth(sha) {
+          console.log("release a synth");
+          for( var i = 0; i < synthPool.length; i++){
+            if(synthPool[i][1] === sha){
+              synthPool[i][1] = "no sha";
+              document.write("<p>".concat("Synth ").concat(i).concat(" is released from job ").concat(sha).concat("</p>"));
+            }
+          }
+        }
 
-            const note = music(message.data.config.language);
+        function printArray(array){
+          for( var i = 0; i < array.length; i++){
+            console.log(array[i]);
+          }
+        }
 
-            buffer.push(note[0]);
-            
-            if(buffer.length == size){
-                synth.triggerAttackRelease(buffer, 3);
-                
-                console.log(buffer);
-                buffer = [];
+        function handleJob(message){
+            console.log(message.data.state);
+            if (message.data.state==="started" && playingJob.length < maxNumberTracks && !(playingJob.has(message.data.commit.sha))) {
+                playingJob.add(message.data.commit.sha);
+                playJob(message);
+                document.write("<p>".concat(message.data.commit.sha).concat(" starts. We are listening to ").concat(playingJob.length).concat(" sounds</p>"));
+                console.log(message);
+            }
+            else{
+              if (playingJob.has(message.data.commit.sha)&&   (message.data.state==="finished" || message.data.state==="errored" || message.data.state==="failed" || message.data.state==="passed")){
+                playingJob.delete(message.data.commit.sha);
+                releaseSynth(message.data.commit.sha);
+                globalCount = globalCount + 1;
+                document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat("</p>"));
+                document.write("<p> We listened to ".concat(playingJob.length).concat(" sounds</p>"))
+              }
+            }
+
+            function playJob(message){
+              //assign a synth to the sha of the input message
+              const synth = assignSynth(message.data.commit.sha);
+              if (synth != null){
+                document.write("<p>".concat(message.data.commit.sha).concat(" is ready to play").concat("</p>"))
+              } else{
+                document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
+              }
+              console.log(soundForJob(message));
+              synth.triggerAttackRelease(soundForJob(message), '8n');
+              //have the synth triggerAttack on the note that corresponds to the language of the job
+            }
+
+            function soundForJob(message){
+                const lang = message.data.config.language;
+                console.log(lang);
+                switch(lang){
+                    case 'php':
+                        return 'C4';
+                    case 'python':
+                        return 'A4';
+                    case 'ruby':
+                        return 'F4';
+                    case 'perl':
+                        return 'B4';
+                    case 'node_js':
+                        return 'G4';
+                    case 'scala':
+                        return 'B2';
+                    case 'clojure':
+                        return 'A2';
+                    case 'java':
+                        return 'E2';
+                    case 'cpp':
+                        return 'G2';
+                    case 'go':
+                        return 'B1';
+                    case 'rust':
+                        return 'A1';
+                    case 'bash':
+                        return 'G1';
+                    case 'julia':
+                        return 'C5';
+                }
+
+                return 'D4';
             }
 
 
