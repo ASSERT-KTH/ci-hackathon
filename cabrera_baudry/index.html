@@ -5,22 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+      .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      </style>
 </head>
 <body>
-    <h2>Click page to activate automatic playing</h2>
+    <button class="button" onclick="start()" >START!</button>
     <script src="tone.js"></script>
     <script src="collections.min.js"></script>
     <script>
         ws = new WebSocket('wss://travis.durieux.me');
-        const maxNumberTracks = 8; //maximum number of tracks (CI jobs) that we listen to in parallel
+        const maxNumberTracks = 2; //maximum number of tracks (CI jobs) that we listen to in parallel
         const synthPool = []; //array of synth used as a pool to play CI jobs
         var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
         var playingJob = new List(); //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
 
-        window.onload = initSynthPool;
-        ws.onmessage = function(event){
+        window.onload = initSynthPool();
+        function start(){
+          ws.onmessage = function(event){
             const message = JSON.parse(event.data);
             handleJob(message)
+          }
         }
 
         function initSynthPool() {
@@ -48,6 +64,7 @@
           console.log("release a synth");
           for( var i = 0; i < synthPool.length; i++){
             if(synthPool[i][1] === sha){
+              synthPool[i][0].triggerRelease();
               synthPool[i][1] = "no sha";
               document.write("<p>".concat("Synth ").concat(i).concat(" is released from job ").concat(sha).concat("</p>"));
             }
@@ -60,71 +77,76 @@
           }
         }
 
+        //for the moment we consider only two situations: the job starts and we play; the job stops and we stop playing
+        //we should consider more: alter the sound when the job is updated (but not finished); play something different depending on the final state of the job (errored, failed, passed)
         function handleJob(message){
-            console.log(message.data.state);
-            if (message.data.state==="started" && playingJob.length < maxNumberTracks && !(playingJob.has(message.data.commit.sha))) {
-                playingJob.add(message.data.commit.sha);
-                playJob(message);
-                document.write("<p>".concat(message.data.commit.sha).concat(" starts. We are listening to ").concat(playingJob.length).concat(" sounds</p>"));
-                console.log(message);
+          if (message.data.state==="started" && playingJob.length < maxNumberTracks && !(playingJob.has(message.data.commit.sha))) {
+              playJob(message);
+              console.log(message);
+          }
+          else{
+            if (playingJob.has(message.data.commit.sha)&&   (message.data.state==="finished" || message.data.state==="errored" || message.data.state==="failed" || message.data.state==="passed")){
+              stopPlayJob(message);
+              globalCount = globalCount + 1;
             }
-            else{
-              if (playingJob.has(message.data.commit.sha)&&   (message.data.state==="finished" || message.data.state==="errored" || message.data.state==="failed" || message.data.state==="passed")){
-                playingJob.delete(message.data.commit.sha);
-                releaseSynth(message.data.commit.sha);
-                globalCount = globalCount + 1;
-                document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat("</p>"));
-                document.write("<p> We listened to ".concat(playingJob.length).concat(" sounds</p>"))
-              }
-            }
+          }
 
-            function playJob(message){
-              //assign a synth to the sha of the input message
-              const synth = assignSynth(message.data.commit.sha);
-              if (synth != null){
-                document.write("<p>".concat(message.data.commit.sha).concat(" is ready to play").concat("</p>"))
-              } else{
-                document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
-              }
-              console.log(soundForJob(message));
-              synth.triggerAttackRelease(soundForJob(message), '8n');
-              //have the synth triggerAttack on the note that corresponds to the language of the job
+          function playJob(message){
+            //add the job in the list of jobs being played
+            playingJob.add(message.data.commit.sha);
+            //assign a synth to the sha of the input message
+            const synth = assignSynth(message.data.commit.sha);
+            if (synth != null){
+              //have the synth play the soundthat corresponds to the job
+              const sound = soundForJob(message)
+              synth.triggerAttack(sound);
+              document.write("<p>".concat(message.data.commit.sha).concat(" plays ").concat(sound).concat(". We are listening to ").concat(playingJob.length).concat(" sounds</p>"));
+            } else{
+              document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
             }
+          }
 
-            function soundForJob(message){
-                const lang = message.data.config.language;
-                console.log(lang);
-                switch(lang){
-                    case 'php':
-                        return 'C4';
-                    case 'python':
-                        return 'A4';
-                    case 'ruby':
-                        return 'F4';
-                    case 'perl':
-                        return 'B4';
-                    case 'node_js':
-                        return 'G4';
-                    case 'scala':
-                        return 'B2';
-                    case 'clojure':
-                        return 'A2';
-                    case 'java':
-                        return 'E2';
-                    case 'cpp':
-                        return 'G2';
-                    case 'go':
-                        return 'B1';
-                    case 'rust':
-                        return 'A1';
-                    case 'bash':
-                        return 'G1';
-                    case 'julia':
-                        return 'C5';
-                }
+          function stopPlayJob(message){
+            //remove the job from the list of sounds being played
+            playingJob.delete(message.data.commit.sha);
+            //release the synth that was assigned to this job
+            releaseSynth(message.data.commit.sha);
+            document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(playingJob.length).concat(" sounds.</p>"));
+          }
 
-                return 'D4';
+          function soundForJob(message){
+            const lang = message.data.config.language;
+            console.log(lang);
+            switch(lang){
+              case 'php':
+                return 'C4';
+              case 'python':
+                return 'A4';
+              case 'ruby':
+                return 'F4';
+              case 'perl':
+                return 'B4';
+              case 'node_js':
+                return 'G4';
+              case 'scala':
+                return 'B2';
+              case 'clojure':
+                return 'A2';
+              case 'java':
+                return 'E2';
+              case 'cpp':
+                return 'G2';
+              case 'go':
+                return 'B1';
+              case 'rust':
+                return 'A1';
+              case 'bash':
+                return 'G1';
+              case 'julia':
+                return 'C5';
             }
+            return 'D4';
+          }
 
 
         }
