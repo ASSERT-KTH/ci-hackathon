@@ -13,6 +13,7 @@ To participate to the hackathon, simply make a pull-request on this repo.
 Participants:
 
 * Thomas Durieux: [Continuous Integration Rain](https://travis.durieux.me/rain.html) [repo](https://travis-ci.com/tdurieux/travis-listener/)
+* Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
 * Add your name / your team with a pull request :-)
 
 ## Program of October 14 2019
