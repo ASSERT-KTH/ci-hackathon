@@ -15,7 +15,7 @@ Participants:
 - Thomas Durieux: [Continuous Integration Rain](https://travis.durieux.me/rain.html) [repo](https://travis-ci.com/tdurieux/travis-listener/)
 - Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
 - Simone Stefani: sonification with chords (details in folder [stefani](stefani))
-- Javier Cabrera and Benoit Baudry: sonification of CI jobs (details in folder [cabrera_baudry](cabrera_baudry)
+- Javier Cabrera and Benoit Baudry: [the pulse of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/index.html) (details in folder [cabrera_baudry](cabrera_baudry)
 - Add your name / your team with a pull request :-)
 
 ## Program of October 14 2019
