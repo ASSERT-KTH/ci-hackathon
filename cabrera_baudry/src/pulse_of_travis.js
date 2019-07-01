@@ -6,6 +6,8 @@ const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen 
 const synthPool = []; //array of synth used as a pool to play CI jobs
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 var playingJob = {} //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
 
 window.onload = initSynthPool();
 function start() {
@@ -16,6 +18,8 @@ function start() {
         //changeSize(message);
         handleJob(message);
     }
+
+    
 }
 
 function initSynthPool() {
@@ -36,6 +40,8 @@ function initSynthPool() {
         console.log(synthPool[i][0]);
         console.log(synthPool[i][1]);
     }
+
+
 }
 
 function assignSynth(sha) {
@@ -43,7 +49,7 @@ function assignSynth(sha) {
     for (var i = 0; i < synthPool.length; i++) {
         if (synthPool[i][1] === "no sha") {
             synthPool[i][1] = sha;
-            document.write("<p>".concat("Synth ").concat(i).concat(" is assigned to job ").concat(sha).concat("</p>"));
+            //document.write("<p>".concat("Synth ").concat(i).concat(" is assigned to job ").concat(sha).concat("</p>"));
             return synthPool[i][0];
         }
     }
@@ -56,7 +62,7 @@ function releaseSynth(sha) {
             synthPool[i][0].triggerRelease();
             synthPool[i][0].triggerAttackRelease('F#3', '4n');
             synthPool[i][1] = "no sha";
-            document.write("<p>".concat("Synth ").concat(i).concat(" is released from job ").concat(sha).concat("</p>"));
+            //document.write("<p>".concat("Synth ").concat(i).concat(" is released from job ").concat(sha).concat("</p>"));
         }
     }
 }
@@ -79,32 +85,67 @@ function handleJob(message) {
             globalCount = globalCount + 1;
         }
         else if ( message.data.commit.sha in playingJob) {
-            document.write("<p>".concat(message.data.commit.sha).concat(" is updated to ").concat(message.data.state).concat("</p>"));
+            //document.write("<p>".concat(message.data.commit.sha).concat(" is updated to ").concat(message.data.state).concat("</p>"));
         }
     }
 }
 
+function drawCanvas(){
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+
+    for(const key in playingJob){
+
+        const info  = playingJob[key];
+        console.log("drawing canvas", info.starting, info.counter);
+
+        context.moveTo(0, info.starting);
+        context.lineTo(0.1*info.counter, info.starting);
+    }
+
+    context.stroke();
+}
+
 function playJob(message) {
     //add the job in the list of jobs being played
-    playingJob[message.data.commit.sha] = 1;
+    const key = message.data.commit.sha;
+
+    playingJob[key] = {
+        interval: null,
+        counter: 0,
+        starting: 400*Math.random()
+    };
+
+    playingJob[key].interval = setInterval(function() {
+        playingJob[key].counter++;
+        drawCanvas();
+    }, 10);
+
     //assign a synth to the sha of the input message
     const synth = assignSynth(message.data.commit.sha);
     if (synth != null) {
         //have the synth play the soundthat corresponds to the job
         const sound = soundForJob(message)
         synth.triggerAttack(sound);
-        document.write("<p>".concat(message.data.commit.sha).concat(" plays ").concat(sound).concat(". We are listening to ").concat(Object.keys(playingJob).length).concat(" sounds</p>"));
+        //document.write("<p>".concat(message.data.commit.sha).concat(" plays ").concat(sound).concat(". We are listening to ").concat(Object.keys(playingJob).length).concat(" sounds</p>"));
     } else {
-        document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
+        //document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
     }
 }
 
 function stopPlayJob(message) {
     //remove the job from the list of sounds being played
-    delete playingJob[message.data.commit.sha];
+    const key = message.data.commit.sha;
+
+    console.log(key, playingJob[key]);
+    
+    clearInterval(playingJob[key].interval);
+
+    delete playingJob[key];
     //release the synth that was assigned to this job
     releaseSynth(message.data.commit.sha);
-    document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(Object.keys(playingJob).length).concat(" sounds.</p>"));
+    //document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(Object.keys(playingJob).length).concat(" sounds.</p>"));
 }
 
 function soundForJob(message) {
