@@ -1,4 +1,4 @@
-#The Travis CI Documentation
+# The Travis CI Documentation
 
 The Travis websocket provides a stream of information for each Travis Job. This means that there can be several Travis jobs for one specific commit, i.e., there is one job for each configuration.
 Moreover, the websocket also contain different events: “job”, “updated_job”, and “finished_job” it means that you can receive several time the same job from the API.
