@@ -60,7 +60,7 @@ ws = new WebSocket('wss://travis.durieux.me’);
 ws.onmessage = console.log
 ```
 
-More information is available [here](./travis-ws-documation.md).
+More information is available [here](https://github.com/KTH/ci-hackathon/blob/master/ci-ws-documentation.md).
 
 ### Travis Listener (NodeJS)
 
