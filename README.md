@@ -16,6 +16,7 @@ Participants:
 - Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
 - Simone Stefani: sonification with chords (details in folder [stefani](stefani))
 - Javier Cabrera and Benoit Baudry: [the pulse of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/index.html) (details in folder [cabrera_baudry](cabrera_baudry)
+- Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/drum-machine) (details in folder [drum-machine](drum-machine))
 - Add your name / your team with a pull request :-)
 
 ## Program of October 14 2019
