@@ -10,6 +10,7 @@ ws = new WebSocket('wss://travis.durieux.me');
 const maxNumberTracks = 26; //maximum number of tracks (CI jobs) that we listen to in parallel
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 var playingJob = {} //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
+var stoppedJob = {}
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -24,6 +25,7 @@ function start() {
         const message = JSON.parse(event.data);
         console.log(message);
         //changeSize(message);
+        updateJobState(message);
         handleJob(message);
     }
 
@@ -33,7 +35,38 @@ function start() {
 //for the moment we consider only two situations: the job starts and we play; the job stops and we stop playing
 //we should consider more: alter the sound when the job is updated (but not finished); play something different depending on the final state of the job (errored, failed, passed)
 
+function updateJobState(message){
+    const key = message.data.commit.sha;
+
+
+    if(key in playingJob){
+        const state = message.data.state;
+        let color = '#11111111';
+
+        console.log(state);
+
+        switch(state){
+            case "passed":
+                color = '#00ff0011'; // green
+                break;
+            case "errored":
+                color = '#0000ff11'; // blue
+                break;
+            case "finished":
+                color = '#ff440011'; // yellow
+                break;
+            case "failed":
+                color = 'gray'; // gray
+                break;
+        }
+
+        playingJob[key].color = color;
+    }
+}
+
 function handleJob(message) {
+
+    // Update drawing jobs
     if (message.data.state === "started" && Object.keys(playingJob).length <= maxNumberTracks && !(message.data.commit.sha in playingJob)) {
         playJob(message);
         console.log("Started", message);
@@ -51,24 +84,30 @@ function handleJob(message) {
 
 function drawCircle(x, y, radius, context, fillColor, strokeColor){
 
+    if(radius < 1){
+        return;
+    }
+
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    
     context.fillStyle = fillColor;
     context.strokeStyle = strokeColor;
+
     context.fill();
     context.stroke();
 }
 
-function drawCanvas(){
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
+function drawCanvas(jobs){
 
-    for(const key in playingJob){
 
-        const info  = playingJob[key];
+    for(const key in jobs){
+
+        const info  = jobs[key];
         //console.log("drawing canvas", info.starting, info.counter);
 
-       drawCircle(info.starting[0], info.starting[1], info.counter, context, 'white', 'black');
+       drawCircle(info.starting[0], info.starting[1], info.radius, context, info.color, 'transparent');
     
     }
     
@@ -116,7 +155,8 @@ function drawDebug(){
 }
 
 let index = 0;
-let maxSizeWave = 100;
+let maxSizeWave = 40;
+let step = 0.1;
 
 function playJob(message) {
     //add the job in the list of jobs being played
@@ -127,7 +167,9 @@ function playJob(message) {
     index = (index + 1)%maxNumberTracks;
     playingJob[key] = {
         interval: null,
-        counter: 0,
+        radius: 0,
+        direction: 1,
+        color: '#11111111',
         index: newIndex,
         starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
         playingNote: '',
@@ -145,8 +187,32 @@ function playJob(message) {
     };
 
     playingJob[key].interval = setInterval(function() {
-        playingJob[key].counter = (playingJob[key].counter + 1)%maxSizeWave;
-        drawCanvas();
+
+        let radius = playingJob[key].radius;
+        let direction = playingJob[key].direction;
+
+        if(direction == 1){
+            radius += step;
+
+            if(radius  >= maxSizeWave){
+                direction = -1;
+            }
+        }
+        else if(direction == -1){
+            radius -= step;
+
+            if(radius <= 0){
+                direction = 1;
+            }
+        }
+
+        playingJob[key].radius = radius;
+        playingJob[key].direction = direction;
+
+        
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawCanvas(playingJob);
+        drawCanvas(stoppedJob);
     }, 10);
 
 
@@ -170,8 +236,13 @@ function stopPlayJob(message) {
     //remove the job from the list of sounds being played
     const key = message.data.commit.sha;
 
-    console.log(key, playingJob[key]);
+    //console.log(key, playingJob[key]);
     
+    const toDelete = playingJob[key];
+    toDelete.radius = 20;
+
+    stoppedJob[key] = toDelete;
+
     const synth = playingJob[key].synth;
 
     //playing special sound for the end of the job
