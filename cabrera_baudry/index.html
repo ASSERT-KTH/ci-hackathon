@@ -26,13 +26,20 @@
 
         background-color: #4CAF50;
       }
+      .canvas{
+        border: 1px solid black;
+      }
       </style>
 </head>
 <body>
     <button id="start-btn" class="button" >START!</button>
     <button id="stop-btn" class="button" style="display: none" >STOP!</button>
 
-    <canvas id="canvas" width="800" height="400"></canvas>
+    <div style="display:flex; flex-direction: row;">
+
+      <canvas id="canvas" class="canvas" height="400" width="400" ></canvas>
+      <canvas id="debug" class="canvas" height="400" width="400" ></canvas>
+    </div>
 
     <script src='bundle.js'>
     </script>
