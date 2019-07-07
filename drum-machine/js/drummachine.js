@@ -57,7 +57,7 @@ class DrumMachine {
 
     initializeLoop() {
         this.playing = false;
-        this.currentBeatIndex = 0;
+        this.currentBeatIndex = -1;
         this.volume = 10;
     }
 
@@ -69,8 +69,8 @@ class DrumMachine {
         this.currentBeatIndex = fromBeat % this.slotCount;
 
         this.loopInterval = setInterval(() => {
-            this.playBeatsAt(this.currentBeatIndex);
             this.currentBeatIndex = (this.currentBeatIndex + 1) % this.slotCount;
+            this.playBeatsAt(this.currentBeatIndex);
         }, noteDuration);
     }
 
