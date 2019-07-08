@@ -15,6 +15,13 @@ function strToRGB(i){
     return "#" + "00000".substring(0, 6 - c.length) + c;
 }
 
+
+let deviations = 0.03;
+Tone.Transport.bpm.value = 200;
+let maxLiveTime = 10000
+
+let patternLength = 8;
+
 // Deep House Drum Samples from soundpacks.com.
 // https://soundpacks.com/free-sound-packs/deep-house-drum-samples/
 const drumFileNames = {
@@ -210,6 +217,7 @@ const drumFileNames = {
   class Cell {
     constructor() {
       this.color = '#EC407A'
+      this.timeout = null;
       this.full = redom.el('div.full');
       this.parts = [
         redom.el('div.part'),
@@ -228,9 +236,18 @@ const drumFileNames = {
     }
 
     toggle() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
         this.model.active = !this.model.active;
         this.model.probability = 1 - this.model.probability;
         this.update(this.model);
+        if (this.model.active) {
+            this.timeout = setTimeout(() => {
+                this.toggle()
+            }, maxLiveTime);
+        }
     }
   
     update(model) {
@@ -299,15 +316,8 @@ const drumFileNames = {
     return output
   }
   
-  let deviations = 0;
-  let patternLength = 8;
-  let drumCount = 4;
-  let density = 0.5;
-  let bpm = 160;
   let drumPattern = generatePattern(
     patternLength,
-    drumCount,
-    density,
     deviations
   );
   let triggerCounter = 0;
@@ -322,7 +332,7 @@ const drumFileNames = {
     }
   }
   
-  function generatePattern(patternLength, drumCount, density, deviations) {
+  function generatePattern(patternLength, deviations) {
     const activeDrums = [
       _.sample(drumBuffers.bd_kick),
       _.sample(drumBuffers.hat),
@@ -356,10 +366,10 @@ const drumFileNames = {
   function playPart(time, { drums, step }) {
     const renderings = new Map();
     drums.forEach(drum => {
-      const probability = drum.active ? 1 - deviations / 2 : deviations / 2;
-      if (Math.random() < probability) {
-        const delayProbability = deviations / 3;
-        const tripletProbability = deviations / 10;
+      const probability = drum.active ? 1 - deviations / 2 : 0;
+      if (drum.active) {
+        const delayProbability = deviations / 2;
+        const tripletProbability = deviations / 3;
         const isDelayed = Math.random() < delayProbability;
         const isTriplet = !isDelayed && Math.random() < tripletProbability;
         const triggers = isTriplet
@@ -395,7 +405,6 @@ const drumFileNames = {
     }
   }
   
-  Tone.Transport.bpm.value = bpm;
   Tone.Transport.timeSignature = patternLength / 2;
   renderSequencer(drumPattern);
   
@@ -403,7 +412,7 @@ const drumFileNames = {
   part.loop = true;
   
   function regenerate() {
-    drumPattern = generatePattern(patternLength, drumCount, density, deviations);
+    drumPattern = generatePattern(patternLength, deviations);
     drumPattern.forEach(pt => {
       part.at(pt.time, pt);
     });
@@ -421,7 +430,7 @@ const drumFileNames = {
         const cells = getCells()
         const cell = cells[Math.floor(Math.random() * cells.length)]
         cell.toggle()
-        cell.color = strToRGB(job.getLanguage())
+        cell.color = strToRGB(job.commit.message)
     })
     Tone.Transport.start();
     setInterval(() => {
