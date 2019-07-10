@@ -29,17 +29,33 @@
       .canvas{
         border: 1px solid black;
       }
+
+      body{
+        margin: 0;
+        background-color: black;
+      }
+
+      #canvas{
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      #start-btn, #stop-btn{
+        position: fixed;
+        top: 0;
+      }
       </style>
 </head>
 <body>
-    <button id="start-btn" class="button" >START!</button>
-    <button id="stop-btn" class="button" style="display: none" >STOP!</button>
 
     <div style="display:flex; flex-direction: row;">
 
-      <canvas id="canvas" class="canvas" height="400" width="400" ></canvas>
-      <canvas id="debug" class="canvas" height="400" width="400" ></canvas>
+      <canvas id="canvas" class="canvas"  ></canvas>
+      <canvas id="debug" class="canvas"  ></canvas>
     </div>
+    <button id="start-btn" class="button" >START!</button>
+    <button id="stop-btn" class="button" style="display: none" >STOP!</button>
+
 
     <script src='bundle.js'>
     </script>

@@ -2,10 +2,13 @@ const Tone = require("./libs/tone.js");
 
 
 ws = new WebSocket('wss://travis.durieux.me');
-const maxNumberTracks = 26; //maximum number of tracks (CI jobs) that we listen to in parallel
+const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
+const maxNumberOfJobs = 100;
+
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
-var playingJob = {} //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
-var stoppedJob = {}
+
+const jobs = {}
+var jobsCounter = 0;
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -21,7 +24,7 @@ function start() {
         console.log(message);
         //changeSize(message);
         updateJobState(message);
-        handleJob(message);
+        handleJobPlay(message);
     }
 
     
@@ -34,45 +37,76 @@ function updateJobState(message){
     const key = message.data.commit.sha;
 
 
-    if(key in playingJob){
+    if(key in jobs){
         const state = message.data.state;
-        let color = '#11111111';
+        let color = '#ffffff44';
 
         console.log(state);
 
         switch(state){
             case "passed":
-                color = '#00ff0011'; // green
+                color = '#42f5ce55'; // green
                 break;
             case "errored":
-                color = '#0000ff11'; // blue
+                color = '#0088ff55'; // blue
                 break;
             case "finished":
-                color = '#ff440011'; // yellow
+                color = '#ffbf0055'; // yellow
                 break;
             case "failed":
-                color = 'gray'; // gray
+                color = 'ff000055'; // gray
                 break;
         }
 
-        playingJob[key].color = color;
+        jobs[key].color = color;
+    }
+    else{
+        putJob(message, false);
+
     }
 }
 
-function handleJob(message) {
+function addSynth(message){
+    const key = message.data.commit.sha;
+
+
+    if(key in jobs){
+        jobs[key].synth = createSynth();
+        
+        
+        //assign a synth to the sha of the input message
+        const synth = jobs[key].synth;
+
+        //have the synth play the soundthat corresponds to the job
+        const sound = soundForJob(message)
+        jobs[key].playingNote = sound;
+
+
+        jobs[key].drawVisitors.push(
+            (self, context) => {
+                console.log("Drawing wave");
+                drawCircle(self.starting[0], self.starting[1], self.radius - 10, context, 'transparent', 'blue');
+            }
+        );
+
+        
+        //synth.triggerAttack(sound);
+    }
+}
+
+function handleJobPlay(message) {
 
     // Update drawing jobs
-    if (message.data.state === "started" && Object.keys(playingJob).length <= maxNumberTracks && !(message.data.commit.sha in playingJob)) {
-        playJob(message);
-        console.log("Started", message);
+    if (message.data.state === "started" && jobsCounter <= maxNumberTracks && !(message.data.commit.sha in jobs)) {
+        addSynth(message);
+        //console.log("Started", message);
+        jobsCounter++;
     }
     else {
-        if (message.data.commit.sha in playingJob && (message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
+        if (message.data.commit.sha in jobs && (message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
             stopPlayJob(message);
             globalCount = globalCount + 1;
-        }
-        else if ( message.data.commit.sha in playingJob) {
-            //document.write("<p>".concat(message.data.commit.sha).concat(" is updated to ").concat(message.data.state).concat("</p>"));
+            jobsCounter--;
         }
     }
 }
@@ -97,61 +131,34 @@ function drawCircle(x, y, radius, context, fillColor, strokeColor){
 function drawCanvas(jobs){
 
 
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     for(const key in jobs){
 
         const info  = jobs[key];
-        //console.log("drawing canvas", info.starting, info.counter);
 
-       drawCircle(info.starting[0], info.starting[1], info.radius, context, info.color, 'transparent');
-    
+        
+        for(func of info.drawVisitors){
+            func(info, context)
+        }
+        //console.log("drawing canvas", info.starting, info.counter);
     }
     
 }
 
 function getJob(index){
 
-    for(key in playingJob)
-        if(playingJob[key].index === index)
-            return playingJob[key];
+    for(key in jobs)
+        if(jobs[key].index === index)
+            return jobs[key];
     
     return null;
 }
 
-function drawDebug(){
-
-    let square = parseInt(Math.sqrt(maxNumberTracks));
-    
-    debugContext.clearRect(0, 0, debug.width, debug.height);
-
-    console.log(debug.width);
-    let squareSizeW = parseInt(debug.width/square);
-    let squareSizeH = parseInt(debug.height/(square + (maxNumberTracks%square == 0? 0 : 1)));
-    let padding = 20;
-    for(let i = 0; i < maxNumberTracks; i++){
-
-        let x = i%square;
-        let y = parseInt(i/square);
-
-        // Draws the grid
-        debugContext.strokeRect(squareSizeW*x, squareSizeH*y, squareSizeW, squareSizeH)
-
-        const job = getJob(i);
-
-        if(job){
-            console.log(playingJob, job)
-            // Write the note
-            debugContext.fillText(job.playingNote, squareSizeW*(x) + padding, squareSizeH*(y + 1) - padding);
-        }
-    }
-
-
-    debugContext.stroke();
-
-}
-
 let index = 0;
 let maxSizeWave = 40;
-let step = 0.1;
+let step = 0.01;
+let stopRadius = 10;
 
 function createSynth(){
     return new Tone.Synth({
@@ -167,95 +174,64 @@ function createSynth(){
     }).toMaster();
 }
 
-function playJob(message) {
+function putJob(message) {
     //add the job in the list of jobs being played
+    
+    if(Object.keys(jobs).length >= maxNumberOfJobs || message.data.commit.sha in jobs)
+        return;
+    
     const key = message.data.commit.sha;
-
+    
     let newIndex = index;
 
     index = (index + 1)%maxNumberTracks;
-    playingJob[key] = {
+    jobs[key] = {
         interval: null,
         radius: 0,
         direction: 1,
+        stopped: false,
+        timer: 0,
         color: '#11111111',
         index: newIndex,
         starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
         playingNote: '',
-
-        synth: createSynth()
+        drawVisitors: [(self, context) => {
+            self.radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
+            drawCircle(self.starting[0], self.starting[1], self.radius, context, self.color, 'gray');
+        },],
+        synth: addSynth ? createSynth() : null
     };
 
-    playingJob[key].interval = setInterval(function() {
-
-        let radius = playingJob[key].radius;
-        let direction = playingJob[key].direction;
-
-        if(direction == 1){
-            radius += step;
-
-            if(radius  >= maxSizeWave){
-                direction = -1;
-            }
-        }
-        else if(direction == -1){
-            radius -= step;
-
-            if(radius <= 0){
-                direction = 1;
-            }
-        }
-
-        playingJob[key].radius = radius;
-        playingJob[key].direction = direction;
-
-        
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        drawCanvas(playingJob);
-        drawCanvas(stoppedJob);
+    jobs[key].interval = setInterval(function() {
+        jobs[key].timer += step;
     }, 10);
 
 
-    //assign a synth to the sha of the input message
-    const synth = playingJob[key].synth;
-
-    if (synth != null) {
-        //have the synth play the soundthat corresponds to the job
-        const sound = soundForJob(message)
-        playingJob[key].playingNote = sound;
-        
-        synth.triggerAttack(sound);
-        //document.write("<p>".concat(message.data.commit.sha).concat(" plays ").concat(sound).concat(". We are listening to ").concat(Object.keys(playingJob).length).concat(" sounds</p>"));
-    } else {
-        //document.write("<p>".concat(message.data.commit.sha).concat(" has no synth").concat("</p>"))
-    }
-
-    drawDebug();
+    //drawDebug();
 }
 
 function stopPlayJob(message) {
     //remove the job from the list of sounds being played
     const key = message.data.commit.sha;
 
-    //console.log(key, playingJob[key]);
+    //console.log(key, jobs[key]);
     
-    const toDelete = playingJob[key];
-    toDelete.radius = 20;
+    if(key in jobs){
+        const toDelete = jobs[key];
+        
+        const synth = jobs[key].synth;
+        
+        jobs[key].stopped = true;
 
-    stoppedJob[key] = toDelete;
+        //playing special sound for the end of the job
+        // synth.triggerRelease();
+        // synth.triggerAttackRelease('F#3', '4n');
+                
+        clearInterval(jobs[key].interval);
+    }
 
-    const synth = playingJob[key].synth;
-
-    //playing special sound for the end of the job
-    synth.triggerRelease();
-    synth.triggerAttackRelease('F#3', '4n');
-            
-    clearInterval(playingJob[key].interval);
-
-    delete playingJob[key];
-
-    drawDebug();
-    //document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(Object.keys(playingJob).length).concat(" sounds.</p>"));
+    //drawDebug();
+    //document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(Object.keys(jobs).length).concat(" sounds.</p>"));
 }
 
 function soundForJob(message) {
@@ -321,6 +297,11 @@ function changeSize(message) {
 
 // Entrypoint
 document.addEventListener('DOMContentLoaded', function(){ // When page is completly loaded
-    drawDebug();
+    ////drawDebug()
+    
+    context.canvas.width  = window.innerWidth;
+    context.canvas.height = window.innerHeight;
     document.getElementById("start-btn").addEventListener("click", start ,false); // Add button click event
+
+    setInterval(() => drawCanvas(jobs), 50)
 }, false);
