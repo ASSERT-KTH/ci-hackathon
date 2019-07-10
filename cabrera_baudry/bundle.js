@@ -229,8 +229,8 @@ function stopPlayJob(message) {
         jobs[key].stopped = true;
 
         //playing special sound for the end of the job
-        // synth.triggerRelease();
-        // synth.triggerAttackRelease('F#3', '4n');
+        synth.triggerRelease();
+        synth.triggerAttackRelease('F#3', '4n');
                 
         clearInterval(jobs[key].interval);
     }
