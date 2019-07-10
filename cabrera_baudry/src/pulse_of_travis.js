@@ -60,7 +60,7 @@ function updateJobState(message){
 
         jobs[key].color = color;
     }
-    else{
+    else if(message.data.state !== "finished" ){
         putJob(message, false);
 
     }
@@ -68,7 +68,6 @@ function updateJobState(message){
 
 function addSynth(message){
     const key = message.data.commit.sha;
-
 
     if(key in jobs){
         jobs[key].synth = createSynth();
@@ -82,28 +81,28 @@ function addSynth(message){
         jobs[key].playingNote = sound;
 
 
-        jobs[key].drawVisitors.push(
-            (self, context) => {
-                console.log("Drawing wave");
-                drawCircle(self.starting[0], self.starting[1], self.radius - 10, context, 'transparent', 'blue');
-            }
-        );
+        var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
+            
+            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer*3)): 0;
+            drawCircle(self.starting[0], self.starting[1], radius, context, 'transparent', '#5DBCD2');
+        })
+
+        jobs[key].drawVisitors = newVisitors;
 
         
-        //synth.triggerAttack(sound);
+        synth.triggerAttack(sound);
     }
 }
 
 function handleJobPlay(message) {
 
     // Update drawing jobs
-    if (message.data.state === "started" && jobsCounter <= maxNumberTracks && !(message.data.commit.sha in jobs)) {
+    if (message.data.state === "started" && jobsCounter <= maxNumberTracks) {
         addSynth(message);
-        //console.log("Started", message);
         jobsCounter++;
     }
     else {
-        if (message.data.commit.sha in jobs && (message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
+        if ((message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
             stopPlayJob(message);
             globalCount = globalCount + 1;
             jobsCounter--;
@@ -137,6 +136,7 @@ function drawCanvas(jobs){
 
         const info  = jobs[key];
 
+        //console.log(info.drawVisitors)
         
         for(func of info.drawVisitors){
             func(info, context)
@@ -196,8 +196,8 @@ function putJob(message) {
         starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
         playingNote: '',
         drawVisitors: [(self, context) => {
-            self.radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
-            drawCircle(self.starting[0], self.starting[1], self.radius, context, self.color, 'gray');
+            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
+            drawCircle(self.starting[0], self.starting[1], radius, context, self.color, 'gray');
         },],
         synth: addSynth ? createSynth() : null
     };
