@@ -120,7 +120,7 @@ def setBulkLight():
     data = request.get_json()
 
 
-    handler = getHandler()
+    handler = HANDLER
     handler.illuminate_many(data["set"], data["session"])
 
     return jsonify({'result': 'ok'})
