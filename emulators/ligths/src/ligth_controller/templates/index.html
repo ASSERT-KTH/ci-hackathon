@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Light simulator</title>
+    <style>
+        body{
+            background-color: black;
+        }
+        #container{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #logs{
+            background-color:rgb(51, 51, 51);
+            width: 30%;
+            left: 70%;
+            top: 0;
+
+            height: 100%;
+            position: absolute;
+        }
+
+        .log{
+            font-family: 'Courier New', Courier, monospace;
+            color:white;
+        }
+
+        .dot{
+            color: gray;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #map{
+            width: 70%;
+            height: 100%;
+            left: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 id="room_name">Room: {{ session_name }}</h1>
+
+    <div id="container">
+        <canvas id="map"></canvas>
+        <div id="logs">
+
+        </div>
+    </div>
+    
+
+    <script src="/static/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    
+    <script>
+    $(document).ready(function(){
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/simulator', {
+            query: 'session={{session_name}}'
+        });
+        socket.on('connect', function() {
+            console.log("Connected")
+        });
+        socket.on('single', function(msg) {
+
+            let now = new Date();
+
+            $("#logs").append(`<div><label class='dot'>[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] </label><label class='log'>${JSON.stringify(msg)}</label><div>`);
+        
+            lights[msg.id].color = msg.color;
+            drawCanvas();
+        });
+        socket.on('bulk', function(msg) {
+
+            let now = new Date();
+
+            $("#logs").append(`<div><label class='dot'>[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] </label><label class='log'>${JSON.stringify(msg)}</label><div>`);
+
+            for(command of msg.sets){
+
+                lights[command.id].color = command.color;
+            }
+            drawCanvas();
+        });
+
+        const lights = {
+            '1': {
+                color: [0 , 0, 0],
+                position: [100,100]
+            },
+            '2': {
+                color: [0 , 0, 0],
+                position: [400,100]
+            },
+            '3': {
+                color: [0 , 0, 0],
+                position: [100,400]
+            },
+            '4': {
+                color: [0 , 0, 0],
+                position: [400,400]
+            },
+            '5': {
+                color: [0 , 0, 0],
+                position: [250,250]
+            }
+        }
+
+        const canvas = document.getElementById("map");
+        const context = canvas.getContext("2d");
+
+        function setuplights(){
+
+            console.log("Setting up canvas...");
+
+            context.canvas.width  = $("#map").width();
+            context.canvas.height = $("#map").height();
+
+            drawCanvas();
+        }
+
+
+        function drawCircle(x, y, radius, context, fillColor, strokeColor){
+
+            if(radius < 1){
+                return;
+            }
+
+            context.beginPath();
+            context.arc(x, y, radius, 0, 2 * Math.PI, false);
+
+            context.fillStyle = fillColor;
+            context.strokeStyle = strokeColor;
+
+            context.fill();
+            context.stroke();
+        }
+
+
+        function drawCanvas(){
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for(var id in lights){
+                const bulb = lights[id];
+
+                drawCircle(bulb.position[0], bulb.position[1], 30, context, bulb.color ? `rgb(${bulb.color[0]}, ${bulb.color[1]}, ${bulb.color[2]})`: 'trasparent', 'gray' )
+            }
+
+        }
+
+        setuplights();
+
+    });
+    </script>
+</body>
+</html>
