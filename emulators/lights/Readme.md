@@ -1,4 +1,4 @@
-# light controller web service
+# Lights controller web service
 
 ## Local deploy
 
