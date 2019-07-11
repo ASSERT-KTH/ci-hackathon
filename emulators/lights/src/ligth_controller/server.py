@@ -90,7 +90,7 @@ bulk_schema = {
 HANDLER = SimulatorHandler(sessions, socketio)
 
 def getHandler():
-    HANDLER_TYPE = os.environ.get("light_CONTROLLER", default='simulator')
+    HANDLER_TYPE = os.environ.get("LIGHT_CONTROLLER", default='simulator')
 
     if HANDLER_TYPE == 'controller':
         handler = ControllerHandler() # Initialize controller handler

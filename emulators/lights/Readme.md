@@ -25,7 +25,7 @@ python src/server.py
 
 
 ## Controller switch
-To switch between web application lights simulator and real pi controller you must set an environment variable ```export light_CONTROLLER=simulator``` or ```export light_CONTROLLER=controller```
+To switch between web application lights simulator and real pi controller you must set an environment variable ```export LIGHT_CONTROLLER=simulator``` or ```export LIGHT_CONTROLLER=controller```
 
 ## Command api
 We process two REST endpoints with POST method data:
