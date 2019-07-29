@@ -1,4 +1,4 @@
-
+import pysimpledmx
 import json
 
 class BaseHandler(object):
@@ -30,6 +30,18 @@ class SimulatorHandler(BaseHandler):
             self.socketio.emit("bulk", dict(sets=sets) , json=True, room=k, namespace='/simulator')
 
 class ControllerHandler(BaseHandler):
-    pass
+    def __init__(self):
+        self.dmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')
+        self.fixture_map = {'1' : 2,
+                            '2' : 5,
+                            '3' : 8,
+			    "4" : 11,
+			    "5" : 14 }
 
-    # TODO
+    def illuminate_with(self, id, color, extra):
+        for chan, color in enumerate(color, start=self.fixture_map[id]):
+            self.dmx.setChannel(chan, color)
+        self.dmx.render()
+
+    def illuminate_many(self, sets, extra):
+        pass
