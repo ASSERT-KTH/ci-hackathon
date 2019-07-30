@@ -3,22 +3,51 @@ import requests
 import json
 import random
 
-while True:
-
-
-    print("Sending")
-
-    URL = "http://localhost:8000/setcolor"
-
+def getRandomSingleCommand():
     ids = ["1", "2", "3", "4", "5"]
+        
 
     data =dict(session='test', id=random.choice(ids), color=[random.randint(0, 255), 
     random.randint(0, 255), random.randint(0, 255)])
 
-    r = requests.post(url = URL, data = json.dumps(data)) 
-  
-    # extracting response text  
-    body = r.text 
+    return data
 
-    print("The response is:%s"%body) 
-    time.sleep(1)
+def foreverSingleEvent():
+    while True:
+
+
+        print("Sending Single")
+
+        URL = "http://localhost:8000/setcolor"
+
+        
+
+        r = requests.post(url = URL, data = json.dumps(getRandomSingleCommand())) 
+    
+        # extracting response text  
+        body = r.text 
+
+        print("The response is:%s"%body) 
+        time.sleep(1)
+
+
+def foreverBulk():
+    while True:
+
+
+        print("Sending Bulk")
+
+        URL = "http://localhost:8000/setbulk"
+
+        
+        data =dict(session='test', set=[getRandomSingleCommand() for _ in range(random.randint(1, 5))])
+
+        r = requests.post(url = URL, data = json.dumps(data)) 
+    
+        # extracting response text  
+        body = r.text 
+
+        print("The response is:%s"%body) 
+        time.sleep(1)
+
+foreverBulk()

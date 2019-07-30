@@ -87,17 +87,19 @@ bulk_schema = {
 
 ## Setting up controller using environment variable
 
-HANDLER = SimulatorHandler(sessions, socketio)
+HANDLER = None
 
-def getHandler():
-    HANDLER_TYPE = os.environ.get("LIGHT_CONTROLLER", default='simulator')
+def initHandler():
+    HANDLER_TYPE = os.environ.get("LIGHT_CONTROLLER", 'simulator')
+
+    print("Handler type", HANDLER_TYPE)
 
     if HANDLER_TYPE == 'controller':
-        handler = ControllerHandler() # Initialize controller handler
-    
-        HANDLER = handler
+        
+        return ControllerHandler()
 
-getHandler()
+    return SimulatorHandler(sessions, socketio)
+
 
 ## REST HANDLERS
 
@@ -106,9 +108,7 @@ getHandler()
 def setlight():
     data = request.get_json()
 
-
-    handler = HANDLER
-    handler.illuminate_with(data["id"], data["color"], data["session"])
+    HANDLER.illuminate_with(data["id"], data["color"], data["session"])
 
     return jsonify({'result': 'ok'})
 
@@ -119,18 +119,19 @@ def setlight():
 def setBulkLight():
     data = request.get_json()
 
-
-    handler = HANDLER
-    handler.illuminate_many(data["set"], data["session"])
+    for s in data["set"]:
+        HANDLER.illuminate_with(s["id"], s["color"], data["session"])
 
     return jsonify({'result': 'ok'})
 
 
 if __name__ == '__main__':
 
-    APP_HOST = os.environ.get("APP_HOST", default='0.0.0.0')
-    APP_PORT = os.environ.get("APP_PORT", default=8000)
-    APP_DEBUG = os.environ.get("APP_DEBUG", default=False)
+    APP_HOST = os.environ.get("APP_HOST", '0.0.0.0')
+    APP_PORT = os.environ.get("APP_PORT", 8000)
+    APP_DEBUG = os.environ.get("APP_DEBUG", False)
+
+    HANDLER = initHandler()
 
     app.run(APP_HOST, APP_PORT, APP_DEBUG)
 

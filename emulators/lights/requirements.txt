@@ -21,6 +21,8 @@ public==2019.4.13
 py==1.8.0
 pyparsing==2.4.0
 pyrsistent==0.15.3
+pyserial==3.4
+pysimpledmx==0.1.1
 pytest==5.0.1
 python-engineio==3.8.2.post1
 python-socketio==4.2.0
