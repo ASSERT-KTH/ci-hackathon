@@ -1,5 +1,6 @@
 import pysimpledmx
 import json
+from config import LIGTHS_MAP
 
 class BaseHandler(object):
 
@@ -27,11 +28,7 @@ class SimulatorHandler(BaseHandler):
 class ControllerHandler(BaseHandler):
     def __init__(self):
         self.dmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')
-        self.fixture_map = {'1' : 2,
-                            '2' : 5,
-                            '3' : 8,
-                            '4' : 11,
-                            '5' : 14 }
+        self.fixture_map = LIGTHS_MAP
 
     def illuminate_with(self, id, color, extra):
         for chan, color in enumerate(color, start=self.fixture_map[id]):
