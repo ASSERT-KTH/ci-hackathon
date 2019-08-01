@@ -21,7 +21,7 @@ s
 - Simone Stefani: sonification with chords (details in folder [stefani](stefani))
 - Javier Cabrera and Benoit Baudry: 
     * [The pulse of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/pulse_of_travis/index.html) (details in folder [cabrera_baudry/pulse_of_travis](cabrera_baudry/pulse_of_travis))
-    * [The voice of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/voice_of_travis/index.html) (details in folder [cabrera_baudry/voice_of_travis](cabrera_baudry/voice_of_travis))
+    * [The voice of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/voice_of_travis) (details in folder [cabrera_baudry/voice_of_travis](cabrera_baudry/voice_of_travis))
 - Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/drum-machine) (details in folder [drum-machine](drum-machine))
 - Add your name / your team with a pull request :-)
 
