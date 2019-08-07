@@ -50,4 +50,4 @@ def foreverBulk():
         print("The response is:%s"%body) 
         time.sleep(3)
 
-foreverBulk()
+foreverSingleEvent()

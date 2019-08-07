@@ -1,49 +1,54 @@
 from flask import Flask, jsonify, request,url_for
 from decorators import validate_schema
 from handlers import SimulatorHandler, ControllerHandler
-from flask_socketio import SocketIO, emit, join_room, leave_room, send
+from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 
 import os
 app = Flask(__name__, template_folder='templates')
 
-from views import room
+from views import room, index
  # SETTING WEBSOCKET FOR SIMULATOR
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, ping_interval=2, ping_timeout=10 )#, logger=True, engineio_logger=True)
 
 sessions = {
     
 }
 
-@socketio.on('connect', namespace='/simulator')
-def on_connect():
-    session = request.args["session"]
-
-    sId = request.sid
-
-    print("Registering", session, sId)
-
-    if session in sessions:
-        if sId not in sessions[session]:
-            sessions[session][sId] = True
-    else:
-        sessions[session] = {sId: True}
-
-@socketio.on('disconnect', namespace='/simulator')
-def on_disconnect():
-
-    sId = request.namespace.socket.sessid
-
-    for k, v in sessions:
-        if sId in v:
-            del v[sId] 
-
-# STATIC CONTENT
-@app.route('/dashboard/<session_name>')
-def index_handler(session_name):
-    return room(session_name)
+class SimulatorNamespace(Namespace):
 
 
+    #@socketio.on('connect', namespace='/simulator')
+    def on_connect(self):
+        session = request.args.get("session", None)
+
+        sId = request.sid
+
+        if session:
+            print("Registering", session, sId)
+
+            if session in sessions:
+                if sId not in sessions[session]:
+                    sessions[session][sId] = True
+            else:
+                sessions[session] = {sId: True}
+        
+        socketio.emit("sessions", sessions , json=True,namespace='/simulator')
+
+    #@socketio.on('disconnect', namespace='/simulator')
+    def on_disconnect(self):
+
+        print("Disconnecting", request.sid)
+        sId = request.sid
+
+        print(sId)
+        if sId:
+            for k, v in sessions.items():
+                if sId in v.keys():
+                    del v[sId] 
+
+        socketio.emit("sessions", sessions , json=True,namespace='/simulator')
+socketio.on_namespace(SimulatorNamespace("/simulator"))
 # JSON SCHEMA VALIDATOR
 
 light_schema = {
@@ -123,6 +128,17 @@ def setBulkLight():
         HANDLER.illuminate_with(s["id"], s["color"], data["session"])
 
     return jsonify({'result': 'ok'})
+
+# STATIC CONTENT
+@app.route('/dashboard/<session_name>')
+def room_handler(session_name):
+    return room(session_name)
+
+# STATIC CONTENT
+@app.route('/')
+def index_handler():
+    return index()
+
 
 
 if __name__ == '__main__':

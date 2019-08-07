@@ -7,7 +7,7 @@
 2. Install requirements ```pip install -r requirements.txt```
 
 
-3. Launch app ```./run_dev.sh```, by default it will run on ```localhost:8000/dashboard/<room_name>```
+3. Launch app ```./run_dev.sh```, by default it will run on ```localhost:8000```
 
 ## Environment variables
 
@@ -79,7 +79,7 @@ We process two REST endpoints with POST method data:
 
  
 ## Access simulator view
-Simulator app works recieving and processing sent API commands through a websocket channel. Each simulator web app runs in an specific session_name, for example, ```http://localhost:8000/dashboard/test``` will process and draw all sent messages with ```test``` as session id.
+Simulator app works recieving and processing sent API commands through a websocket channel. Each simulator web app runs in an specific session_name, for example, ```http://localhost:8000/dashboard/test``` will process and draw all sent messages with ```test``` as session id. Opened sessions are shown in the home page of the simulator (```http://localhost:8000/```). Clicking a session name will show the session view.
 
 ### Pipeline
 
