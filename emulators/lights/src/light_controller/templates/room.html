@@ -90,7 +90,7 @@
 
             // Add camera and orbit control
             var controls = new THREE.OrbitControls( camera, renderer.domElement );
-            camera.position.set( 0, 20, 100 );
+            camera.position.set( 0, 20, 700 );
             controls.update();
 
             return controls;
@@ -109,7 +109,7 @@
         function addGround(){
             
 
-            const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2, boxSize[2]*2);
+            const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2.5, boxSize[2]*2.5);
             const planeMat = new THREE.MeshStandardMaterial({
                 color: 0xffffff,
                 //side: THREE.DoubleSide,
