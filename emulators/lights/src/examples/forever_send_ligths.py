@@ -28,7 +28,7 @@ def foreverSingleEvent():
         body = r.text 
 
         print("The response is:%s"%body) 
-        time.sleep(1)
+        time.sleep(3)
 
 
 def foreverBulk():
@@ -48,6 +48,6 @@ def foreverBulk():
         body = r.text 
 
         print("The response is:%s"%body) 
-        time.sleep(1)
+        time.sleep(3)
 
 foreverBulk()

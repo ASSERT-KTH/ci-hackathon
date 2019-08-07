@@ -31,6 +31,6 @@ class ControllerHandler(BaseHandler):
         self.fixture_map = LIGTHS_MAP
 
     def illuminate_with(self, id, color, extra):
-        for chan, color in enumerate(color, start=self.fixture_map[id]):
+        for chan, color in enumerate(color, start=self.fixture_map[id]["dmxId"]):
             self.dmx.setChannel(chan, color)
         self.dmx.render()

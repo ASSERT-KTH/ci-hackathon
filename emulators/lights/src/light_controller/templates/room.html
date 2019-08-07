@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Room</title>
+    <style>
+        body{
+            background-color: black;
+        }
+        #container{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #logs{
+            background-color:rgb(51, 51, 51);
+            width: 30%;
+            left: 70%;
+            top: 0;
+
+            height: 100%;
+            position: absolute;
+        }
+
+        .log{
+            font-family: 'Courier New', Courier, monospace;
+            color:white;
+        }
+
+        .dot{
+            color: gray;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #map{
+            width: 70%;
+            height: 100%;
+            left: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 id="room_name">Room 1: {{ session_name }}</h1>
+
+    <div id="container">
+        <canvas id="map"></canvas>
+        <div id="logs">
+
+        </div>
+    </div>
+    
+
+    <script src="/static/socket.io.js"></script>
+    <script src="/static/three.min.js"></script>
+    <script src="/static/OrbitControls.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    
+    <script>
+        const roomCanvas = document.getElementById("map")
+        const logBox = $("#logs");
+
+        roomCanvas.width = window.innerWidth - logBox.width();
+        roomCanvas.height =  window.innerHeight ;
+
+        function setupSize(){
+
+            console.log("Setting up canvas...");
+
+            context.canvas.width  = $("#map").width();
+            context.canvas.height = $("#map").height();
+
+            drawCanvas();
+        }
+
+        const boxSize = [300, 800, 300];
+
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, roomCanvas.width / roomCanvas.height, 0.1, 2000 );
+        
+
+        var renderer = new THREE.WebGLRenderer({canvas: roomCanvas});
+        renderer.setSize( roomCanvas.width, roomCanvas.height, false );
+
+        function addControls(){
+
+            // Add camera and orbit control
+            var controls = new THREE.OrbitControls( camera, renderer.domElement );
+            camera.position.set( 0, 20, 100 );
+            controls.update();
+
+            return controls;
+        }
+
+        function addGrid(){
+            // Add basic box layout and lights
+            var geometry = new THREE.BoxGeometry(...boxSize);
+            geometry = new THREE.EdgesGeometry(geometry);
+            var material = new THREE.LineBasicMaterial( { color: 0xffffff, lineWidth: true } );
+
+            var cube = new THREE.LineSegments( geometry, material );
+            scene.add( cube );
+        }
+
+        function addGround(){
+            
+
+            const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2, boxSize[2]*2);
+            const planeMat = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                //side: THREE.DoubleSide,
+                //roughness: 0.3,
+                metalness: 0.65,
+            });
+            const mesh = new THREE.Mesh(planeGeo, planeMat);
+
+            //mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            
+            mesh.rotation.x = Math.PI * -.5;
+            mesh.position.y = -boxSize[1]/2;
+            scene.add(mesh);
+        }
+
+        function addAmbienLigth(){
+            var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+            scene.add( light );
+        }
+
+
+        function getRandom(max, min) {
+            let a = Math.random() * (max - min) + min;
+            return a;
+        }
+
+        function addObjects(){
+            for (i = 0; i < 10; i++) {
+                var size = getRandom(boxSize[0]/4, 1);
+                var boxX = getRandom(boxSize[0], -boxSize[0]);
+                var boxZ = getRandom(boxSize[2], -boxSize[2]);
+
+                var boxGeo = new THREE.BoxGeometry(size, size, size);
+                var boxMat = new THREE.MeshStandardMaterial({
+                    color: 0xffffff,
+                    side: THREE.DoubleSide,
+                    //roughness: 0.3,
+                    metalness: 0.65,
+                });
+
+                var box = new THREE.Mesh(boxGeo, boxMat);
+                box.receiveShadow = true;
+                box.castShadow = true;
+    
+                scene.add(box);
+                box.position.set(boxX, -boxSize[1]/2 + size/2, boxZ);
+            }
+        }
+
+        var controls = addControls();
+        addGround();
+
+        //addGrid();
+        addAmbienLigth();
+        addObjects();
+
+        // Add dynamic lights
+
+        
+        
+
+        function rgbtoHex(rgb){
+
+            function singleToHex(n){
+                var hex = Number(n).toString(16);
+
+                if(hex.length < 2)
+                    hex = "0" + hex;
+                
+                    return hex;
+            }
+            return `0x${singleToHex(rgb[0])}${singleToHex(rgb[1])}${singleToHex(rgb[2])}`;
+        }
+
+        function toGlobalPosition(position){
+            // Transform relative positions to box coordinate space
+
+            const deltaX = boxSize[0]/2;
+            const deltaY = boxSize[1]/2;
+            const deltaZ = boxSize[2]/2;
+
+            const margin = 5;
+
+            return [
+                position[0]*boxSize[0] - deltaX, // x = x*size - deltaX
+                position[1]*boxSize[1] - deltaY,
+                position[2]*boxSize[2] - deltaZ
+            ]
+        }
+
+        // R1 lights
+        const spotLights = {{lights|tojson|safe}}
+
+        for(var ligth in spotLights){
+
+            const obj = spotLights[ligth];
+            
+            const threeLigth = addLigth(rgbtoHex(obj.color), toGlobalPosition(obj.relativePosition))
+            
+            spotLights[ligth].obj = threeLigth;
+        }
+
+        function addLigth(color, position){
+            
+            group = new THREE.Group();
+
+            var bulbGeometry = new THREE.SphereGeometry(5, boxSize[1]/4, boxSize[1]/4);
+            var bulbLight = new THREE.PointLight(Number(color), 0.1);
+            bulbLight.power = 5;
+            bulbLight.decay = 1;
+            bulbLight.exposure=0.81
+
+            var bulbMat = new THREE.MeshStandardMaterial({
+                emissive: color,
+                emissiveIntensity: 2,
+                color: color,
+                //metalness: 0.9,
+                roughness: 1
+            });
+
+            bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
+            bulbLight.position.set(...position);
+            bulbLight.castShadow = true;
+
+            group.add(bulbLight)
+            scene.add(group);
+            group.position.y = 0;
+            group.position.z = 0;
+            group.position.x = 0;
+
+            return [bulbLight, bulbMat];
+        }
+
+
+        renderer.toneMappingExposure = Math.pow(0.7, 2.0);
+
+        //renderer.shadowMap.enabled = true;
+        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        function animate() {
+
+            requestAnimationFrame( animate );
+
+            // required if controls.enableDamping or controls.autoRotate are set to true
+            controls.update();
+
+            renderer.render( scene, camera );
+        }
+
+        animate()
+
+
+        // Setup listener
+
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/simulator', {
+            query: 'session={{session_name}}'
+        });
+        socket.on('connect', function() {
+            console.log("Connected")
+        });
+        socket.on('single', function(msg) {
+
+            let now = new Date();
+
+            $("#logs").append(`<div><label class='dot'>[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] </label><label class='log'>${JSON.stringify(msg)}</label><div>`);
+        
+            
+                spotLights[msg.id].color = msg.color;
+                //console.log(spotLights[msg.id])
+                spotLights[msg.id].obj[0].color.setHex(rgbtoHex(msg.color));
+                spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
+                spotLights[msg.id].obj[1].emissive.setHex(rgbtoHex(msg.color));
+            
+            //enderer.render( scene, camera );
+            //renderer.render( scene, camera );
+        });
+        
+    </script>
+</body>
+</html>
