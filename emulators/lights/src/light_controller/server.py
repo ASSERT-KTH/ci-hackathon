@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request,url_for
 from decorators import validate_schema
-from handlers import SimulatorHandler, ControllerHandler
+from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 
 import os
@@ -102,6 +102,10 @@ def initHandler():
     if HANDLER_TYPE == 'controller':
         
         return ControllerHandler()
+
+    if HANDLER_TYPE == 'both':
+        
+        return CompundHandler(sessions, socketio)
 
     return SimulatorHandler(sessions, socketio)
 

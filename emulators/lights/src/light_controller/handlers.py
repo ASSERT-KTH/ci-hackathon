@@ -34,3 +34,15 @@ class ControllerHandler(BaseHandler):
         for chan, color in enumerate(color, start=self.fixture_map[id]["dmxId"]):
             self.dmx.setChannel(chan, color)
         self.dmx.render()
+
+class CompundHandler(BaseHandler):
+
+    def __init__(self, sessions, socketio):
+        self.simulator = SimulatorHandler(sessions, socketio)
+        self.controller = ControllerHandler()
+        
+
+    def illuminate_with(self, id, color, extra):
+        self.simulator.illuminate_with(id, color, extra)
+        self.controller.illuminate_with(id, color, extra)
+        
