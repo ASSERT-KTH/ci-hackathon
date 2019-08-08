@@ -4,7 +4,7 @@ import json
 import random
 
 def getRandomSingleCommand():
-    ids = ["1", "2", "3", "4", "5"]
+    ids = ["1", "2", "3", "4", "5", "6",  "7", "8", "9"]
         
 
     data =dict(session='test', id=random.choice(ids), color=[random.randint(0, 255), 
@@ -28,7 +28,7 @@ def foreverSingleEvent():
         body = r.text 
 
         print("The response is:%s"%body) 
-        time.sleep(3)
+        time.sleep(0.1)
 
 
 def foreverBulk():

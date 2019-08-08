@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block head %}
+   <style>
+        #help_container{
+            display: flex;
+            flex-direction: column;
+
+            padding: 20px;
+
+            margin-top: 100px;
+        }
+        .help{
+            padding: 10px;
+            border: 1px solid white;
+
+            margin: 20px;
+        }
+        .title{
+            color:  gold;
+        }
+   </style>
+{% endblock %}
+
+{% block title %} Help {% endblock %}
+
+{% block content %}
+   
+    <div id="help_container">
+        <div class="help">
+            <h4 class="title">setcolor </h4>
+            <p class="method">POST</p>
+            <p>Send a command to put specific color to one light</p>
+            <h5>Json schema</h5>
+            <pre class="schema">
+{{schema1|safe}}
+            </pre>
+            <h5>Example</h5>
+            <pre>
+{
+    "id": 1,
+    "color": [200, 0, 200],
+    "session": "main"
+}
+            </pre>
+        </div>
+        <div class="help">
+            <h4 class="title">setbulk </h4>
+            <p class="method">POST</p>
+            <p>Send a command to put specific color to a set of lights</p>
+            <h5>Json schema</h5>
+            <pre class="schema">
+{{schema2|safe}}
+            </pre>
+            <h5>Example</h5>
+            <pre>
+{
+
+    "set": [
+    {
+        "id": 1,
+        "color": [200,200,0]
+    },
+    {
+        "id": 2,
+        "color": [200,0,20]
+    }
+    ],
+    "session": "main"
+}
+            </pre>
+        </div>
+        <div class="help">
+                <h4 class="title">reset</h4>
+                <p class="method">POST</p>
+                <p>Reset lights (TODO)</p>
+                <p class="schema">
+    
+                </p>
+            </div>
+    </div>
+
+{% endblock %}
+
+{% block command_form %}{%endblock%}
+
+{% block scripts %}
+
+</script>
+{% endblock %}

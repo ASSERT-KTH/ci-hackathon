@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}Light simulator{% endblock %}</title>
+    <title>{% block title %}Ligths simulator{% endblock %}</title>
     <style>
         body{
             background-color: black;
@@ -51,7 +51,11 @@
             left: 0;
              
              background: rgb(51, 51, 51);
-             padding: 20px;
+             padding: 10px;
+
+             display: flex;
+             flex-direction: row;
+             align-items: center;
         }
 
         #brand>h2{
@@ -60,6 +64,63 @@
             margin: 0;
         }
 
+
+        #send{
+            position: fixed;
+            bottom: 80px;
+
+            border: 1px solid white;
+
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        #send input{
+            margin: 10px;
+
+            color: white;
+            background: transparent;
+
+            border: none;
+
+            border-bottom: 2px solid gray;
+
+            padding: 5px;
+        }
+
+        #send input:focus{
+            outline: none;
+        }
+
+        #send a{
+            border: 1px solid white;
+            padding: 5px;
+            text-align: center;
+
+            margin-top: 20px;
+
+            cursor: pointer;
+        }
+
+        #send a:hover{
+            color: orange;
+        }
+
+        #color-container{
+            display:flex;
+            flex-direction: row;
+        }
+
+        #color-container input{
+            max-width: 70px;
+        }
+        .nav{
+            color: white !important;
+            text-decoration: none !important;
+
+            margin-left: 20px;
+        }
     </style>
 
     {% block head %}
@@ -68,11 +129,39 @@
 <body>
     {% block brand %}
     <div id="brand">
-        <h2>R1 ligths simulator</h2>
+        <h2><a class="nav" href="/">R1 lights simulator</a></h2>
+
+        <h4><a class="nav" href="/help">Help</a></h4>
     </div>
+
     {%endblock%}
+
     {% block content %}
 
+    {% endblock %}
+
+
+    {% block command_form %}
+
+    <div id="send">
+
+            {% if not session_name %}
+                <h5>Session</h5>
+                <input id="cmdSession" placeholder="Session name" />
+            {% endif %}
+            <h5>Ligth ID</h5>
+            <input id="cmdID" placeholder="Ligth Id" />
+    
+            <h5>RGB color</h5>
+            <div id="color-container">
+    
+                    <input id="cmdR" type="number" placeholder="R" />
+                    <input id="cmdG"  type="number" placeholder="G" />
+                    <input id="cmdB" type="number" placeholder="B"/>
+            </div>
+    
+            <a id="send-btn">Send command</a>
+        </div>
     {% endblock %}
 
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -82,5 +171,50 @@
 
    
     {% endblock %}
+
+    <script>
+    
+        $("#send-btn").click(function(e){
+            // Validate
+
+            const session = {% if not session_name %} $("#cmdSession").val() {% else %} "{{session_name}}" {%endif%};
+            const id = $("#cmdID").val();
+
+            const r = Number($("#cmdR").val());
+            const g = Number($("#cmdG").val());
+            const b = Number($("#cmdB").val());
+
+            if(!session){
+                alert("You must provide a valid session name");
+                return;
+            }
+
+            if(!id){
+                alert("You must provide a light id");
+                return;
+            }
+
+            console.log(r, g, b)
+            if(!r || !g || !b ||  !(0 <= r <= 255) || !(0 <= g <= 255)  || !(0 <= b <= 255) ||r*g*b < 0 ){
+
+                alert("RGB value must be in between 0 and 255 values");
+                return;
+            }
+
+            $.ajax({
+                    url :'http://' + document.domain + ':' + location.port + '/setcolor',
+                    data: JSON.stringify({
+                        id,
+                        session,
+                        color: [r, g, b]
+                    }),
+                    method: 'POST',
+                    error: function(e){
+                        alert( e.responseJSON.errors.join("\n"))
+                    }
+                }
+            )
+        })
+    </script>
 </body>
 </html>

@@ -23,7 +23,7 @@
 
         #session_preview iframe{
             position: fixed;
-            top: 50px;
+            top: 65px;
             left: 0;
             width: 100%;
             height: 100%;
@@ -40,6 +40,7 @@
            font-weight: bold;
            color:gold;
         }
+
     </style>
 {% endblock %}
 
@@ -47,15 +48,18 @@
    
 
     <div id="session_preview">
-        <iframe id="window">
+        <iframe id="window" src="dashboard/main">
 
         </iframe>
     </div>
     <div id="sessions">
 
-        </div>
+    </div>
+
 
 {% endblock %}
+
+{% block command_form %}{%endblock%}
 
 {% block scripts %}
 <script>
@@ -65,7 +69,7 @@
             console.log("Connected")
         });
 
-    let selected = "";
+    let selected = "main";
 
     socket.on('sessions', function(e) {
         console.log(e)
@@ -84,5 +88,6 @@
                 }))
         })
     });
+
 </script>
 {% endblock %}

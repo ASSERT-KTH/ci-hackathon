@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespac
 import os
 app = Flask(__name__, template_folder='templates')
 
-from views import room, index
+from views import room, index, h
  # SETTING WEBSOCKET FOR SIMULATOR
 
 socketio = SocketIO(app, ping_interval=2, ping_timeout=10 )#, logger=True, engineio_logger=True)
@@ -134,12 +134,16 @@ def setBulkLight():
 def room_handler(session_name):
     return room(session_name)
 
+
+# STATIC CONTENT
+@app.route('/help')
+def help_handler():
+    return h(light_schema, bulk_schema)
+
 # STATIC CONTENT
 @app.route('/')
 def index_handler():
     return index()
-
-
 
 if __name__ == '__main__':
 

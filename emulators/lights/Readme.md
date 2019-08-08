@@ -5,9 +5,17 @@
 1. Create virtualenv ```virtualenv controllerEnv```
 2. Activate virtualenv ```source <controllerEnv path>/bin/activate```
 2. Install requirements ```pip install -r requirements.txt```
-
-
 3. Launch app ```./run_dev.sh```, by default it will run on ```localhost:8000```
+
+![docs/simluator.png](docs/simulator.png)
+
+## Simulator views
+- Home page: ```http://localhost:8000```
+    - This page starts a new session room, called "main"
+- Light simulator room view: ```http://localhost:8000/dashboard/<session_name>```
+    - Isolated view for room session
+- Help page: ```http://localhost:8000/help```
+    - Shows API entrypoints and json schemas for lights controller
 
 ## Environment variables
 
@@ -27,7 +35,7 @@ python src/server.py
 ## Controller switch
 To switch between web application lights simulator and real pi controller you must set an environment variable ```export LIGHT_CONTROLLER=simulator``` or ```export LIGHT_CONTROLLER=controller```
 
-## Command api
+## Command API
 We process two REST endpoints with POST method data:
 
 - ```setcolor``` illuminates one light based on id for an specific session. Json schema: 
@@ -85,3 +93,7 @@ Simulator app works recieving and processing sent API commands through a websock
 
 1. Send command to ```http://localhost:8000/setcolor``` with data ```{"id": "1", "color": [100, 200, 50], "session": "test"}```
 2. In all browser tabs (opened in ```http://localhost:8000/dashboard/test```) you will see command logs and drawing simulation
+
+## TODO
+
+We are working on lights blueprint to put achieve the better representation of the real setup in R1. 

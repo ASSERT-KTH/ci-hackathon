@@ -9,3 +9,8 @@ def room(name):
 
 def index():
     return render_template("index.html")
+
+
+def h(schema1, schema2):
+    return render_template("help.html", schema1=dumps(schema1, indent=4, sort_keys=True), 
+schema2=dumps(schema2, indent=4, sort_keys=True))
