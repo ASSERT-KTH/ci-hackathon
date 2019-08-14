@@ -22,8 +22,9 @@ LIGTHS_MAP = {'1' : initLightMap(2, [0, 1, 0]),
              '3' : initLightMap(8, [1, 1, 1]),
              '4' : initLightMap(11, [0, 1, 1]),
              '5' : initLightMap(14, [0.5, 1.1, 0.5]) ,
-             '6' : initLightMap(14, [0.5, 1, 0.5]) ,
-             '7' : initLightMap(14, [1, 1, 0.75]) ,
-             '8' : initLightMap(14, [0.75, 1, 1]) ,
-             '9' : initLightMap(14, [1, 1, 0.75]) 
+             '6' : initLightMap(17, [0.5, 1, 0.5]) ,
+             '7' : initLightMap(20, [1, 1, 0.75]) ,
+             '8' : initLightMap(23, [0.75, 1, 1]) ,
+             '9' : initLightMap(26, [1, 1, 0.75]),
+             '10' : initLightMap(29, [1, 1, 0.75]) 
              }
