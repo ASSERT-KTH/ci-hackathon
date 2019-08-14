@@ -96,4 +96,4 @@ Simulator app works recieving and processing sent API commands through a websock
 
 ## TODO
 
-We are working on lights blueprint to put achieve the better representation of the real setup in R1. 
+We are working on lights blueprint to put a representation of the real lights setup in R1. 
