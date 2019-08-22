@@ -1,7 +1,7 @@
 source: site
 destination: build
 
-environment: prod
+subdomain: ci-hackathon
 
 collections:
     participants:
