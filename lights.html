@@ -156,23 +156,25 @@ python src/server.py
 <p>We process two REST endpoints with POST method data:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">setcolor</code> illuminates one light based on id for an specific session. Json schema:
-```json</li>
+  <li><code class="highlighter-rouge">setcolor</code> illuminates one light based on id for an specific session. Json schema:</li>
 </ul>
 
-<p>{“required”: [“id”, “color”, “session”],
-    “properties”: {
-        “id”: { “type”: “string” },
-        “session”: {“type”: “string”},
-        “color”: { “type”: “array”, “items”: { “type”: “number”, “minimum”: 0,
-  “maximum”: 255} },
-    }</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+{"required": ["id", "color", "session"],
+    "properties": {
+        "id": { "type": "string" },
+        "session": {"type": "string"},
+        "color": { "type": "array", "items": { "type": "number", "minimum": 0,
+  "maximum": 255} },
+    }
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">setbulk</code> illuminates lights collection based on id for an specific session. Json schema:</li>
+</ul>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-- ```setbulk``` illuminates lights collection based on id for an specific session. Json schema: 
-
-```json
-
 {
     "required": ["set", "session"],
     "properties": {
