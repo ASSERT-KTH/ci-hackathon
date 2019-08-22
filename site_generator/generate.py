@@ -3,6 +3,7 @@ import urllib.request
 from stat import S_ISDIR
 from json import loads
 import re
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARTICIIPANTS_DIR = "participants"
@@ -10,6 +11,8 @@ PARTICIIPANTS_DIR = "participants"
 
 participantsFolder = "%s/site/_participants"%(BASE_DIR,)
 solutionsFolder = "%s/site/_solutions"%(BASE_DIR,)
+
+BASE_URL =  sys.argv[1] if len(sys.argv) > 0 else  ''
 
 def generateSolution(team, folder):
 
@@ -119,7 +122,7 @@ def process_participants():
                 teamPage.write("## Solutions\n")
 
                 for solution in solutions:
-                    teamPage.write("- [%s](/solutions/%s)\n"%(solution,solution))
+                    teamPage.write("- [%s](%s/solutions/%s)\n"%(solution,BASE_URL,solution))
                 # print solution list instead
 
 
