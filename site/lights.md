@@ -3,7 +3,7 @@
     title: Lights controller web service
 ---
 
-This is an abstraction between your pc and the lights controller hardware. Try to write your code targeting an abstract webapi. We have a r-pi in R1 controlling real lights. When you come to R1 place, you only needs to change the webpapi url, and the r-pi will do the magic.
+This is an abstraction between your pc and the lights controller hardware. Try to write your code targeting an abstract webapi. We have an r-pi in R1 controlling real lights. When you come to R1 place, you only need to change the webpapi url, and the r-pi will do the magic.
 
 Here is an example of how lights work with our web service.
 
