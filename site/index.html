@@ -263,7 +263,7 @@ layout: base
           <div class="team-container">
           {% for member in team.team %}
           <div class="team-member">
-            <a  href="{{team.url}}">
+            <a  href="{{site.subdomain}}/{{team.url}}">
               <img class="mx-auto rounded-circle" src="{{member.avatar_url}}" alt="">
             </a>
             <h4>{{member.name}}</h4>
@@ -339,10 +339,10 @@ layout: base
 
 
 <!-- Contact form JavaScript -->
-<script src="js/jqBootstrapValidation.js"></script>
+<script src="{{site.subdomain}}/js/jqBootstrapValidation.js"></script>
 
 <!-- Custom scripts for this template -->
-<script src="js/agency.min.js"></script>
+<script src="{{site.subdomain}}/js/agency.min.js"></script>
 
 <script>
   // Set the date we're counting down to

@@ -11,14 +11,14 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav text-uppercase ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="{{preffix}}#program">Program</a>
+                    <a class="nav-link js-scroll-trigger" href="{{site.subdomain}}/{{preffix}}#program">Program</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="{{preffix}}#participants">Participants</a>
+                    <a class="nav-link js-scroll-trigger" href="{{site.subdomain}}/{{preffix}}#participants">Participants</a>
                 </li>
               {% for item in site.pages %}
               
-                {% if item.link %}<li class="nav-item"><a class="nav-link {% if page.url == item.url %}active{% endif %}" href="{{ item.url }}">{{ item.link }}</a></li>{% endif %}
+                {% if item.link %}<li class="nav-item"><a class="nav-link {% if page.url == item.url %}active{% endif %}" href="{{site.subdomain}}/{{ item.url }}">{{ item.link }}</a></li>{% endif %}
               {% endfor %}
             </ul>
           </div>

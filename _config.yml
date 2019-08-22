@@ -1,4 +1,7 @@
 source: site
+destination: build
+
+subdomain: ci-hackathon
 
 collections:
     participants:
