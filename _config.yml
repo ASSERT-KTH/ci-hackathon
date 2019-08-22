@@ -1,7 +1,8 @@
 source: site
 destination: build
 
-subdomain: ci-hackathon
+absolute: https://kth.github.io/ci-hackathon/
+environment: dev
 
 collections:
     participants:

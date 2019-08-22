@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+    
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lights controller web service</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Art for continuous integration.">
+    <link rel="canonical" href="/lights.html">
+
+
+    <!-- Custom CSS & Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link rel="stylesheet" href="https://kth.github.io/ci-hackathon/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="https://kth.github.io/ci-hackathon/vendor/fontawesome-free/css/all.min.css">
+
+    <link rel="stylesheet" href="https://kth.github.io/ci-hackathon/vendor/bootstrap/css/bootstrap.min.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://kth.github.io/ci-hackathon//img/logos/favicon.png" type="image/x-icon">
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://kth.github.io/ci-hackathon/vendor/jquery/jquery.min.js"></script>
+    <script src="https://kth.github.io/ci-hackathon/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://kth.github.io/ci-hackathon/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body id="page-top" class="index">
+    
+    
+  
+
+
+<nav style="background: #212529"  class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+          <a class="navbar-brand js-scroll-trigger" href="https://kth.github.io/ci-hackathon//#page-top">Ci Hackathon</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="https://kth.github.io/ci-hackathon//#program">Program</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="https://kth.github.io/ci-hackathon//#participants">Participants</a>
+                </li>
+              
+              
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon//faq.html">FAQ</a></li>
+              
+              
+                
+              
+              
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon//inspiration.html">Inspiration</a></li>
+              
+              
+                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon//lights.html">Lights</a></li>
+              
+              
+                
+              
+              
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon//technology.html">technology</a></li>
+              
+              
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon//travis.html">Travis</a></li>
+              
+              
+                
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      
+      
+    
+
+<div class="container" style="margin-top: 150px">
+    <h1 style="margin-bottom:50px">Lights controller web service</h1>
+    <p>This is an abstraction between your pc and the lights controller hardware. Try to write your code targeting an abstract webapi. We have a r-pi in R1 controlling real lights. When you come to R1 place, you only needs to change the webpapi url, and the r-pi will do the magic.</p>
+
+<p>Here is an example of how lights work with our web service.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/oaBTSngKxxM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h2 id="emulator-local-deploy">Emulator local deploy</h2>
+
+<ol>
+  <li>Create virtualenv <code class="highlighter-rouge">virtualenv controllerEnv</code></li>
+  <li>Activate virtualenv <code class="highlighter-rouge">source &lt;controllerEnv path&gt;/bin/activate</code></li>
+  <li>Install requirements <code class="highlighter-rouge">pip install -r requirements.txt</code></li>
+  <li>Launch app <code class="highlighter-rouge">./run_dev.sh</code>, by default it will run on <code class="highlighter-rouge">localhost:8000</code></li>
+</ol>
+
+<p><img src="/img/simulator.png" alt="simluator.png" /></p>
+
+<h2 id="simulator-views">Simulator views</h2>
+<ul>
+  <li>Home page: <code class="highlighter-rouge">http://localhost:8000</code>
+    <ul>
+      <li>This page starts a new session room, called “main”</li>
+    </ul>
+  </li>
+  <li>Light simulator room view: <code class="highlighter-rouge">http://localhost:8000/dashboard/&lt;session_name&gt;</code>
+    <ul>
+      <li>Isolated view for room session</li>
+    </ul>
+  </li>
+  <li>Help page: <code class="highlighter-rouge">http://localhost:8000/help</code>
+    <ul>
+      <li>Shows API entrypoints and json schemas for lights controller</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="environment-variables">Environment variables</h2>
+
+<p>To specify host Ip and Port you must set them as environment variables like:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nb">export </span><span class="nv">APP_PORT</span><span class="o">=</span>9000
+<span class="nb">export </span><span class="nv">APP_HOST</span><span class="o">=</span>0.0.0.0
+<span class="nb">export </span><span class="nv">APP_DEBUG</span><span class="o">=</span>True
+
+python src/server.py
+
+</code></pre></div></div>
+
+<h2 id="controller-switch">Controller switch</h2>
+<p>To switch between web application lights simulator and real pi controller you must set an environment variable <code class="highlighter-rouge">export LIGHT_CONTROLLER=simulator</code> or <code class="highlighter-rouge">export LIGHT_CONTROLLER=controller</code></p>
+
+<h2 id="command-api">Command API</h2>
+<p>We process two REST endpoints with POST method data:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">setcolor</code> illuminates one light based on id for an specific session. Json schema:
+```json</li>
+</ul>
+
+<p>{“required”: [“id”, “color”, “session”],
+    “properties”: {
+        “id”: { “type”: “string” },
+        “session”: {“type”: “string”},
+        “color”: { “type”: “array”, “items”: { “type”: “number”, “minimum”: 0,
+  “maximum”: 255} },
+    }</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+- ```setbulk``` illuminates lights collection based on id for an specific session. Json schema: 
+
+```json
+
+{
+    "required": ["set", "session"],
+    "properties": {
+        "session": {
+            "type": "string"
+        },
+        "set": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 255
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+</code></pre></div></div>
+
+<h2 id="access-simulator-view">Access simulator view</h2>
+<p>Simulator app works recieving and processing sent API commands through a websocket channel. Each simulator web app runs in an specific session_name, for example, <code class="highlighter-rouge">http://localhost:8000/dashboard/test</code> will process and draw all sent messages with <code class="highlighter-rouge">test</code> as session id. Opened sessions are shown in the home page of the simulator (<code class="highlighter-rouge">http://localhost:8000/</code>). Clicking a session name will show the session view.</p>
+
+<h3 id="pipeline">Pipeline</h3>
+
+<ol>
+  <li>Send command to <code class="highlighter-rouge">http://localhost:8000/setcolor</code> with data <code class="highlighter-rouge">{"id": "1", "color": [100, 200, 50], "session": "test"}</code></li>
+  <li>In all browser tabs (opened in <code class="highlighter-rouge">http://localhost:8000/dashboard/test</code>) you will see command logs and drawing simulation</li>
+</ol>
+
+<h2 id="todo">TODO</h2>
+
+<p>We are working on lights blueprint to put a representation of the real lights setup in R1.</p>
+
+</div>
+
+
+
+    
+<!-- Footer -->
+<footer class="footer">
+<div class="container">
+    <div class="row align-items-center">
+    <div class="col-md-4">
+        <span class="copyright">Copyright &copy; CI Art Hackathon 2019</span>
+    </div>
+    <!-- <div class="col-md-4">
+        <ul class="list-inline social-buttons">
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+        </ul>
+    </div> -->
+    <!--<div class="col-md-4">
+        <ul class="list-inline quicklinks">
+        <li class="list-inline-item">
+            <a href="#">Privacy Policy</a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">Terms of Use</a>
+        </li>
+        </ul>
+    </div>-->
+    </div>
+</div>
+</footer>
+
+    
+
+</body>
+</html>
