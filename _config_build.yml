@@ -1,6 +1,7 @@
 source: site
 destination: build
 
+absolute: https://kth.github.io/ci-hackathon/
 environment: prod
 
 collections:

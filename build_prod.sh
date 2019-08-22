@@ -1,0 +1,1 @@
+bundle exec jekyll build --config _config_build.yml

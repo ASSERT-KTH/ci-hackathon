@@ -2,6 +2,7 @@
 layout: base
 ---
     {% include header.html scope="index" %}
+    {% capture absolute %}{% if site.environment == 'prod' %}{{site.absolute}}{% endif %}{% endcapture %}
 
   <!-- Services 
   <section class="page-section" id="services">
@@ -263,7 +264,7 @@ layout: base
           <div class="team-container">
           {% for member in team.team %}
           <div class="team-member">
-            <a  href="{{team.url}}">
+            <a  href="{{absolute}}{{team.url}}">
               <img class="mx-auto rounded-circle" src="{{member.avatar_url}}" alt="">
             </a>
             <h4>{{member.name}}</h4>
@@ -308,41 +309,14 @@ layout: base
     </div>
   </section>
 
-  <!-- Clients -->
-  <section class="py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 col-sm-6">
-          <a href="#">
-            <img class="img-fluid d-block mx-auto" src="img/logos/envato.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <a href="#">
-            <img class="img-fluid d-block mx-auto" src="img/logos/designmodo.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <a href="#">
-            <img class="img-fluid d-block mx-auto" src="img/logos/themeforest.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <a href="#">
-            <img class="img-fluid d-block mx-auto" src="img/logos/creative-market.jpg" alt="">
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
 
 
 
 <!-- Contact form JavaScript -->
-<script src="js/jqBootstrapValidation.js"></script>
+<script src="{{absolute}}js/jqBootstrapValidation.js"></script>
 
 <!-- Custom scripts for this template -->
-<script src="js/agency.min.js"></script>
+<script src="{{absolute}}js/agency.min.js"></script>
 
 <script>
   // Set the date we're counting down to
