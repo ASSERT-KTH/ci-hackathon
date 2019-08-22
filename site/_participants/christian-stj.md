@@ -1,0 +1,38 @@
+---
+layout: team
+team: 
+  - id : "christian-stj" 
+    login : "christian-stj" 
+    id : "32709086" 
+    node_id : "MDQ6VXNlcjMyNzA5MDg2" 
+    avatar_url : "https://avatars2.githubusercontent.com/u/32709086?v=4" 
+    gravatar_id : "" 
+    url : "https://api.github.com/users/christian-stj" 
+    html_url : "https://github.com/christian-stj" 
+    followers_url : "https://api.github.com/users/christian-stj/followers" 
+    following_url : "https://api.github.com/users/christian-stj/following{/other_user}" 
+    gists_url : "https://api.github.com/users/christian-stj/gists{/gist_id}" 
+    starred_url : "https://api.github.com/users/christian-stj/starred{/owner}{/repo}" 
+    subscriptions_url : "https://api.github.com/users/christian-stj/subscriptions" 
+    organizations_url : "https://api.github.com/users/christian-stj/orgs" 
+    repos_url : "https://api.github.com/users/christian-stj/repos" 
+    events_url : "https://api.github.com/users/christian-stj/events{/privacy}" 
+    received_events_url : "https://api.github.com/users/christian-stj/received_events" 
+    type : "User" 
+    site_admin : "False" 
+    name : "Christian Stjernberg" 
+    company : "None" 
+    blog : "" 
+    location : "Stockholm" 
+    email : "None" 
+    hireable : "None" 
+    bio : "Computer science student at KTH" 
+    public_repos : "1" 
+    public_gists : "0" 
+    followers : "0" 
+    following : "0" 
+    created_at : "2017-10-11T13:41:42Z" 
+    updated_at : "2019-08-13T06:28:41Z" 
+solution_count: 0
+---
+## Solutions

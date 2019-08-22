@@ -1,3 +1,8 @@
+---
+layout: solution
+team: gluckzhang
+path: king_of_ci_fighters
+---
 # The King of CI Fighters
 
 ## What Is The Idea?

@@ -1,2 +1,9 @@
 source: site
-destination: ../_hacksite
+
+collections:
+    participants:
+      permalink: "/participants/:path"
+      output: true
+    solutions:
+      output: True
+      permalink: "/solutions/:path"

@@ -2,6 +2,7 @@
 .team-member {
   margin-bottom: 50px;
   text-align: center;
+  position: relative;
   img {
     width: 225px;
     height: 225px;
@@ -15,4 +16,16 @@
   p {
     margin-top: 0;
   }
+}
+
+.team-container{
+  display: flex;
+  flex-direction: row;
+  margin: 50px;
+
+  .team-member{
+    zoom: 0.7;
+  }
+
+  justify-content: center;
 }

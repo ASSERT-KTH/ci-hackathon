@@ -70,4 +70,6 @@ A collection of libraries, code examples and papers that can serve to build CI-a
 
 ## Hardware bridges
 
-Here we will post code to control actual hardware fixtures: lights and the organ.
+Here we will post code to control actual hardware fixtures:
+- [Lights](lights)
+- The organ.
