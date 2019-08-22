@@ -145,3 +145,5 @@ ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons l
 @media (min-width: 1200px) { .timeline-icon { font-size: 5em; line-height: 160px !important; } }
 
 img { max-width: 800px; }
+
+.navbar-brand { text-transform: uppercase; font-family: Montserrat, "Helvetica Neue",Helvetica,Arial,sans-serif; font-weight: 700; }
