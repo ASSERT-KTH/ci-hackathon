@@ -1,5 +1,5 @@
 source: site
-destination: build
+destination: docs
 
 absolute: https://kth.github.io/ci-hackathon/
 environment: prod

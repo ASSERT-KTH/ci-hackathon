@@ -1,5 +1,5 @@
 source: site
-destination: build
+destination: docs
 
 environment: prod
 
