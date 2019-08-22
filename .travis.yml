@@ -1,0 +1,12 @@
+language: ruby
+
+script:
+  -  python site_generator/generate.py
+after_success:
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then .push.sh envprod.tld; fi
+on:
+  branch:
+    master
+
+
+  
