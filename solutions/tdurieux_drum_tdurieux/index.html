@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script language="javascript" type="text/javascript" src="//travis.durieux.me/travisListener.js"></script>
+    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.11.12/Tone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/redom@3.24.0/dist/redom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/startaudiocontext@1.2.1/StartAudioContext.min.js"></script>
+    <style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #222;
+  color: #eee;
+  height: 100%;
+}
+.container {
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+.controls {
+  display: flex;
+  padding: 20px 5px
+}
+.controls .left {
+  flex: 2;
+}
+.left button {
+  width: 100%;
+}
+.controls .control {
+  flex: 2;
+  font-size: 13px;
+  text-align: center;
+}
+.controls .mdl-slider__background-upper {
+  background-color: #bbb;
+}
+#sequencer {
+  flex: 1;
+  display: none;
+}
+#loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sequencer {
+  width: 100%;
+  display: flex;
+  margin: 0;
+  perspective: 500px;
+  transform-style: preserve-3d;
+}
+.sequencer .column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transform-style: inherit;
+}
+
+.sequencer .cell {
+  flex: 1;
+  margin: .5px;
+  box-sizing: border-box;
+  position: relative;
+}
+.sequencer .cell .full, .sequencer .cell .parts {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+.sequencer .cell .parts {
+  display: flex;
+}
+.sequencer .cell .part {
+  flex: 1;
+}
+    </style>
+    <title>TravisCI Drum</title>
+</head>
+<body>
+    <div class="container">
+        <div id="sequencer"></div>
+        <div id="loading">
+            Loading
+        </div>
+    </div>
+    <script language="javascript" type="text/javascript" src="script.js"></script>
+</body>
+</html>
