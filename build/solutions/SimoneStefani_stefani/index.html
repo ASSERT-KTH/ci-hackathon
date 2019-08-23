@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .button {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button" onclick="start()">START!</button>
+    <script src="tone.js"></script>
+    <script src="collections.min.js"></script>
+    <script>
+      ws = new WebSocket("wss://travis.durieux.me");
+      const maxNumberTracks = 1; //maximum number of tracks (CI jobs) that we listen to in parallel
+      var synth = null; // synth used to play CI jobs
+      var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
+      var playingJob = new List(); //keeps the list of sha values for each job being played. inv: playingJob.length < maxNumberTracks
+      var lock = false;
+
+      window.onload = initSynth();
+      function start() {
+        ws.onmessage = function(event) {
+          const message = JSON.parse(event.data);
+          handleJob(message);
+        };
+      }
+
+      function initSynth() {
+        synth = new Tone.Synth().toMaster();
+      }
+
+      function printArray(array) {
+        for (var i = 0; i < array.length; i++) {
+          console.log(array[i]);
+        }
+      }
+
+      //for the moment we consider only two situations: the job starts and we play; the job stops and we stop playing
+      //we should consider more: alter the sound when the job is updated (but not finished); play something different depending on the final state of the job (errored, failed, passed)
+      function handleJob(message) {
+        if (
+          (message.data.state === "passed" ||
+            message.data.state === "failed") &&
+          playingJob.length < maxNumberTracks &&
+          !playingJob.has(message.data.commit.sha) &&
+          !lock
+        ) {
+          var sound = soundForJob(message);
+          console.log("playing: " + sound);
+          handleArpeggio(sound);
+        }
+
+        function soundForJob(message) {
+          const lang = message.data.config.language;
+          var langChordPrefix = getChordFromLang(lang);
+          console.log(langChordPrefix);
+          var variant = message.data.state === "passed" ? "M" : "m";
+
+          var chord = getChord(langChordPrefix + variant);
+
+          return chord;
+        }
+
+        function getChord(chord) {
+          switch (chord) {
+            case "Cm":
+              return ["C4", "Eb4", "G4"];
+            case "Dm":
+              return ["D4", "F4", "A4"];
+            case "Em":
+              return ["E4", "G4", "B4"];
+            case "Fm":
+              return ["F4", "Ab4", "C4"];
+            case "CM":
+              return ["C4", "E4", "G4"];
+            case "DM":
+              return ["D4", "F#4", "A4"];
+            case "EM":
+              return ["E4", "G#4", "B4"];
+            default:
+              // F major
+              return ["F4", "A4", "C4"];
+          }
+        }
+
+        function getChordFromLang(lang) {
+          switch (lang) {
+            case "php":
+              return "C";
+            case "python":
+              return "D";
+            case "node_js":
+              return "E";
+            case "java":
+              return "F";
+          }
+        }
+
+        function handleArpeggio(chord) {
+          var pattern = new Tone.Pattern(
+            function(time, note) {
+              synth.triggerAttackRelease(note, "4n", time);
+            },
+            chord,
+            "upDown"
+          ).start(0);
+          Tone.Transport.bpm.value = 120;
+          Tone.Transport.start("+0.1");
+        }
+      }
+    </script>
+  </body>
+</html>
