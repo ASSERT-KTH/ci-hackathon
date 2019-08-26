@@ -110,7 +110,7 @@ For sonification, one can use the library [tone.js](https://tonejs.github.io/)
 
 We will provide access to:
 
-   - light fixtures to have a ci-art light show. [More information about lights for ci-art]().
+   - light fixtures to have a ci-art light show. [More information about lights for ci-art](https://kth.github.io/ci-hackathon/lights.html).
    - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
    - a big screen to display pieces that are rendered on your laptop
    - speakers to play sound ci-art pieces
