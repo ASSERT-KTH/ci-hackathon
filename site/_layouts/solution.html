@@ -1,0 +1,20 @@
+---
+layout: base
+---
+
+ 
+{% include header.html %}
+
+{{ page.team }}
+
+<div class="container" style="margin-top: 150px">
+
+    
+    {{ content }}
+
+    <a class="btn btn-warning" style="margin-right: 20px"  href="{{absolute}}/participants/{{page.team}}">To the team page</a>
+
+    {% if page.demo %}
+        <a class="btn btn-warning" href="{{site.absolute}}/solutions/{{page.team}}_{{page.sol}}/{{page.demo}}" target="_blank" >See demo</a>
+    {% endif %}
+</div>

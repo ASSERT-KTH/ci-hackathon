@@ -1,0 +1,2 @@
+* [The pulse of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/pulse_of_travis/index.html) (details in folder [pulse_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis))
+* [The voice of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/voice_of_travis) (details in folder [voice_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis))

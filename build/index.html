@@ -1,0 +1,824 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+    
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ci-hackathon</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Art for continuous integration.">
+    <link rel="canonical" href="http://localhost:4000/">
+
+
+    <!-- Custom CSS & Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="/vendor/fontawesome-free/css/all.min.css">
+
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="/img/logos/favicon.png" type="image/x-icon">
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body id="page-top" class="index">
+    
+        
+  
+
+
+<nav  class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+          <a class="navbar-brand js-scroll-trigger" href="#page-top">Ci Hackathon</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#program">Program</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#participants">Participants</a>
+                </li>
+              
+              
+                <li class="nav-item"><a class="nav-link " href="/faq.html">FAQ</a></li>
+              
+              
+                
+              
+              
+                <li class="nav-item"><a class="nav-link " href="/inspiration.html">Inspiration</a></li>
+              
+              
+                <li class="nav-item"><a class="nav-link " href="/lights.html">Lights</a></li>
+              
+              
+                
+              
+              
+                <li class="nav-item"><a class="nav-link " href="/technology.html">technology</a></li>
+              
+              
+                <li class="nav-item"><a class="nav-link " href="/travis.html">Travis</a></li>
+              
+              
+                
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      
+      
+        <header class="masthead">
+            <div class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in">CASTOR Software Days</div>
+                <div id="counter" class="intro-heading text-uppercase">CI Art Hackathon</div>
+            </div>
+            </div>
+        </header>
+      
+    
+    
+
+  <!-- Services 
+  <section class="page-section" id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Services</h2>
+          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">E-Commerce</h4>
+          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+        </div>
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Responsive Design</h4>
+          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+        </div>
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Web Security</h4>
+          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+        </div>
+      </div>
+    </div>
+  </section>-->
+
+  <!-- Portfolio Grid 
+  <section class="bg-light page-section" id="portfolio">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Portfolio</h2>
+          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Threads</h4>
+            <p class="text-muted">Illustration</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/02-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Explore</h4>
+            <p class="text-muted">Graphic Design</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/03-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Finish</h4>
+            <p class="text-muted">Identity</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal4">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/04-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Lines</h4>
+            <p class="text-muted">Branding</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/05-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Southwest</h4>
+            <p class="text-muted">Website Design</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6">
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fas fa-plus fa-3x"></i>
+              </div>
+            </div>
+            <img class="img-fluid" src="img/portfolio/06-thumbnail.jpg" alt="">
+          </a>
+          <div class="portfolio-caption">
+            <h4>Window</h4>
+            <p class="text-muted">Photography</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>-->
+  <section class="bg-light page-section" id="intro">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+              <p>We build beautiful visualizations or sonifications of continuous integration (of compilation, test, analysis, packaging, deployment, etc).</p>
+              <p>For months, we prepare our prototypes about CI data and activity. On October 14 2019, we meet in the nuclear reactor R1 at KTH for a unique moment of art and software technology.</p>
+          </div>
+        </div>
+        </div>
+    </section>
+
+
+  <!-- About -->
+  <section class="page-section" id="program">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Program</h2>
+          <h3 class="section-subheading text-muted">October 14 2019</h3>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="timeline">
+            
+            <li class="">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-user-tie"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>18:00</h4>
+                <h4 class="subheading">Welcome talk by hackathon curator Benoit Baudry</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">Benoit Baudry</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="timeline-inverted">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-book-reader"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>18:20</h4>
+                <h4 class="subheading">Reading of Code</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-laptop-code"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>18:30</h4>
+                <h4 class="subheading">Demo and explanation of the Travis API / Websocket</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">Thomas Durieux</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="timeline-inverted">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-video"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>18:40</h4>
+                <h4 class="subheading">Demo and Explanation of the organ interface</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">Simone Stefani</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-video"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>18:50</h4>
+                <h4 class="subheading">Demo and Explanation of the light interface</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="timeline-inverted">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-drumstick-bite"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>19h00</h4>
+                <h4 class="subheading">Pizza, beer and coding</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-calendar"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>22:00</h4>
+                <h4 class="subheading">CI Rain</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">Thomas Durieux</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="timeline-inverted">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-calendar"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>22:15</h4>
+                <h4 class="subheading">TBA</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-calendar"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>22:30</h4>
+                <h4 class="subheading">TBA</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <li class="timeline-inverted">
+            <div class="timeline-image">
+                <i class="timeline-icon fas fa-calendar"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                <h4>22:45</h4>
+                <h4 class="subheading">TBA</h4>
+                </div>
+                <div class="timeline-body">
+                <p class="text-muted">TBA</p>
+                </div>
+            </div>
+            </li>
+            
+            <!-- <li>
+              <div class="timeline-image">
+                <img class="rounded-circle img-fluid" src="img/about/1.jpg" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>2009-2011</h4>
+                  <h4 class="subheading">Our Humble Beginnings</h4>
+                </div>
+                <div class="timeline-body">
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-inverted">
+              <div class="timeline-image">
+                <img class="rounded-circle img-fluid" src="img/about/2.jpg" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>March 2011</h4>
+                  <h4 class="subheading">An Agency is Born</h4>
+                </div>
+                <div class="timeline-body">
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="timeline-image">
+                <img class="rounded-circle img-fluid" src="img/about/3.jpg" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>December 2012</h4>
+                  <h4 class="subheading">Transition to Full Service</h4>
+                </div>
+                <div class="timeline-body">
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-inverted">
+              <div class="timeline-image">
+                <img class="rounded-circle img-fluid" src="img/about/4.jpg" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>July 2014</h4>
+                  <h4 class="subheading">Phase Two Expansion</h4>
+                </div>
+                <div class="timeline-body">
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-inverted">
+              <div class="timeline-image">
+                <h4>Be Part
+                  <br>Of Our
+                  <br>Story!</h4>
+              </div>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="bg-light page-section" id="participants">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Participants</h2>
+          <h3 class="section-subheading text-muted">We have 5 teams up to now. Become a participant !! <a href="faq.html">How to?</a></h3>
+        </div>
+      </div>
+      <div class="row">
+
+          
+        <div class="col-sm-4">
+          <div class="team-container">
+          
+          <div class="team-member">
+            <a  href="/participants/Jacarte_bbaudry">
+              <img class="mx-auto rounded-circle" src="https://avatars2.githubusercontent.com/u/16924379?v=4" alt="">
+            </a>
+            <h4>Javier Cabrera</h4>
+            
+              <p class="text-muted">KTH Royal Institute of Technology</p>
+            
+
+            
+              <p class="text-muted">Stockholm, Sweden</p>
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+          <div class="team-member">
+            <a  href="/participants/Jacarte_bbaudry">
+              <img class="mx-auto rounded-circle" src="https://avatars1.githubusercontent.com/u/2844085?v=4" alt="">
+            </a>
+            <h4>Benoit Baudry</h4>
+            
+
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+
+        </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="team-container">
+          
+          <div class="team-member">
+            <a  href="/participants/SimoneStefani">
+              <img class="mx-auto rounded-circle" src="https://avatars0.githubusercontent.com/u/13915504?v=4" alt="">
+            </a>
+            <h4>Simone Stefani</h4>
+            
+              <p class="text-muted">KTH Royal Institute of Technology</p>
+            
+
+            
+              <p class="text-muted">Stockholm, Sweden</p>
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+
+        </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="team-container">
+          
+          <div class="team-member">
+            <a  href="/participants/gluckzhang">
+              <img class="mx-auto rounded-circle" src="https://avatars2.githubusercontent.com/u/6386131?v=4" alt="">
+            </a>
+            <h4>GluckZhang</h4>
+            
+              <p class="text-muted">KTH Royal Institute of Technology</p>
+            
+
+            
+              <p class="text-muted">Stockholm, Sweden</p>
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+
+        </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="team-container">
+          
+          <div class="team-member">
+            <a  href="/participants/oscarlvp">
+              <img class="mx-auto rounded-circle" src="https://avatars2.githubusercontent.com/u/630717?v=4" alt="">
+            </a>
+            <h4>Oscar Luis Vera Pérez</h4>
+            
+
+            
+              <p class="text-muted">France</p>
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+
+        </div>
+        </div>
+        
+        <div class="col-sm-4">
+          <div class="team-container">
+          
+          <div class="team-member">
+            <a  href="/participants/tdurieux">
+              <img class="mx-auto rounded-circle" src="https://avatars2.githubusercontent.com/u/5577568?v=4" alt="">
+            </a>
+            <h4>Thomas Durieux</h4>
+            
+              <p class="text-muted">INESC-ID</p>
+            
+
+            
+              <p class="text-muted">Lisbon</p>
+            
+
+
+            <!--<ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-globe"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>-->
+          </div>
+          
+
+        </div>
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <p class="large text-muted"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+<!-- Contact form JavaScript -->
+<script src="/js/jqBootstrapValidation.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="/js/agency.min.js"></script>
+
+<script>
+  // Set the date we're counting down to
+  var countDownDate = new Date("Oct 14, 2019 18:00:00").getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+    // Get today's date and time
+    var now = new Date().getTime();
+      
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+      
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+    // Output the result in an element with id="demo"
+    document.getElementById("counter").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+      
+    // If the count down is over, write some text 
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+  </script>
+
+
+    
+<!-- Footer -->
+<footer class="footer">
+<div class="container">
+    <div class="row align-items-center">
+    <div class="col-md-4">
+        <span class="copyright">Copyright &copy; CI Art Hackathon 2019</span>
+    </div>
+    <!-- <div class="col-md-4">
+        <ul class="list-inline social-buttons">
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">
+            <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+        </ul>
+    </div> -->
+    <!--<div class="col-md-4">
+        <ul class="list-inline quicklinks">
+        <li class="list-inline-item">
+            <a href="#">Privacy Policy</a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#">Terms of Use</a>
+        </li>
+        </ul>
+    </div>-->
+    </div>
+</div>
+</footer>
+
+    
+
+</body>
+</html>

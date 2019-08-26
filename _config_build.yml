@@ -1,0 +1,13 @@
+source: site
+destination: build
+
+absolute: https://kth.github.io/ci-hackathon
+environment: prod
+
+collections:
+    participants:
+      permalink: "/participants/:path"
+      output: true
+    solutions:
+      output: True
+      permalink: "/solutions/:path"

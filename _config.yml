@@ -1,0 +1,11 @@
+source: site
+destination: build
+environment: dev
+
+collections:
+    participants:
+      permalink: "/participants/:path"
+      output: true
+    solutions:
+      output: True
+      permalink: "/solutions/:path"
