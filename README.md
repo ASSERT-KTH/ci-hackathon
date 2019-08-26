@@ -6,12 +6,14 @@
 
 For months, we prepare our prototypes about CI data and activity. On October 14 2019, we meet in the nuclear reactor R1 at KTH for a unique moment of art and software technology.
 
+[Learn more about continuous integration and the hackathon data]().
+
 ## Participants
 
 To participate to the hackathon, simply make a pull-request on this repo.
 
 Participants:
-s
+
 - Thomas Durieux: 
     * [Continuous Integration Rain](https://travis.durieux.me/rain.html) [repo](https://travis-ci.com/tdurieux/travis-listener/)
     * [Travis Drum](https://kth.github.io/ci-hackathon/solutions/tdurieux_drum_tdurieux) based on https://codepen.io/teropa/pen/PKoYXM
