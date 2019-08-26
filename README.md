@@ -14,15 +14,15 @@ Participants:
 s
 - Thomas Durieux: 
     * [Continuous Integration Rain](https://travis.durieux.me/rain.html) [repo](https://travis-ci.com/tdurieux/travis-listener/)
-    * [Travis Drum](https://kth.github.io/ci-hackathon/solutions/tdurieux_drum_tdurieux/index.html) (details in folder [drum_tdurieux](https://kth.github.io/ci-hackathon/solutions/tdurieux_drum_tdurieux)) based on https://codepen.io/teropa/pen/PKoYXM
+    * [Travis Drum](https://kth.github.io/ci-hackathon/solutions/tdurieux_drum_tdurieux) based on https://codepen.io/teropa/pen/PKoYXM
     * [Travis Canvas](https://travis.durieux.me/canvas.html) 
     * [Travis Tree](https://travis.durieux.me/tree/) based on https://github.com/guo2/tree_js
 - Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
 - Simone Stefani: sonification with chords (details in folder [stefani](stefani))
 - Javier Cabrera and Benoit Baudry: 
-    * [The pulse of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis) (details in folder [pulse_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis))
-    * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis) (details in folder [voice_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis))
-- Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/solutions/oscarlvp_drum-machine.html) (details in folder [drum-machine](drum-machine))
+    * [The pulse of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis)
+    * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis) 
+- Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/solutions/oscarlvp_drum-machine.html)
 - Add your name / your team with a pull request :-)
 
 ## Program of October 14 2019
