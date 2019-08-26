@@ -20,8 +20,8 @@ s
 - Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
 - Simone Stefani: sonification with chords (details in folder [stefani](stefani))
 - Javier Cabrera and Benoit Baudry: 
-    * [The pulse of Travis](https://kth.github.io/ci-hackathon/cabrera_baudry/pulse_of_travis/index.html) (details in folder [pulse_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis))
-    * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_traviss) (details in folder [voice_of_travis](cabrera_baudry/voice_of_travis))
+    * [The pulse of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis) (details in folder [pulse_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis))
+    * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis) (details in folder [voice_of_travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis))
 - Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/solutions/oscarlvp_drum-machine.html) (details in folder [drum-machine](drum-machine))
 - Add your name / your team with a pull request :-)
 
