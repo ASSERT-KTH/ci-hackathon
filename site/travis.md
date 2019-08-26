@@ -22,4 +22,4 @@ The possible states for one Travis job are:
 
 It is possible to identify unique build using with `build_id` and a unique job with `id`.
 
-![job states](/img/travisci_state.png)
+![job states](https://kth.github.io/ci-hackathon/img/travisci_state.png)

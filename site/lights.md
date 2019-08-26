@@ -48,7 +48,8 @@ To switch between web application lights simulator and real pi controller you mu
 We process two REST endpoints with POST method data:
 
 - ```setcolor``` illuminates one light based on id for an specific session. Json schema: 
-```json
+
+```
 
 {"required": ["id", "color", "session"],
     "properties": {
@@ -62,7 +63,7 @@ We process two REST endpoints with POST method data:
 
 - ```setbulk``` illuminates lights collection based on id for an specific session. Json schema: 
 
-```json
+```
 
 {
     "required": ["set", "session"],

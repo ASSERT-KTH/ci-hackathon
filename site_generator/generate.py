@@ -4,6 +4,7 @@ from stat import S_ISDIR
 from json import loads
 import re
 import sys
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARTICIIPANTS_DIR = "participants"
@@ -12,7 +13,16 @@ PARTICIIPANTS_DIR = "participants"
 participantsFolder = "%s/site/_participants"%(BASE_DIR,)
 solutionsFolder = "%s/site/_solutions"%(BASE_DIR,)
 
-BASE_URL =  sys.argv[1] if len(sys.argv) > 0 else  ''
+BASE_URL =  sys.argv[1] if len(sys.argv) > 1 else  ''
+
+def htmlPageIn(folder):
+    files = os.listdir(folder)
+
+    for f in files:
+        if re.compile("[iI][nN][dD][eE][xX]\.[hH][tT][mM][lL]?").match(f):
+            return f
+
+    return None
 
 def generateSolution(team, folder):
 
@@ -29,11 +39,22 @@ def generateSolution(team, folder):
 
             solution_page.write("layout: solution\n")
             solution_page.write("team: %s\n"%(team,))
-            solution_page.write("path: %s\n"%(solution,))
+            solution_page.write("sol: %s\n"%(solution,))
+
+            indexPreview = htmlPageIn("%s/%s"%(folder, solution))
+
+            if indexPreview:
+                solution_page.write("demo: %s\n"%(indexPreview))
 
             solution_page.write("---\n")
 
             readmeContent = getReadmeContent("%s/%s"%(folder, solution))
+
+            # copy folder
+            try:
+                shutil.copytree("%s/%s"%(folder, solution), "%s/%s_%s"%(solutionsFolder, team, solution))
+            except:
+                pass
 
             if readmeContent:
                 solution_page.write(readmeContent)
@@ -122,7 +143,7 @@ def process_participants():
                 teamPage.write("## Solutions\n")
 
                 for solution in solutions:
-                    teamPage.write("- [%s](%s/solutions/%s)\n"%(solution,BASE_URL,solution))
+                    teamPage.write("- [%s](%s/solutions/%s.html)\n"%(solution,BASE_URL,solution))
                 # print solution list instead
 
 
