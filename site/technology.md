@@ -6,11 +6,8 @@
 
 Here is a list of all the technologies involved in the hackathon and those we think may be useful.
 
-## Travis API
-We use Travis CI as main source of data. Travis CI provides different API end-points to listen to their builds. Reference documentation: https://docs.travis-ci.com/user/developer/
-
-## WebSocket
-A websocket with Travis builds is available at ws://travis.durieux.me.
+## Input stream : the Travis CI WebSocket
+A websocket with Travis builds is available at ws://travis.durieux.me. More information about the streamed objects is available [here](https://github.com/KTH/ci-hackathon/blob/master/site/travis.md)
 
 ### PYTHON
 
@@ -42,34 +39,37 @@ More information is available [here](/travis.html).
 
 [Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
 
-## Visualization
+## Tangible output technology
 
+### Reaktorhallen unique setup
+
+We have setup hardware bridges to exploit the unique space of reaktorhallen. Participants have the opportunity to hook on two hardware interfaces
+- [Light fixtures](lights). We will setup 20 light fixtures in reaktorhallen, which can be controlled through a simple web interface. Hackathon participants can use the [ligth fixtures emulator](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights) to prepare their piece of CI art. The same code can be reused to control real light fixtures on the day of the hackathon. More documentation about this interface is available [here](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights)
+- The organ. 
+
+### Visualization
+
+Here are popular Javascript libraries for data vizualization
 - [D3.js](https://d3js.org/)
 - [P5.js](https://p5js.org/)
 - [Vega Lite](https://vega.github.io/vega-lite/)
 
-## Sonification
+For example, the [Travis CI drum machine](https://github.com/KTH/ci-hackathon/tree/master/participants/oscarlvp/drum-machine) uses the [P5.js](https://p5js.org/) library
 
-For sonification, one can use the library [tone.js](https://tonejs.github.io/)
+### Sonification
 
-## Other resources
+Here are examples of sound synthesis libraries
+- [tone.js](https://tonejs.github.io/)
+- [Faust](https://faust.grame.fr/)
+- [ChucK](http://chuck.stanford.edu/)
+
+For example, the [Pulse of Travis](https://github.com/KTH/ci-hackathon/tree/master/participants/Jacarte_bbaudry/pulse_of_travis) uses [tone.js](https://tonejs.github.io/).
+
+### Other resources
 
 A collection of libraries, code examples and papers that can serve to build CI-art pieces.
-
-### Libraries
-
 * [Network-synchronised metronome](https://github.com/chr15m/SyncJams) a library to synchronize several device with respect to a common pulse, over wifi. Can be useful to syncrhonize the CI event and the media displays.
 * [Pure Data and openGL](https://github.com/Ant1r/ofxPof). A set of Pure Data (Pd) externals written with openFrameworks API, that bring OpenGL graphics and utilities to Pd.
-
-### CodePen
-
-[CodePen](https://codepen.io) is a social development environment for front-end designers and developers. It includes various visual effects that can be remixed for the hackathon. Here a few curated examples
-
-* [Rain](https://codepen.io/MillerTime/pen/oXmgJe). This pen served as a starting point for the [CI rain](https://travis.durieux.me/rain.html).
+* [CodePen](https://codepen.io) is a social development environment for front-end designers and developers. It includes various visual effects that can be remixed for the hackathon. Here a few curated examples
 * [Infinite tree of life](https://codepen.io/ge1doot/pen/vOQZGG)
 
-## Hardware bridges
-
-Here we will post code to control actual hardware fixtures:
-- [Lights](lights)
-- The organ.
