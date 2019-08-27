@@ -18,3 +18,17 @@
    6. Create a pull request to master
    7. And thats all !!.
    
+- **Where is the hackathon happening?**
+
+  The hackathon will take place in [reaktorhallen, a.k.a R1](https://www.r1.kth.se/). This is a very special place, 25 meters underground, where Swedish researchers had an experimental nuclear reactor and investigated nuclear physics from 1954 to 1970. In 1982, the reactor was completetely dismantled. Since 1998, the place is managed by KTH and used mainly for creative events, art exhibitions and installation, seminars and movie production. Over the years, among others, Madonna (the video [Nothing Really Matters](https://www.youtube.com/watch?v=cAVx9RKaLPU)), Moderna Dansteatern, Cullberg Ballet, Riksteatern, Radiokören and others have used R1 for different types of artistic projects. ([source](https://openhousestockholm.se/objekt/reaktorhallen-r1-2/))
+  
+- **What kind of equipment can I expect?**
+
+We will provide access to:
+
+   - light fixtures to have a ci-art light show. [More information about lights for ci-art](https://kth.github.io/ci-hackathon/lights.html).
+   - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
+   - a big screen to display pieces that are rendered on your laptop
+   - speakers to play sound ci-art pieces
+
+   
