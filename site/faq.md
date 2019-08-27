@@ -24,7 +24,7 @@
   
 - **What kind of equipment can I expect?**
 
-We will provide access to:
+    We will provide access to:
 
    - light fixtures to have a ci-art light show. [More information about lights for ci-art](https://kth.github.io/ci-hackathon/lights.html).
    - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
