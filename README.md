@@ -85,6 +85,5 @@ More information is available [here](https://github.com/KTH/ci-hackathon/blob/ma
 
 For sonification, one can use the library [tone.js](https://tonejs.github.io/)
 
-## Frequently Asked Questions
 
 
