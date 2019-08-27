@@ -30,48 +30,9 @@ The list of current participating teams and their ongoing CI art projects is ava
 
 ## Technology
 
-### Travis API
+The input stream of Travis CI continuous construction of open source software is provided through a websocket.
 
-We use Travis CI as main source of data. Travis CI provides different API end-points to listen to their builds. Reference documentation: <https://docs.travis-ci.com/user/developer/>
+Hackathon participants can use different hardware and software technology to build pieces of CI art that render this continuous software activity.
 
-### WebSocket
-
-A websocket with Travis builds is available at <ws://travis.durieux.me>.
-
-PYTHON: `pip3 install websocket_client`
-
-```python
-import websocket
-def on_message(ws, message):
-    print(message)
-
-websocket.enableTrace(True)
-ws = websocket.WebSocketApp("wss://travis.durieux.me/",on_message = on_message)
-ws.run_forever()
-```
-
-JAVASCRIPT
-
-```js
-ws = new WebSocket('wss://travis.durieux.me’);
-ws.onmessage = console.log
-```
-
-More information is available [here](https://github.com/KTH/ci-hackathon/blob/master/ci-ws-documentation.md).
-
-### Travis Listener (NodeJS)
-
-[Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
-
-### Visualization
-
-- [D3.js](https://d3js.org/)
-- [P5.js](https://p5js.org/)
-- [Vega Lite](https://vega.github.io/vega-lite/)
-
-### Sonification
-
-For sonification, one can use the library [tone.js](https://tonejs.github.io/)
-
-
+Resources about these different technology are available in the [technology page](https://github.com/KTH/ci-hackathon/blob/master/site/technology.md)
 
