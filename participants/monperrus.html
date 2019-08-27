@@ -7,10 +7,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Technology</title>
+    <title>Monperrus</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Art for continuous integration.">
-    <link rel="canonical" href="/technology.html">
+    <link rel="canonical" href="/participants/monperrus">
 
 
     <!-- Custom CSS & Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
@@ -82,7 +82,7 @@
                 
               
               
-                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon/technology.html">technology</a></li>
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/technology.html">technology</a></li>
               
               
                 <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/travis.html">Travis CI</a></li>
@@ -103,82 +103,15 @@
     
 
 <div class="container" style="margin-top: 150px">
-    <h1 style="margin-bottom:50px">Technology</h1>
-    <p>Here is a list of all the technologies involved in the hackathon and those we think may be useful.</p>
-
-<h2 id="travis-api">Travis API</h2>
-<p>We use Travis CI as main source of data. Travis CI provides different API end-points to listen to their builds. Reference documentation: https://docs.travis-ci.com/user/developer/</p>
-
-<h2 id="websocket">WebSocket</h2>
-<p>A websocket with Travis builds is available at ws://travis.durieux.me.</p>
-
-<h3 id="python">PYTHON</h3>
-
-<p>Install the websocket client package</p>
-
-<p><code class="highlighter-rouge">pip3 install websocket_client</code></p>
-
-<p>Run the following code:</p>
-
-<pre><code class="language-Python">import websocket
-def on_message(ws, message):
-    print(message)
-
-websocket.enableTrace(True)
-ws = websocket.WebSocketApp("wss://travis.durieux.me/",on_message = on_message)
-ws.run_forever()
-</code></pre>
-
-<h3 id="javascript">JavaScript</h3>
-
-<pre><code class="language-Python">ws = new WebSocket('wss://travis.durieux.me’);
-ws.onmessage = console.log
-</code></pre>
-<p>More information is available <a href="/travis.html">here</a>.</p>
-
-<h2 id="travis-listener-nodejs">Travis Listener (NodeJS)</h2>
-
-<p><a href="https://github.com/tdurieux/travis-listener">Travis Listener</a> provides a websocket server for easier use (<a href="https://durieux.me/projects/travis_listener.html">documentation</a>)</p>
-
-<h2 id="visualization">Visualization</h2>
-
-<ul>
-  <li><a href="https://d3js.org/">D3.js</a></li>
-  <li><a href="https://p5js.org/">P5.js</a></li>
-  <li><a href="https://vega.github.io/vega-lite/">Vega Lite</a></li>
-</ul>
-
-<h2 id="sonification">Sonification</h2>
-
-<p>For sonification, one can use the library <a href="https://tonejs.github.io/">tone.js</a></p>
-
-<h2 id="other-resources">Other resources</h2>
-
-<p>A collection of libraries, code examples and papers that can serve to build CI-art pieces.</p>
-
-<h3 id="libraries">Libraries</h3>
-
-<ul>
-  <li><a href="https://github.com/chr15m/SyncJams">Network-synchronised metronome</a> a library to synchronize several device with respect to a common pulse, over wifi. Can be useful to syncrhonize the CI event and the media displays.</li>
-  <li><a href="https://github.com/Ant1r/ofxPof">Pure Data and openGL</a>. A set of Pure Data (Pd) externals written with openFrameworks API, that bring OpenGL graphics and utilities to Pd.</li>
-</ul>
-
-<h3 id="codepen">CodePen</h3>
-
-<p><a href="https://codepen.io">CodePen</a> is a social development environment for front-end designers and developers. It includes various visual effects that can be remixed for the hackathon. Here a few curated examples</p>
-
-<ul>
-  <li><a href="https://codepen.io/MillerTime/pen/oXmgJe">Rain</a>. This pen served as a starting point for the <a href="https://travis.durieux.me/rain.html">CI rain</a>.</li>
-  <li><a href="https://codepen.io/ge1doot/pen/vOQZGG">Infinite tree of life</a></li>
-</ul>
-
-<h2 id="hardware-bridges">Hardware bridges</h2>
-
-<p>Here we will post code to control actual hardware fixtures:</p>
-<ul>
-  <li><a href="lights">Lights</a></li>
-  <li>The organ.</li>
-</ul>
+    <div style="display:flex; flex-direction: row; justify-content: center">
+        
+        <div style="display: flex; flex-direction: column; justify-content: center; width:100%" >
+            <img style="max-width:200px" class="mx-auto rounded-circle" src="https://avatars3.githubusercontent.com/u/803666?v=4" alt="">
+            <h1 style="margin:50px; text-align: center">Martin Monperrus</h1>
+        </div>
+        
+    </div>    
+    <h2 id="solutions">Solutions</h2>
 
 </div>
 
