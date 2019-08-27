@@ -6,26 +6,14 @@
 
 For months, we prepare our prototypes about CI data and activity. On October 14 2019, we meet in the nuclear reactor R1 at KTH for a unique moment of art and software technology.
 
-[Learn more about continuous integration and the hackathon data]().
+[Learn more about continuous integration and the hackathon data](https://github.com/KTH/ci-hackathon/blob/master/site/travis.md).
 
 ## Participants
 
-To participate to the hackathon, simply make a pull-request on this repo.
+To participate to the hackathon, clone the repo, add a subfolder in the 'participants' folder, named with your github identifier(s) and simply make a pull-request on this repo. You will find more details about this in the [FAQ](https://github.com/KTH/ci-hackathon/blob/master/site/faq.md).
 
-Participants:
+The list of current participating teams and their ongoing CI art projects is available [here](https://kth.github.io/ci-hackathon/#participants).
 
-- Thomas Durieux: 
-    * [Continuous Integration Rain](https://travis.durieux.me/rain.html) [repo](https://travis-ci.com/tdurieux/travis-listener/)
-    * [Travis Drum](https://kth.github.io/ci-hackathon/solutions/tdurieux_drum_tdurieux) based on https://codepen.io/teropa/pen/PKoYXM
-    * [Travis Canvas](https://travis.durieux.me/canvas.html) 
-    * [Travis Tree](https://travis.durieux.me/tree/) based on https://github.com/guo2/tree_js
-- Long Zhang: [The King of CI Fighters](https://youtu.be/94_OSJQFY9Q) (details in folder [king_of_ci_fighters](king_of_ci_fighters))
-- Simone Stefani: sonification with chords (details in folder [stefani](stefani))
-- Javier Cabrera and Benoit Baudry: 
-    * [The pulse of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis)
-    * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis) 
-- Oscar Luis Vera Pérez: [The Travis CI Drum Machine](https://kth.github.io/ci-hackathon/solutions/oscarlvp_drum-machine.html)
-- Add your name / your team with a pull request :-)
 
 ## Program of October 14 2019
 
