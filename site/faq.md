@@ -54,3 +54,5 @@ We will provide access to:
 
 Other questions? Please contact baudry@kth.se
 
+Seats are limited! [Register here](https://www.castor.kth.se/event/kth-continuous-integration-art-hackathon/) before 10 October
+
