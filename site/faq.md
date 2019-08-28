@@ -18,6 +18,10 @@
    6. Create a pull request to master
    7. And thats all !!.
    
+- **Can I register together with a friend so we can be  on the same team?**   
+   
+You are very welcome to do so! Follow the instructions of previous question and create a folder named with all github ids separated by underscore
+
 - **Where is the hackathon happening?**
 
   The hackathon will take place in [reaktorhallen, a.k.a R1](https://www.r1.kth.se/). This is a very special place, 25 meters underground, where Swedish researchers had an experimental nuclear reactor and investigated nuclear physics from 1954 to 1970. In 1982, the reactor was completetely dismantled. Since 1998, the place is managed by KTH and used mainly for creative events, art exhibitions and installation, seminars and movie production. Over the years, among others, Madonna (the video [Nothing Really Matters](https://www.youtube.com/watch?v=cAVx9RKaLPU)), Moderna Dansteatern, Cullberg Ballet, Riksteatern, Radiokören and others have used R1 for different types of artistic projects. ([source](https://openhousestockholm.se/objekt/reaktorhallen-r1-2/))
@@ -30,5 +34,9 @@ We will provide access to:
    - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
    - a big screen to display pieces that are rendered on your laptop
    - speakers to play sound ci-art pieces
+
+
+Other questions? Please contact baudry@kth.se
+
 
    
