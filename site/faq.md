@@ -52,7 +52,7 @@ We will provide access to:
 
     Of course, feel free to start before and come with cool demo on Oct 14 2019 in R1.
 
-Other questions? Please contact baudry@kth.se
+Other questions? Please contact ci-hackathon@eecs.kth.se
 
 Seats are limited! [Register here](https://www.castor.kth.se/event/kth-continuous-integration-art-hackathon/) before 10 October
 
