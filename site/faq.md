@@ -34,9 +34,23 @@ We will provide access to:
    - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
    - a big screen to display pieces that are rendered on your laptop
    - speakers to play sound ci-art pieces
+   
+- **Do I have to know how to program to participate to the hackathon?**
 
+    No. You can join an existing team and it is great to do statistics and data visualization based on the dump of Travis CI builds available here: [https://zenodo.org/record/2560966](https://zenodo.org/record/2560966)
+    
+- **Do I have to use Travis CI?**
+
+    No, you can use another open CI API or CI dataset. The goal is to something fun or aesthetic with continuous integration data.  
+
+- **Is there a specific goal that should be achieved at the hackathon?**
+
+    The main goals is that all participants participants have fun with CI data. It would be great to create something artistic based on CI (something that may be called "software art" or in this case "CI art").
+
+
+- **Can I start before the hackathon’s day?**
+
+    Of course, feel free to start before and come with cool demo on Oct 14 2019 in R1.
 
 Other questions? Please contact baudry@kth.se
 
-
-   
