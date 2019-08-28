@@ -7,7 +7,7 @@
 Here is a list of all the technologies involved in the hackathon and those we think may be useful.
 
 ## Input stream : the Travis CI WebSocket
-A websocket with Travis builds is available at ws://travis.durieux.me. More information about the streamed objects is available [here](https://github.com/KTH/ci-hackathon/blob/master/site/travis.md)
+A websocket with Travis builds is available at ws://travis.durieux.me. More information about the streamed objects is available [here](https://github.com/KTH/ci-hackathon/blob/master/site/travis.md). This tool uses [Travis-CI npm package](https://www.npmjs.com/package/travis-ci) to gather jobs information. Job informations are gethered every 1.5 seconds and then exposed trhough the websocket channel in a "real-time" stream.
 
 ### PYTHON
 
