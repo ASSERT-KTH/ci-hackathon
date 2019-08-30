@@ -18,6 +18,10 @@
    6. Create a pull request to master
    7. And thats all !!.
    
+- **Can I register together with a friend so we can be  on the same team?**   
+   
+You are very welcome to do so! Follow the instructions of previous question and create a folder named with all github ids separated by underscore
+
 - **Where is the hackathon happening?**
 
   The hackathon will take place in [reaktorhallen, a.k.a R1](https://www.r1.kth.se/). This is a very special place, 25 meters underground, where Swedish researchers had an experimental nuclear reactor and investigated nuclear physics from 1954 to 1970. In 1982, the reactor was completetely dismantled. Since 1998, the place is managed by KTH and used mainly for creative events, art exhibitions and installation, seminars and movie production. Over the years, among others, Madonna (the video [Nothing Really Matters](https://www.youtube.com/watch?v=cAVx9RKaLPU)), Moderna Dansteatern, Cullberg Ballet, Riksteatern, Radiokören and others have used R1 for different types of artistic projects. ([source](https://openhousestockholm.se/objekt/reaktorhallen-r1-2/))
@@ -30,5 +34,30 @@
    - an organ that can be controlled through a MIDI API. [More information about the organ MIDI API]().
    - a big screen to display pieces that are rendered on your laptop
    - speakers to play sound ci-art pieces
-
    
+- **Do I have to know how to program to participate to the hackathon?**
+
+    No. You can join an existing team and it is great to do statistics and data visualization based on the dump of Travis CI builds available here: [https://zenodo.org/record/2560966](https://zenodo.org/record/2560966)
+    
+- **Do I have to use Travis CI?**
+
+    No, you can use another open CI API or CI dataset. The goal is to something fun or aesthetic with continuous integration data.  
+
+- **Is there a specific goal that should be achieved at the hackathon?**
+
+    The main goals is that all participants participants have fun with CI data. It would be great to create something artistic based on CI (something that may be called "software art" or in this case "CI art").
+
+
+- **Can I start before the hackathon’s day?**
+
+    Of course, feel free to start before and come with cool demo on Oct 14 2019 in R1.
+    
+- **What can CI art be?**
+
+You can find inspiration of possible art pieces looking at the current proposals from the [CI art hackathon participating teams](https://kth.github.io/ci-hackathon/#participants).
+You can also be inspired by other [pieces of software art](https://kth.github.io/ci-hackathon/inspiration.html).
+
+Other questions? Please contact ci-hackathon@eecs.kth.se
+
+Seats are limited! [Register here](https://www.castor.kth.se/event/kth-continuous-integration-art-hackathon/) before 10 October
+
