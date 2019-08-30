@@ -54,10 +54,10 @@ You are very welcome to do so! Follow the instructions of previous question and 
     
 - **What can CI art be?**
 
-You can find inspiration of possible art pieces looking at the current proposals from the [CI art hackathon participating teams](https://kth.github.io/ci-hackathon/#participants).
-You can also be inspired by other [pieces of software art](https://kth.github.io/ci-hackathon/inspiration.html).
+    You can find inspiration of possible art pieces looking at the current proposals from the [CI art hackathon participating teams](https://kth.github.io/ci-hackathon/#participants).
+    You can also be inspired by other [pieces of software art](https://kth.github.io/ci-hackathon/inspiration.html).
 
-Other questions? Please contact ci-hackathon@eecs.kth.se
+    Other questions? Please contact ci-hackathon@eecs.kth.se
 
-Seats are limited! [Register here](https://www.castor.kth.se/event/kth-continuous-integration-art-hackathon/) before 10 October
+    Seats are limited! [Register here](https://www.castor.kth.se/event/kth-continuous-integration-art-hackathon/) before 10 October
 
