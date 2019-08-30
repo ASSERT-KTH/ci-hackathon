@@ -13,3 +13,4 @@ Languages are loosely clustered with respect to different levels of the software
 |backend |haskell, D, crystal, clojure, elixir, ruby |D2  |
 |system  |android, c, go, nix, rust, bash            |G1  |
 |swedish |erlang                                     |E2  |
+|other   |                                           |    |
