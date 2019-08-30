@@ -3,7 +3,7 @@ const Tone = require("./libs/tone.js");
 
 ws = new WebSocket('wss://travis.durieux.me');
 //const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
-const maxNumberOfJobs = 1000;
+const maxNumberOfJobs = 200;
 
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 
@@ -38,31 +38,30 @@ function updateJobState(message){
 
     if(key in jobs){
         const state = message.data.state;
-        let color = getColor(message) || 'transparent';
-        let note = 'undefined'
+        //let color = getColor(message) || 'transparent';
         const synth = new Tone.FMSynth().toMaster()
 
 
         switch(state){
             case "passed":
-                color = '#42f5ce55'; // green
+                //color = '#42f5ce55'; // green
                 synth.triggerAttackRelease("A1", "2n")
                 break;
             case "errored":
-                color = '#0088ff55'; // blue
+                //color = '#0088ff55'; // blue
                 synth.triggerAttackRelease("F1", "2n")
                 break;
             case "finished":
-                color = '#ffbf0055'; // yellow
+                //color = '#ffbf0055'; // yellow
                 synth.triggerAttackRelease("B1", "2n")
                 break;
             case "failed":
-                color = 'ff000055'; // gray
+                //color = 'ff000055'; // gray
                 synth.triggerAttackRelease("G1", "2n")
                 break;
         }
 
-        jobs[key].color = color;
+        //jobs[key].color = color;
 
     }
 }
@@ -211,7 +210,7 @@ function getColor(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            return 'ffbf0088';
+            return '#ffbf0088';
 
         // backend 
         case 'haskell':
@@ -221,7 +220,7 @@ function getColor(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            return 'ff00bf88';
+            return '#ff00bf88';
 
         // Apps
         case 'scala':
@@ -232,7 +231,7 @@ function getColor(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            return '40ff0088';
+            return '#40ff0088';
         
 
         case 'erlang':

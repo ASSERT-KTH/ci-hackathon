@@ -43,31 +43,30 @@ function updateJobState(message){
 
     if(key in jobs){
         const state = message.data.state;
-        let color = getColor(message) || 'transparent';
-        let note = 'undefined'
+        //let color = getColor(message) || 'transparent';
         const synth = new Tone.FMSynth().toMaster()
 
 
         switch(state){
             case "passed":
-                color = '#42f5ce55'; // green
+                //color = '#42f5ce55'; // green
                 synth.triggerAttackRelease("A1", "2n")
                 break;
             case "errored":
-                color = '#0088ff55'; // blue
+                //color = '#0088ff55'; // blue
                 synth.triggerAttackRelease("F1", "2n")
                 break;
             case "finished":
-                color = '#ffbf0055'; // yellow
+                //color = '#ffbf0055'; // yellow
                 synth.triggerAttackRelease("B1", "2n")
                 break;
             case "failed":
-                color = 'ff000055'; // gray
+                //color = 'ff000055'; // gray
                 synth.triggerAttackRelease("G1", "2n")
                 break;
         }
 
-        jobs[key].color = color;
+        //jobs[key].color = color;
 
     }
 }
@@ -207,7 +206,7 @@ function getColor(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            return '#6a088888';
+            return '#ff000088';
 
         // frontend/client
         case 'node_js':
@@ -216,7 +215,7 @@ function getColor(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            return 'ffbf0088';
+            return '#ffbf0088';
 
         // backend 
         case 'haskell':
@@ -226,7 +225,7 @@ function getColor(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            return 'ff00bf88';
+            return '#ff00bf88';
 
         // Apps
         case 'scala':
@@ -237,7 +236,7 @@ function getColor(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            return '40ff0088';
+            return '#40ff0088';
         
 
         case 'erlang':
