@@ -202,7 +202,7 @@ function getColor(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            return '#6a088888';
+            return '#ff000088';
 
         // frontend/client
         case 'node_js':
