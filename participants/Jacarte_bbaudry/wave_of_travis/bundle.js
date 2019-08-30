@@ -43,25 +43,32 @@ function updateJobState(message){
 
     if(key in jobs){
         const state = message.data.state;
-        let color = '#ffffff44';
+        let color = getColor(message) || 'transparent';
+        let note = 'undefined'
+        const synth = new Tone.FMSynth().toMaster()
 
 
         switch(state){
             case "passed":
                 color = '#42f5ce55'; // green
+                synth.triggerAttackRelease("A1", "2n")
                 break;
             case "errored":
                 color = '#0088ff55'; // blue
+                synth.triggerAttackRelease("F1", "2n")
                 break;
             case "finished":
                 color = '#ffbf0055'; // yellow
+                synth.triggerAttackRelease("B1", "2n")
                 break;
             case "failed":
                 color = 'ff000055'; // gray
+                synth.triggerAttackRelease("G1", "2n")
                 break;
         }
 
         jobs[key].color = color;
+
     }
 }
 
@@ -83,13 +90,13 @@ function addSynth(message){
             jobs[key].playingNote = sound;
 
 
-            var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
+            /*var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
                 
                 var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer*3)): 0;
                 drawCircle(self.starting[0], self.starting[1], radius, context, 'transparent', '#5DBCD2');
-            })
+            })*/
 
-            jobs[key].drawVisitors = newVisitors;
+            //jobs[key].drawVisitors = newVisitors;
 
             
             synth.triggerAttackRelease(sound, '4n');
@@ -180,6 +187,67 @@ function createSynth(){
     }).toMaster();
 }
 
+function getColor(message){
+    const lang = message.data.config.language;
+
+    switch (lang) {
+        // script languages and platforms
+        case 'php':
+        case 'r':
+        case 'python':
+        case 'groovy':
+        case 'perl':
+        case 'perl6':
+            return '#58f4f488';
+
+        // systems
+        case 'android':
+        case 'c':
+        case 'go':
+        case 'nix':
+        case 'rust':
+        case 'bash':
+            return '#6a088888';
+
+        // frontend/client
+        case 'node_js':
+        case 'dart':
+        case 'elm':
+        case 'swift':
+        case 'js':
+        case 'objective-c':
+            return 'ffbf0088';
+
+        // backend 
+        case 'haskell':
+        case 'd':
+        case 'crystal':
+        case 'clojure':
+        case 'elixir':
+        case 'erlang':
+        case 'ruby':
+            return 'ff00bf88';
+
+        // Apps
+        case 'scala':
+        case 'c#':
+        case 'haxe':
+        case 'c++':
+        case 'cpp':
+        case 'smalltalk':
+        case 'julia':
+        case 'java':
+            return '40ff0088';
+        
+
+        case 'erlang':
+                return '#ffff0088';
+        
+    }
+
+    return undefined;
+}
+
 function putJob(message) {
     //add the job in the list of jobs being played
     
@@ -197,13 +265,13 @@ function putJob(message) {
         direction: 1,
         stopped: false,
         timer: 0,
-        color: '#11111111',
+        color: getColor(message) || "transparent",
         index: newIndex,
         starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
         playingNote: '',
         drawVisitors: [(self, context) => {
             var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
-            drawCircle(self.starting[0], self.starting[1], radius, context, self.color, 'gray');
+            drawCircle(self.starting[0], self.starting[1], radius, context, self.color, self.color);
         },],
         synth: null
     };
@@ -285,8 +353,10 @@ function soundForJob(message) {
         case 'scala':
         case 'c#':
         case 'haxe':
+        case 'c++':
         case 'cpp':
         case 'smalltalk':
+        case 'julia':
         case 'java':
             return 'D4';
         
@@ -306,7 +376,7 @@ function startDemo(){
 
     context.canvas.width  = window.innerWidth;
     context.canvas.height = window.innerHeight;
-    setInterval(() => drawCanvas(jobs), 50)
+    setInterval(() => drawCanvas(jobs), 30)
 
     start()
 }
