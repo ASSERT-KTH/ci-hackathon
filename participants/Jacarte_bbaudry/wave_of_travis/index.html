@@ -53,11 +53,32 @@
       <canvas id="canvas" class="canvas"  ></canvas>
       <canvas id="debug" class="canvas"  ></canvas>
     </div>
-    <button id="start-btn" class="button" >START!</button>
-    <button id="stop-btn" class="button" style="display: none" >STOP!</button>
+
+    <h2 id="start_text" style="color:white; text-align: center">Press enter to start</h2>
 
 
+   
     <script src='bundle.js'>
+    </script>
+     <script>
+
+      document.onkeydown = function(evt) {
+          evt = evt || window.event;
+          var isEnter = false;
+
+          if ("key" in evt) {
+              isEnter = (evt.key === "Enter" || evt.key === "Ent");
+          } else {
+            isEnter = (evt.keyCode === 13);
+          }
+          if (isEnter) {
+
+          console.log(evt.key)
+          //document.getElementById(start_text).remove()
+            window.start()
+          }
+        };
+      
     </script>
 </body>
 </html>

@@ -7,8 +7,8 @@ const Tone = require("./libs/tone.js");
 
 
 ws = new WebSocket('wss://travis.durieux.me');
-const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
-const maxNumberOfJobs = 100;
+//const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
+const maxNumberOfJobs = 1000;
 
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 
@@ -23,13 +23,12 @@ const debugContext = debug.getContext("2d");
 
 
 function start() {
-    console.log("Starting");
     ws.onmessage = function (event) {
         const message = JSON.parse(event.data);
-        console.log(message);
+        //console.log(message);
         //changeSize(message);
-        updateJobState(message);
         handleJobPlay(message);
+        updateJobState(message);
     }
 
     
@@ -46,7 +45,6 @@ function updateJobState(message){
         const state = message.data.state;
         let color = '#ffffff44';
 
-        console.log(state);
 
         switch(state){
             case "passed":
@@ -65,10 +63,6 @@ function updateJobState(message){
 
         jobs[key].color = color;
     }
-    else if(message.data.state !== "finished" ){
-        putJob(message, false);
-
-    }
 }
 
 function addSynth(message){
@@ -83,31 +77,38 @@ function addSynth(message){
 
         //have the synth play the soundthat corresponds to the job
         const sound = soundForJob(message)
-        jobs[key].playingNote = sound;
+
+        if(sound !== undefined){
+            console.log(sound, message.data.config.language)
+            jobs[key].playingNote = sound;
 
 
-        var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
+            var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
+                
+                var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer*3)): 0;
+                drawCircle(self.starting[0], self.starting[1], radius, context, 'transparent', '#5DBCD2');
+            })
+
+            jobs[key].drawVisitors = newVisitors;
+
             
-            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer*3)): 0;
-            drawCircle(self.starting[0], self.starting[1], radius, context, 'transparent', '#5DBCD2');
-        })
+            synth.triggerAttackRelease(sound, '4n');
 
-        jobs[key].drawVisitors = newVisitors;
-
-        
-        synth.triggerAttack(sound);
+        }
     }
 }
 
 function handleJobPlay(message) {
 
     // Update drawing jobs
-    if (message.data.state === "started" && jobsCounter <= maxNumberTracks) {
-        addSynth(message);
+    if (message.data.state === "started") {
+        putJob(message);
+        addSynth(message) // play start sound
         jobsCounter++;
+        console.log(message.data.state)
     }
     else {
-        if ((message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
+        if ((message.data.commit.sha in jobs && message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
             stopPlayJob(message);
             globalCount = globalCount + 1;
             jobsCounter--;
@@ -189,7 +190,7 @@ function putJob(message) {
     
     let newIndex = index;
 
-    index = (index + 1)%maxNumberTracks;
+    index = (index + 1);
     jobs[key] = {
         interval: null,
         radius: 0,
@@ -204,7 +205,7 @@ function putJob(message) {
             var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
             drawCircle(self.starting[0], self.starting[1], radius, context, self.color, 'gray');
         },],
-        synth: addSynth ? createSynth() : null
+        synth: null
     };
 
     jobs[key].interval = setInterval(function() {
@@ -241,73 +242,74 @@ function stopPlayJob(message) {
 
 function soundForJob(message) {
     const lang = message.data.config.language;
-    console.log(lang);
+
     switch (lang) {
+        // script languages and platforms
         case 'php':
-            return 'C4';
+        case 'r':
         case 'python':
-            return 'A4';
-        case 'ruby':
-            return 'F4';
+        case 'groovy':
         case 'perl':
-            return 'B4';
-        case 'node_js':
-            return 'G4';
-        case 'scala':
-            return 'B2';
-        case 'clojure':
-            return 'A2';
-        case 'java':
-            return 'E2';
-        case 'cpp':
-            return 'G2';
+        case 'perl6':
+            return 'B3';
+
+        // systems
+        case 'android':
+        case 'c':
         case 'go':
-            return 'B1';
+        case 'nix':
         case 'rust':
-            return 'A1';
         case 'bash':
             return 'G1';
-        case 'julia':
-            return 'C5';
+
+        // frontend/client
+        case 'node_js':
+        case 'dart':
+        case 'elm':
+        case 'swift':
+        case 'js':
+        case 'objective-c':
+            return 'G4';
+
+        // backend 
+        case 'haskell':
+        case 'd':
+        case 'crystal':
+        case 'clojure':
+        case 'elixir':
+        case 'erlang':
+        case 'ruby':
+            return 'D2';
+
+        // Apps
+        case 'scala':
+        case 'c#':
+        case 'haxe':
+        case 'cpp':
+        case 'smalltalk':
+        case 'java':
+            return 'D4';
+        
+
+        case 'erlang':
+                return 'E2';
+        
     }
-    return 'D4';
+
+    console.log("Not analyzed " + lang)
+    return undefined;
 }
 
 first = true;
 
-function changeSize(message) {
+function startDemo(){
 
-    if(first){
-        const diffURL = message.data.commit.compare_url.concat(".diff");
-        fetch(`http://localhost:8000/?url=${diffURL}`, {method: 'GET'})
-            .then(function (data) {
-                data.json().then(json => {
-                    console.log(json);
-                }).
-                catch(err => {
-
-                        console.log(err);
-                    }
-                );
-            })
-            .catch(function (error) {
-                console.log("could not fetch diff for ".concat(message.data.commit.sha));
-            });
-
-            //first = false;
-
-           
-    }
-}
-
-// Entrypoint
-document.addEventListener('DOMContentLoaded', function(){ // When page is completly loaded
-    ////drawDebug()
-    
     context.canvas.width  = window.innerWidth;
     context.canvas.height = window.innerHeight;
-    document.getElementById("start-btn").addEventListener("click", start ,false); // Add button click event
-
     setInterval(() => drawCanvas(jobs), 50)
-}, false);
+
+    start()
+}
+
+window.start = startDemo
 },{"./libs/tone.js":1}]},{},[2]);
