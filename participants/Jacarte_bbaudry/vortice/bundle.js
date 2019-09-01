@@ -16,7 +16,7 @@ https://codepen.io/Godje/post/spinning-stars-mechanics
 */
 
 let ctx, thetas = [];
-const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 1000;
+const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 1500;
 const mw = parseInt(w/2), mh = parseInt(h/2);
 
 const maxJobs = 1000
@@ -102,7 +102,7 @@ function getRadius(message){
         case 'groovy':
         case 'perl':
         case 'perl6':
-            r = randomRange(10, MAX_R/8)
+            r = randomRange(10, MAX_R/5)
             break;
 
         // systems
@@ -112,7 +112,7 @@ function getRadius(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            r = randomRange(MAX_R/8, MAX_R/7)
+            r = randomRange(MAX_R/5, MAX_R/6)
             break;
 
         // frontend/client
@@ -122,7 +122,7 @@ function getRadius(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            r = randomRange(MAX_R/7, MAX_R/6)
+            r = randomRange(MAX_R/7, MAX_R/8)
             break;
 
         // backend 
@@ -133,7 +133,7 @@ function getRadius(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            r = randomRange(MAX_R/6, MAX_R/5)
+            r = randomRange(MAX_R/8, MAX_R/9)
             break;
 
         // Apps
@@ -145,7 +145,7 @@ function getRadius(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            r = randomRange(MAX_R/5, MAX_R/4)
+            r = randomRange(MAX_R/9, MAX_R)
             break;
         
 
@@ -187,6 +187,8 @@ function handleJob(message){
     }
 }
 
+let r, canvas;
+
 function setup(){
 
     ws.onmessage = function (event) {
@@ -194,7 +196,7 @@ function setup(){
         handleJob(message)
     }
 
-	let r, canvas = document.createElement('canvas');
+	r, canvas = document.createElement('canvas');
 	canvas.width = w;
 	canvas.height = h;
 	document.body.appendChild(canvas);
@@ -209,6 +211,14 @@ let step = 0.01
 function draw(){
     let r, p, x, y;
     
+
+
+    // translate context to center of canvas
+    //ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    // rotate 45 degrees clockwise
+    //ctx.rotate(globalTime);
+
     for(const key in jobs){
         const job = jobs[key]
 
@@ -228,8 +238,12 @@ function draw(){
 
         for(let i = 0; i < 15; i++){
 
-            r = job.radius + MAX_R*Math.random() - MAX_R
-            let t = job.theta + 2*Math.random() - 1
+            r = job.radius+ 2*MAX_R*Math.random()-MAX_R
+
+            r = 2*r*Math.random() - r
+            let step = Math.PI
+
+            let t = job.theta + step*Math.random()
             x = r*Math.cos(t);
             y = r*Math.sin(t);
             
