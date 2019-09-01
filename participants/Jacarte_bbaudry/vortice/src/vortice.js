@@ -11,7 +11,7 @@ https://codepen.io/Godje/post/spinning-stars-mechanics
 */
 
 let ctx, thetas = [];
-const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 500;
+const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 1000;
 const mw = parseInt(w/2), mh = parseInt(h/2);
 
 const maxJobs = 1000
@@ -221,12 +221,12 @@ function draw(){
             ctx.fill();
         }*/
 
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < 15; i++){
 
-            r = job.radius
-            p = 2*Math.random()*Math.PI/r
-            x = r*Math.cos(job.theta + Math.random()*TAU);
-            y = r*Math.sin(job.theta + Math.random()*TAU);
+            r = job.radius + MAX_R*Math.random() - MAX_R
+            let t = job.theta + 2*Math.random() - 1
+            x = r*Math.cos(t);
+            y = r*Math.sin(t);
             
 
 
