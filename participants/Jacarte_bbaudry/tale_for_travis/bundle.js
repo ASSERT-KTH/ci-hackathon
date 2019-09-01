@@ -8,7 +8,7 @@ const Tone = require("./libs/tone.js");
 
 ws = new WebSocket('wss://travis.durieux.me');
 //const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
-const maxNumberOfJobs = 1000;
+const maxNumberOfJobs = 200;
 
 var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 
@@ -139,8 +139,10 @@ function drawCircle(x, y, radius, context, fillColor, strokeColor){
 }
 
 
+
 function drawCanvas(jobs){
 
+    //console.log("Drawgin")
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -148,7 +150,7 @@ function drawCanvas(jobs){
 
         const info  = jobs[key];
 
-        //console.log(info.drawVisitors)
+        //console.log(info)
         
         for(func of info.drawVisitors){
             func(info, context)
@@ -156,6 +158,8 @@ function drawCanvas(jobs){
         //console.log("drawing canvas", info.starting, info.counter);
     }
     
+    requestAnimationFrame(() => drawCanvas(jobs))
+    time += step;
 }
 
 function getJob(index){
@@ -169,7 +173,7 @@ function getJob(index){
 
 let index = 0;
 let maxSizeWave = 40;
-let step = 0.01;
+let step = 0.03;
 let stopRadius = 10;
 
 function createSynth(){
@@ -263,25 +267,26 @@ function putJob(message) {
         radius: 0,
         direction: 1,
         stopped: false,
-        timer: 0,
+        timer: time,
         color: getColor(message) || "transparent",
         index: newIndex,
         starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
         playingNote: '',
         drawVisitors: [(self, context) => {
-            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer)): stopRadius;
+
+            const currentTime = time - self.timer 
+            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(currentTime)): 20.0/(1 + currentTime);
+
             drawCircle(self.starting[0], self.starting[1], radius, context, self.color, self.color);
         },],
-        synth: null
+        synth: createSynth()
     };
-
-    jobs[key].interval = setInterval(function() {
-        jobs[key].timer += step;
-    }, 10);
 
 
     //drawDebug();
 }
+
+let time = 0
 
 function stopPlayJob(message) {
     //remove the job from the list of sounds being played
@@ -297,10 +302,10 @@ function stopPlayJob(message) {
         jobs[key].stopped = true;
 
         //playing special sound for the end of the job
-        synth.triggerRelease();
-        synth.triggerAttackRelease('F#3', '4n');
+        //synth.triggerRelease();
+        //synth.triggerAttackRelease('F#3', '4n', '8n', '9n');
                 
-        clearInterval(jobs[key].interval);
+        //clearInterval(jobs[key].interval);
     }
 
     //drawDebug();
@@ -375,8 +380,8 @@ function startDemo(){
 
     context.canvas.width  = window.innerWidth;
     context.canvas.height = window.innerHeight;
-    setInterval(() => drawCanvas(jobs), 30)
 
+    requestAnimationFrame(() => drawCanvas(jobs))
     start()
 }
 
