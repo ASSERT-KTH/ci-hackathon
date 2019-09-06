@@ -89,6 +89,8 @@ function getRadius(message){
     const lang = message.data.config.language;
     let r = MAX_R;
 
+    return 300
+
     switch (lang) {
         // script languages and platforms
         case 'php':
@@ -231,26 +233,28 @@ function draw(){
             ctx.fill();
         }*/
 
-        for(let i = 0; i < 15; i++){
+        for(let i = 0; i < 1; i++){
 
-            r = job.radius+ 2*MAX_R*Math.random()-MAX_R
-
-            r = 2*r*Math.random() - r
-            let step = Math.PI
-
-            let t = job.theta + step*Math.random()
-            x = r*Math.cos(t);
-            y = r*Math.sin(t);
             
-
-
-            ctx.fillStyle = job.color
-            ctx.beginPath();
-        
-            ctx.arc(mw + x, mw + y, 1, 0, TAU, true);
-            ctx.arc(mh - x, mh + y, 1, 0, TAU, true);
-            ctx.fill();
         }
+
+        r = job.radius//+ 2*MAX_R*Math.random()-MAX_R
+
+            //r = 2*r*Math.random() - r
+        let step = Math.PI
+
+        let t = job.theta// + step*Math.random()
+        x = r*Math.cos(t);
+        y = r*Math.sin(t);
+        
+
+
+        ctx.fillStyle = job.color
+        ctx.beginPath();
+    
+        ctx.arc(mw + x, mw + y, 3, 0, TAU, true);
+        ctx.arc(mh - x, mh + y, 3, 0, TAU, true);
+        ctx.fill();
 
     }
 
