@@ -92,7 +92,7 @@ function getColor(message){
         case 'groovy':
         case 'perl':
         case 'perl6':
-            return '#58f4f488';
+            return '#ffeede';
 
         // systems
         case 'android':
@@ -101,7 +101,7 @@ function getColor(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            return '#ff000088';
+            return '#fdb94d';
 
         // frontend/client
         case 'node_js':
@@ -110,7 +110,7 @@ function getColor(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            return '#ffbf0088';
+            return '#ee303a';
 
         // backend 
         case 'haskell':
@@ -120,7 +120,7 @@ function getColor(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            return '#ff00bf88';
+            return '#471b34';
 
         // Apps
         case 'scala':
@@ -131,11 +131,11 @@ function getColor(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            return '#40ff0088';
+            return '#97d7df';
         
 
         case 'erlang':
-                return '#ffff0088';
+                return '#ee303a';
         
     }
 
@@ -151,6 +151,11 @@ function handleJob(message){
             ring.sha1 = message.data.commit.sha
             jobs[ring.sha1] = message
             jobs[ring.sha1].ring = ring
+
+            
+            let synth = createSynth()
+            let sound = soundForJob(message)
+            synth.triggerAttackRelease(sound, '4n');
         }
          
     }
@@ -166,6 +171,29 @@ function handleJob(message){
                 
                 jobs[key].ring.sha1 = undefined
                 delete  jobs[key]
+            }
+
+            const synth = new Tone.FMSynth().toMaster()
+
+            let state = message.data.state
+
+            switch(state){
+                case "passed":
+                    //color = '#42f5ce55'; // green
+                    synth.triggerAttackRelease("A1", "2n")
+                    break;
+                case "errored":
+                    //color = '#0088ff55'; // blue
+                    synth.triggerAttackRelease("F1", "2n")
+                    break;
+                case "finished":
+                    //color = '#ffbf0055'; // yellow
+                    synth.triggerAttackRelease("B1", "2n")
+                    break;
+                case "failed":
+                    //color = 'ff000055'; // gray
+                    synth.triggerAttackRelease("G1", "2n")
+                    break;
             }
             // Todo sound or splash
 
@@ -299,6 +327,84 @@ function createRing(x, y, innerRadius, outerRadius, fromTheta, toTheta, color){
 
     //2 * Math.PI
 }
+
+
+function soundForJob(message) {
+    const lang = message.data.config.language;
+
+    switch (lang) {
+        // script languages and platforms
+        case 'php':
+        case 'r':
+        case 'python':
+        case 'groovy':
+        case 'perl':
+        case 'perl6':
+            return 'B3';
+
+        // systems
+        case 'android':
+        case 'c':
+        case 'go':
+        case 'nix':
+        case 'rust':
+        case 'bash':
+            return 'G1';
+
+        // frontend/client
+        case 'node_js':
+        case 'dart':
+        case 'elm':
+        case 'swift':
+        case 'js':
+        case 'objective-c':
+            return 'G4';
+
+        // backend 
+        case 'haskell':
+        case 'd':
+        case 'crystal':
+        case 'clojure':
+        case 'elixir':
+        case 'erlang':
+        case 'ruby':
+            return 'D2';
+
+        // Apps
+        case 'scala':
+        case 'c#':
+        case 'haxe':
+        case 'c++':
+        case 'cpp':
+        case 'smalltalk':
+        case 'julia':
+        case 'java':
+            return 'D4';
+        
+
+        case 'erlang':
+                return 'E2';
+        
+    }
+
+    console.log("Not analyzed " + lang)
+    return undefined;
+}
+
+function createSynth(){
+    return new Tone.Synth({
+        oscillator: {
+            type: 'triangle8'
+        },
+        envelope: {
+            attack: 2,
+            decay: 1,
+            sustain: 0.4,
+            release: 4
+        }
+    }).toMaster();
+}
+
 
 function draw(){
     
