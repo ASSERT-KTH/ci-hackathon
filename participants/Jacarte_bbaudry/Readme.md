@@ -1,2 +1,5 @@
 * [The pulse of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_pulse_of_travis)
 * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis)
+* [The tale of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_tale_for_travis)
+* [Vortice](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_vortice)
+* [Gears](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_gears)
