@@ -40,5 +40,5 @@ jobs:
       run: git checkout -b gh-pages && git add build && git commit -m 'Creating gh-pages' 
       
     - name: GIT
-      run: git push origin-tok gh-pages
+      run: git push --force origin-tok gh-pages
     
