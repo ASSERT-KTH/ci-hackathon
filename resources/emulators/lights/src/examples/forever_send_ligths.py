@@ -7,7 +7,7 @@ def getRandomSingleCommand():
     #ids = ["1", "2", "3", "4", "5", "6",  "7", "8", "9", "10", "11", "12", "13", "14", "15", "11", "12", "13"]
         
 
-    data = dict(session='test', id=random.choice(range(1, 26)).__str__(), color=[random.randint(0, 255), 
+    data = dict(session='main', id=random.choice(range(1, 25)).__str__(), color=[random.randint(0, 255), 
     random.randint(0, 255), random.randint(0, 255)])
 
     return data
@@ -18,17 +18,18 @@ def foreverSingleEvent():
 
         print("Sending Single")
 
-        URL = "http://192.168.1.157:8000/setcolor"
+        URL = "http://localhost:8000/setcolor"
 
         
-
-        r = requests.post(url = URL, data = json.dumps(getRandomSingleCommand())) 
+        data = getRandomSingleCommand()
+        print(data)
+        r = requests.post(url = URL, data = json.dumps(data)) 
     
         # extracting response text  
         body = r.text 
 
         print("The response is:%s"%body) 
-        time.sleep(0.005)
+        time.sleep(0.9)
 
 def blackout():
     URL = "http://192.168.1.157:8000/setcolor"
@@ -95,5 +96,5 @@ def foreverBulk():
         print("The response is:%s"%body) 
         time.sleep(3)
 
-blackout()
-testOneToOne()
+#blackout()
+foreverSingleEvent()

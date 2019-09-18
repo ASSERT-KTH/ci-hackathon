@@ -4,16 +4,20 @@ from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 
 import os
+import threading
+
 app = Flask(__name__, template_folder='templates')
+app.config["SECRET_KEY"] = 'secret!'
+socketio = SocketIO(app, logger=True, engineio_logger=True, ping_interval=1, ping_timeout=1)
 
 from views import room, index, h
  # SETTING WEBSOCKET FOR SIMULATOR
 
-socketio = SocketIO(app, ping_interval=2, ping_timeout=10 )#, logger=True, engineio_logger=True)
 
 sessions = {
     
 }
+
 
 class SimulatorNamespace(Namespace):
 
@@ -41,7 +45,6 @@ class SimulatorNamespace(Namespace):
         print("Disconnecting", request.sid)
         sId = request.sid
 
-        print(sId)
         if sId:
             for k, v in sessions.items():
                 if sId in v.keys():
@@ -50,6 +53,8 @@ class SimulatorNamespace(Namespace):
         socketio.emit("sessions", sessions , json=True,namespace='/simulator')
 socketio.on_namespace(SimulatorNamespace("/simulator"))
 # JSON SCHEMA VALIDATOR
+
+
 
 light_schema = {
     'required': ['id', 'color', 'session'],
@@ -151,12 +156,9 @@ def index_handler():
 
 if __name__ == '__main__':
 
-    APP_HOST = os.environ.get("APP_HOST", '0.0.0.0')
+    APP_HOST = os.environ.get("APP_HOST", '127.0.0.1')
     APP_PORT = os.environ.get("APP_PORT", 8000)
-    APP_DEBUG = os.environ.get("APP_DEBUG", False)
+    APP_DEBUG = os.environ.get("APP_DEBUG", True)
 
     HANDLER = initHandler()
-
-    app.run(APP_HOST, APP_PORT, APP_DEBUG)
-
-    socketio.run(app)
+    socketio.run(app, debug=APP_DEBUG, host=APP_HOST , port=APP_PORT)

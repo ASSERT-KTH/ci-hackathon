@@ -6,7 +6,27 @@
     <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="{{ site.description }}">
+
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+
+    <meta name="title" content="CI art hackathon">
+    <meta name="canonical" content="https://kth.github.io/ci-hackathon">
+
+
+    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CI art hackathon">
+    <meta property="og:image" content="https://kth.github.io/ci-hackathon/img/header-bg.png">
+    <meta property="og:title" content="CASTOR Software Days at KTH">
+    <meta property="og:url" content="https://kth.github.io/ci-hackathon">
+
+    <meta property="twitter:url" content="https://kth.github.io/ci-hackathon">
+    <meta property="twitter:title" content="CI art hackathon">
+    <meta property="twitter:description" content="{{ site.description }}">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:site" content="CI art hackathon">
+    <meta property="twitter:image" content="https://kth.github.io/ci-hackathon/img/header-bg.png">
 
 
     <!-- Custom CSS & Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->

@@ -21,6 +21,7 @@ class SimulatorHandler(BaseHandler):
         return {}
 
     def illuminate_with(self, id, color, extra):
+        
         for k, v in self.getSiD(extra).items():
             self.socketio.emit("single", dict(id=id, color=color) , json=True, room=k, namespace='/simulator')
 

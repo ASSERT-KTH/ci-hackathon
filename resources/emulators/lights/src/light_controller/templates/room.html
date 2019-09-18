@@ -16,9 +16,13 @@
 {% block scripts %}
     <script src="/static/three.min.js"></script>
     <script src="/static/OrbitControls.js"></script>
+    <script src="/static/FirstPersonControls.js"></script>
+    <script src="/static/OBJLoader.js"></script>
+    <script src="/static/MTLLoader.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     
     <script>
+
         const roomCanvas = document.getElementById("map")
         const logBox = $("#logs");
 
@@ -49,7 +53,9 @@
 
             // Add camera and orbit control
             var controls = new THREE.OrbitControls( camera, renderer.domElement );
-            camera.position.set( 0, 20, 700 );
+            camera.position.set( 0, 100, 150 );
+            camera.rotation.order = "YXZ"; // three.js r.65
+
             controls.update();
 
             return controls;
@@ -68,7 +74,7 @@
         function addGround(){
             
 
-            const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2.5, boxSize[2]*2.5);
+           /* const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2.5, boxSize[2]*2.5);
             const planeMat = new THREE.MeshStandardMaterial({
                 color: 0xffffff,
                 //side: THREE.DoubleSide,
@@ -82,7 +88,7 @@
             
             mesh.rotation.x = Math.PI * -.5;
             mesh.position.y = -boxSize[1]/2;
-            scene.add(mesh);
+            scene.add(mesh);*/
         }
 
         function addAmbienLigth(){
@@ -97,26 +103,33 @@
         }
 
         function addObjects(){
-            for (i = 0; i < 10; i++) {
-                var size = getRandom(boxSize[0]/4, 1);
-                var boxX = getRandom(boxSize[0], -boxSize[0]);
-                var boxZ = getRandom(boxSize[2], -boxSize[2]);
+           
+            var loader = new THREE.OBJLoader();
 
-                var boxGeo = new THREE.BoxGeometry(size, size, size);
-                var boxMat = new THREE.MeshStandardMaterial({
-                    color: 0xffffff,
-                    side: THREE.DoubleSide,
-                    //roughness: 0.3,
-                    metalness: 0.65,
-                });
+            // load a resource
+            loader.load(
+                // resource URL
+                '/static/r1.obj',
+                // called when resource is loaded
+                function ( object ) {
 
-                var box = new THREE.Mesh(boxGeo, boxMat);
-                box.receiveShadow = true;
-                box.castShadow = true;
-    
-                scene.add(box);
-                box.position.set(boxX, -boxSize[1]/2 + size/2, boxZ);
-            }
+                    object.scale.set(0.05, 0.05, 0.05)
+                    scene.add( object );
+
+                },
+                // called when loading is in progresses
+                function ( xhr ) {
+
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+                },
+                // called when loading has errors
+                function ( error ) {
+
+                    console.log( 'An error happened' );
+
+                }
+            );
         }
 
         var controls = addControls();
@@ -126,6 +139,7 @@
         addAmbienLigth();
         addObjects();
 
+        addLigth(0xaaaaaa, [0,300,0])
         // Add dynamic lights
 
         
@@ -148,8 +162,8 @@
             // Transform relative positions to box coordinate space
 
             const deltaX = boxSize[0]/2;
-            const deltaY = boxSize[1]/2;
-            const deltaZ = boxSize[2]/2;
+            const deltaY = boxSize[1]/2  - 220;
+            const deltaZ = boxSize[2]/2 + 150;
 
             const margin = 5;
 
@@ -167,7 +181,8 @@
 
             const obj = spotLights[ligth];
             
-            const threeLigth = addLigth(rgbtoHex(obj.color), toGlobalPosition(obj.relativePosition))
+            const threeLigth = addLigth(rgbtoHex(obj.color), 
+            toGlobalPosition(obj.relativePosition))
             
             spotLights[ligth].obj = threeLigth;
         }
@@ -206,8 +221,8 @@
 
         renderer.toneMappingExposure = Math.pow(0.7, 2.0);
 
-        //renderer.shadowMap.enabled = true;
-        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
         function animate() {
 
@@ -222,17 +237,69 @@
         animate()
 
 
+        
+        
+
+        roomCanvas.addEventListener('keydown',onDocumentKeyDown,false);
+        function onDocumentKeyDown(event){
+            var VIEW_INCREMENT = 1000;
+            event = event || window.event;
+            var keycode = event.keyCode;
+            console.log(keycode)
+
+            const KEYUP = 38;
+            const KEYDOWN = 40;
+            const KEYLEFT = 37
+            const KEYRIGHT = 39;
+
+            switch(keycode){
+                case KEYUP:
+                    if ( camera.getRotateX() < 90 ){ // restrict so they cannot look overhead
+                        camera.setRotateX( camera.getRotateX() + VIEW_INCREMENT );
+                    }
+                    break;
+
+                case KEYDOWN:
+                    if ( camera.getRotateX() > -90 ){ // restrict so they cannot look under feet
+                        camera.setRotateX( camera.getRotateX() - VIEW_INCREMENT );
+                    }
+                    break;
+
+                case KEYLEFT:
+                    camera.setRotateY( camera.getRotateY() + VIEW_INCREMENT );
+                    break;
+
+                case KEYRIGHT:
+                    camera.setRotateY( camera.getRotateY() - VIEW_INCREMENT );
+                    break;
+            }
+            document.updateProjectionMatrix();
+
+            //roomCanvas.addEventListener('keyup',onDocumentKeyUp,false);
+        }
+        function onDocumentKeyUp(event){
+            //roomCanvas.removeEventListener('keydown',onDocumentKeyDown,false);
+        }
+
         // Setup listener
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + '/simulator', {
-            query: 'session={{session_name}}'
+            query: 'session={{session_name}}',
+            //transports: ['websocket'],
+            //upgrade: 'false'
         });
         socket.on('connect', function() {
             console.log("Connected")
         });
+
+        socket.on('disconnect', function() {
+            console.log("Disconnected")
+        });
+
         socket.on('single', function(msg) {
 
             let now = new Date();
+            console.log(msg)
 
             $("#logs").append(`<div><label class='dot'>[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] </label><label class='log'>${JSON.stringify(msg)}</label><div>`);
         
@@ -246,6 +313,5 @@
             //enderer.render( scene, camera );
             //renderer.render( scene, camera );
         });
-        
     </script>
 {% endblock %}
