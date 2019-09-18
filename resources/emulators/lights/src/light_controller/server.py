@@ -47,7 +47,7 @@ class SimulatorNamespace(Namespace):
 
         if sId:
             for k, v in sessions.items():
-                if sId in v.keys():
+                if sId in list(v.keys()):
                     del v[sId] 
 
         socketio.emit("sessions", sessions , json=True,namespace='/simulator')
