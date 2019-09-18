@@ -38,7 +38,8 @@ jobs:
     
     - name: GIT
       run: git checkout -b gh-pages && git add build && git commit -m 'Creating gh-pages' 
-      
     - name: GIT
-      run: git subtree push --force  --prefix build origin-tok gh-pages
+      run: git push origin-tok --delete gh-pages
+    - name: GIT
+      run: git subtree push --prefix build origin-tok gh-pages
     
