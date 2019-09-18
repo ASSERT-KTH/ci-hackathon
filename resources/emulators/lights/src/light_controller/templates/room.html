@@ -121,32 +121,40 @@
 
         function addObjects(){
            
-            var loader = new THREE.OBJLoader();
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load("/static/r1.mtl", function(materials){
 
-            // load a resource
-            loader.load(
-                // resource URL
-                '/static/r1.obj',
-                // called when resource is loaded
-                function ( object ) {
+                materials.preload();
 
-                    object.scale.set(0.05, 0.05, 0.05)
-                    scene.add( object );
+                var loader = new THREE.OBJLoader();
+                loader.setMaterials(materials);
+                // load a resource
+                loader.load(
+                    // resource URL
+                    '/static/r1.obj',
+                    // called when resource is loaded
+                    function ( object ) {
 
-                },
-                // called when loading is in progresses
-                function ( xhr ) {
+                        object.scale.set(0.05, 0.05, 0.05)
+                        scene.add( object );
 
-                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                    },
+                    // called when loading is in progresses
+                    function ( xhr ) {
 
-                },
-                // called when loading has errors
-                function ( error ) {
+                        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 
-                    console.log( 'An error happened' );
+                    },
+                    // called when loading has errors
+                    function ( error ) {
 
-                }
-            );
+                        console.log( 'An error happened' );
+
+                    }
+                );
+
+            })
+
         }
 
         var controls = addControls();
