@@ -1,0 +1,9 @@
+---
+layout: base
+---
+
+ 
+{% include header.html scope="index" %}
+{% capture absolute %}{% if site.environment == 'prod' %}{{site.absolute}}{% endif %}{% endcapture %}
+
+{{ content }}
