@@ -37,3 +37,18 @@ img{
     width:100%;
     min-height: 600px;
 }
+
+.ci-gallery{
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+
+    img{
+        width: 100%;
+        flex: 1;
+    }
+
+    position: relative;
+    left: 0;
+    width: 25%;
+}
