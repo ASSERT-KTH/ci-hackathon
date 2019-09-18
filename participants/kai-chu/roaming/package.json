@@ -1,0 +1,22 @@
+{
+  "name": "roaming",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kai Chu",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "build": "webpack --config webpack.config.js"
+  },
+  "dependencies": {
+    "isomorphic-ws": "^4.0.1",
+    "lodash": "^4.17.14",
+    "three": "^0.106.2",
+    "ws": "^7.1.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  }
+}
