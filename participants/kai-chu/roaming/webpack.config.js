@@ -1,21 +1,20 @@
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
     devServer: {
-        contentBase: './dist',
-        publicPath: 'http://localhost:8080/',
-        open: 'Google Chrome'
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 8080
     },
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist')
-    }
+    },
+    plugins: [
+        new CopyPlugin([
+          { from: 'public', to: '.' },
+        ]),
+    ],
 };
-//yarn add webpack --dev
-//yarn add webpack-cli --dev
-// this is the default webpack.config.js
-// can be used by npx webpack --config webpack.config.js
-//  yarn add webpack-dev-server --dev
-// add devServer key configuration
-// can be used by  webpack-dev-server --open

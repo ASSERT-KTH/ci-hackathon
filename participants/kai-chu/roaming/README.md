@@ -6,8 +6,24 @@ The color of the build cube will be changed based on the build state.
 
 ## Start project
 ```
-yarn build && yarn start
+yarn install && yarn build 
+yarn start
 ```
+Visit http://localhost:8080
+
+## Product deploy
+```
+yarn build 
+yarn install global serve
+yarn serve -p 80 -s /dist
+```
+
+## Build docker image and start by docker
+```
+docker build -t roaming .
+docker run -p 8080:8080 roaming
+```
+Visit http://localhost:8080
 
 ## Examples 
 ![Running Result](roaming.gif)
