@@ -1,0 +1,14 @@
+FROM python:3
+
+RUN apt-get update && apt-get install -y ca-certificates
+
+COPY  ./src/light_controller /app
+COPY requirements.txt /app
+
+WORKDIR /app
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python"]
+
+EXPOSE 80
+
+CMD ["server.py"]
