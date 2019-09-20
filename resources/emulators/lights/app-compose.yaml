@@ -1,6 +1,6 @@
 version: "2"
 services:
-  go-web-app:
+  web-app:
     restart: always
     build:
       dockerfile: Dockerfile.prod
