@@ -9,6 +9,7 @@
     "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
+    "dat.gui": "^0.7.6",
     "isomorphic-ws": "^4.0.1",
     "lodash": "^4.17.14",
     "three": "^0.106.2",
