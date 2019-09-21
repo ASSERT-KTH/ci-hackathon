@@ -27,3 +27,7 @@ Visit http://localhost:8080
 
 ## Examples 
 ![Running Result](roaming.gif)
+
+## Latest GUI screenshot 
+* Add gui to show project, name and number of repos which has been received 
+![Roaming CI screenshop](screenshot-latest.png)
