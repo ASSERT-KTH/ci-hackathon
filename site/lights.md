@@ -7,7 +7,7 @@ This is an abstraction between your pc and the lights controller hardware. Try t
 
 Here is an example of how lights work with our web service.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/oaBTSngKxxM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/r8aUu9TcsdA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Emulator local deploy
 
@@ -16,7 +16,7 @@ Here is an example of how lights work with our web service.
 2. Install requirements ```pip install -r requirements.txt```
 3. Launch app ```./run_dev.sh```, by default it will run on ```localhost:8000```
 
-![simluator.png](img/simulator.png)
+![simluator.png](https://i.pinimg.com/originals/66/91/2e/66912e94ba74daf5ea59a78991bce983.png)
 
 ## Simulator views
 - Home page: ```http://localhost:8000```
