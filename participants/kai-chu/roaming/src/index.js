@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { createOrbitController } from './controller';
 import { CinematicCamera } from 'three/examples/jsm/cameras/CinematicCamera.js';
-
+import * as dat from 'dat.gui';
 import animation from './animation';
 const WebSocket = require('isomorphic-ws');
 
@@ -252,6 +252,18 @@ floor.rotation.x = -0.5 * Math.PI;
 floor.receiveShadow = true;
 scene.add(floor);
 */
+var FizzyText = function() {
+  this.title = "CI Romaing";
+  this.project = "KTH CI hackathon"
+  this.numOfRepos = 0;
+};
+
+
+var text = new FizzyText();
+  var gui = new dat.GUI();
+  gui.add(text, 'title');
+  gui.add(text, 'project');
+  gui.add(text, 'numOfRepos', 0).listen();
 
 // Resize
 function onWindowResize() {
@@ -278,6 +290,7 @@ animation(
     //controller.update( clock.getDelta() );
     //buildCube.rotateOnAxis( new THREE.Vector3( 0, 1, 0 ), 0.1);
     updateBuildCubes() ;
+    text.numOfRepos = repoIdToCube.size
     controller.update();
   },
   () => {

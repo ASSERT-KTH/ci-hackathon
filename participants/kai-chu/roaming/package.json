@@ -9,12 +9,14 @@
     "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
+    "dat.gui": "^0.7.6",
     "isomorphic-ws": "^4.0.1",
     "lodash": "^4.17.14",
     "three": "^0.106.2",
     "ws": "^7.1.0"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^5.0.4",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.7.2"
