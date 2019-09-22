@@ -135,11 +135,31 @@
 The color of the build cube will be changed based on the build state.</p>
 
 <h2 id="start-project">Start project</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn build &amp;&amp; yarn start
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn install &amp;&amp; yarn build 
+yarn start
 </code></pre></div></div>
+<p>Visit http://localhost:8080</p>
+
+<h2 id="product-deploy">Product deploy</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn build 
+yarn install global serve
+yarn serve -p 80 -s /dist
+</code></pre></div></div>
+
+<h2 id="build-docker-image-and-start-by-docker">Build docker image and start by docker</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t roaming .
+docker run -p 8080:8080 roaming
+</code></pre></div></div>
+<p>Visit http://localhost:8080</p>
 
 <h2 id="examples">Examples</h2>
 <p><img src="roaming.gif" alt="Running Result" /></p>
+
+<h2 id="latest-gui-screenshot">Latest GUI screenshot</h2>
+<ul>
+  <li>Add gui to show project, name and number of repos which has been received 
+<img src="screenshot-latest.png" alt="Roaming CI screenshop" /></li>
+</ul>
 
 
     <a class="btn btn-warning" style="margin-right: 20px"  href="https://kth.github.io/ci-hackathon/participants/kai-chu">To the team page</a>

@@ -8,22 +8,188 @@ const Tone = require("./libs/tone.js");
 
 ws = new WebSocket('wss://travis.durieux.me');
 //const maxNumberTracks = 25; //maximum number of tracks (CI jobs) that we listen to in parallel
+const maxNumberOfJobs = 200;
 
-/* I think there's a similar pen somewhere else, but I wasn't able to find it 
+var globalCount = 0; //this counter keeps increasing and records the total number of jobs that have been played since page load
 
-* UPDATE - Godje sent me his similar pen:
-https://codepen.io/Godje/post/spinning-stars-mechanics
-*/
+const jobs = {}
+var jobsCounter = 0;
 
-let ctx, thetas = [];
-const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 1500;
-const mw = parseInt(w/2), mh = parseInt(h/2);
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
 
-const maxJobs = 1000
+const debug = document.getElementById("debug");
+const debugContext = debug.getContext("2d");
 
-const jobs = {
 
+function start() {
+    ws.onmessage = function (event) {
+        const message = JSON.parse(event.data);
+        //console.log(message);
+        //changeSize(message);
+        handleJobPlay(message);
+        updateJobState(message);
+    }
+
+    
 }
+
+//for the moment we consider only two situations: the job starts and we play; the job stops and we stop playing
+//we should consider more: alter the sound when the job is updated (but not finished); play something different depending on the final state of the job (errored, failed, passed)
+
+function updateJobState(message){
+    const key = message.data.commit.sha;
+
+
+    if(key in jobs){
+        const state = message.data.state;
+        //let color = getColor(message) || 'transparent';
+        const synth = new Tone.FMSynth().toMaster()
+
+
+        switch(state){
+            case "passed":
+                //color = '#42f5ce55'; // green
+                synth.triggerAttackRelease("A1", "2n")
+                break;
+            case "errored":
+                //color = '#0088ff55'; // blue
+                synth.triggerAttackRelease("F1", "2n")
+                break;
+            case "finished":
+                //color = '#ffbf0055'; // yellow
+                synth.triggerAttackRelease("B1", "2n")
+                break;
+            case "failed":
+                //color = 'ff000055'; // gray
+                synth.triggerAttackRelease("G1", "2n")
+                break;
+        }
+
+        //jobs[key].color = color;
+
+    }
+}
+
+function addSynth(message){
+    const key = message.data.commit.sha;
+
+    if(key in jobs){
+        jobs[key].synth = createSynth();
+        
+        
+        //assign a synth to the sha of the input message
+        const synth = jobs[key].synth;
+
+        //have the synth play the soundthat corresponds to the job
+        const sound = soundForJob(message)
+
+        if(sound !== undefined){
+            console.log(sound, message.data.config.language)
+            jobs[key].playingNote = sound;
+
+
+            /*var newVisitors =  jobs[key].drawVisitors.concat((self, context) => {
+                
+                var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(self.timer*3)): 0;
+                drawCircle(self.starting[0], self.starting[1], radius, context, 'transparent', '#5DBCD2');
+            })*/
+
+            //jobs[key].drawVisitors = newVisitors;
+
+            
+            synth.triggerAttackRelease(sound, '4n');
+
+        }
+    }
+}
+
+function handleJobPlay(message) {
+
+    // Update drawing jobs
+    if (message.data.state === "started") {
+        putJob(message);
+        addSynth(message) // play start sound
+        jobsCounter++;
+        console.log(message.data.state)
+    }
+    else {
+        if ((message.data.commit.sha in jobs && message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed")) {
+            stopPlayJob(message);
+            globalCount = globalCount + 1;
+            jobsCounter--;
+        }
+    }
+}
+
+function drawCircle(x, y, radius, context, fillColor, strokeColor){
+
+    if(radius < 1){
+        return;
+    }
+
+    context.beginPath();
+    context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    
+    context.fillStyle = fillColor;
+    context.strokeStyle = strokeColor;
+
+    context.fill();
+    context.stroke();
+}
+
+
+
+function drawCanvas(jobs){
+
+    //console.log("Drawgin")
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    for(const key in jobs){
+
+        const info  = jobs[key];
+
+        //console.log(info)
+        
+        for(func of info.drawVisitors){
+            func(info, context)
+        }
+        //console.log("drawing canvas", info.starting, info.counter);
+    }
+    
+    requestAnimationFrame(() => drawCanvas(jobs))
+    time += step;
+}
+
+function getJob(index){
+
+    for(key in jobs)
+        if(jobs[key].index === index)
+            return jobs[key];
+    
+    return null;
+}
+
+let index = 0;
+let maxSizeWave = 40;
+let step = 0.03;
+let stopRadius = 10;
+
+function createSynth(){
+    return new Tone.Synth({
+        oscillator: {
+            type: 'triangle8'
+        },
+        envelope: {
+            attack: 2,
+            decay: 1,
+            sustain: 0.4,
+            release: 4
+        }
+    }).toMaster();
+}
+
 function getColor(message){
     const lang = message.data.config.language;
 
@@ -35,7 +201,7 @@ function getColor(message){
         case 'groovy':
         case 'perl':
         case 'perl6':
-            return '#58f4f444';
+            return '#58f4f488';
 
         // systems
         case 'android':
@@ -44,7 +210,7 @@ function getColor(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            return '#ff000044';
+            return '#ff000088';
 
         // frontend/client
         case 'node_js':
@@ -53,7 +219,7 @@ function getColor(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            return '#ffbf0044';
+            return '#ffbf0088';
 
         // backend 
         case 'haskell':
@@ -63,7 +229,7 @@ function getColor(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            return '#ff00bf44';
+            return '#ff00bf88';
 
         // Apps
         case 'scala':
@@ -74,27 +240,80 @@ function getColor(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            return '#40ff0044';
+            return '#40ff0088';
         
 
         case 'erlang':
-                return '#ffff0044';
+                return '#ffff0088';
         
     }
 
     return undefined;
 }
 
-function randomRange(min, max){
-    return min + Math.random()*(max - min)
+function putJob(message) {
+    //add the job in the list of jobs being played
+    
+    if(Object.keys(jobs).length >= maxNumberOfJobs || message.data.commit.sha in jobs)
+        return;
+    
+    const key = message.data.commit.sha;
+    
+    let newIndex = index;
+
+    index = (index + 1);
+    jobs[key] = {
+        interval: null,
+        radius: 0,
+        direction: 1,
+        stopped: false,
+        timer: time,
+        color: getColor(message) || "transparent",
+        index: newIndex,
+        starting: [ Math.random()*canvas.width, Math.random()*canvas.height], // 2d random space point in canvas
+        playingNote: '',
+        drawVisitors: [(self, context) => {
+
+            const currentTime = time - self.timer 
+            var radius = !self.stopped? maxSizeWave*Math.abs(Math.sin(currentTime)): 20.0/(1 + currentTime);
+
+            drawCircle(self.starting[0], self.starting[1], radius, context, self.color, self.color);
+        },],
+        synth: createSynth()
+    };
+
+
+    //drawDebug();
 }
 
-function getRadius(message){
+let time = 0
 
+function stopPlayJob(message) {
+    //remove the job from the list of sounds being played
+    const key = message.data.commit.sha;
+
+    //console.log(key, jobs[key]);
+    
+    if(key in jobs){
+        const toDelete = jobs[key];
+        
+        const synth = jobs[key].synth;
+        
+        jobs[key].stopped = true;
+
+        //playing special sound for the end of the job
+        //synth.triggerRelease();
+        //synth.triggerAttackRelease('F#3', '4n', '8n', '9n');
+                
+        //clearInterval(jobs[key].interval);
+    }
+
+    //drawDebug();
+    //document.write("<p>".concat(message.data.commit.sha).concat(" is done: ").concat(message.data.state).concat(".We listened to ").concat(Object.keys(jobs).length).concat(" sounds.</p>"));
+}
+
+function soundForJob(message) {
     const lang = message.data.config.language;
-    let r = MAX_R;
-
-    return 300
 
     switch (lang) {
         // script languages and platforms
@@ -104,8 +323,7 @@ function getRadius(message){
         case 'groovy':
         case 'perl':
         case 'perl6':
-            r = randomRange(10, MAX_R/5)
-            break;
+            return 'B3';
 
         // systems
         case 'android':
@@ -114,8 +332,7 @@ function getRadius(message){
         case 'nix':
         case 'rust':
         case 'bash':
-            r = randomRange(MAX_R/5, MAX_R/6)
-            break;
+            return 'G1';
 
         // frontend/client
         case 'node_js':
@@ -124,8 +341,7 @@ function getRadius(message){
         case 'swift':
         case 'js':
         case 'objective-c':
-            r = randomRange(MAX_R/7, MAX_R/8)
-            break;
+            return 'G4';
 
         // backend 
         case 'haskell':
@@ -135,8 +351,7 @@ function getRadius(message){
         case 'elixir':
         case 'erlang':
         case 'ruby':
-            r = randomRange(MAX_R/8, MAX_R/9)
-            break;
+            return 'D2';
 
         // Apps
         case 'scala':
@@ -147,126 +362,28 @@ function getRadius(message){
         case 'smalltalk':
         case 'julia':
         case 'java':
-            r = randomRange(MAX_R/9, MAX_R)
-            break;
+            return 'D4';
         
 
         case 'erlang':
-            r = randomRange(MAX_R/4, MAX_R/3)
-            break;
+                return 'E2';
         
     }
 
-    return 2*Math.random() - 1 < 0? r: -r;
+    console.log("Not analyzed " + lang)
+    return undefined;
 }
 
-function putJob(message){
-    const key = message.data.commit.sha
+first = true;
 
-    const job = {
-        color: getColor(message),
-        radius: getRadius(message),
-        theta: Math.random()*TAU
-    }
+function startDemo(){
 
-    if(job.color){
-        console.log(job)
-        jobs[key] = job
-    }
+    context.canvas.width  = window.innerWidth;
+    context.canvas.height = window.innerHeight;
+
+    requestAnimationFrame(() => drawCanvas(jobs))
+    start()
 }
 
-function handleJob(message){
-    if (message.data.state === "started" && Object.keys(jobs).length < maxJobs) {
-        putJob(message);
-    }
-    else {
-        if ((message.data.commit.sha in jobs)) {
-
-            // Todo sound or splash
-
-            delete jobs[message.data.commit.sha]
-        }
-    }
-}
-
-let r, canvas;
-
-function setup(){
-
-    ws.onmessage = function (event) {
-        const message = JSON.parse(event.data);
-        handleJob(message)
-    }
-
-	r, canvas = document.createElement('canvas');
-	canvas.width = w;
-	canvas.height = h;
-	document.body.appendChild(canvas);
-	ctx = canvas.getContext('2d');
-
-	requestAnimationFrame(draw);
-}
-
-let globalTime = 0
-let step = 0.01
-
-function draw(){
-    let r, p, x, y;
-    
-
-
-    // translate context to center of canvas
-    //ctx.translate(canvas.width / 2, canvas.height / 2);
-
-    // rotate 45 degrees clockwise
-    //ctx.rotate(globalTime);
-
-    for(const key in jobs){
-        const job = jobs[key]
-
-        /*for(r = 1; r < MAX_R; r++){
-            p = 2*Math.random()*Math.PI/r;
-            thetas[r] += (Math.random() > 0.5) ? p : -p;
-            x = r*Math.cos(thetas[r]);
-            y = r*Math.sin(thetas[r]);
-            
-            ctx.fillStyle = colors[(r) % colors.length];
-            ctx.beginPath();
-        
-            ctx.arc(mw + x, mw + y, 2, 0, TAU, true);
-            ctx.arc(mh - x, mh + y, 2, 0, TAU, true);
-            ctx.fill();
-        }*/
-
-        for(let i = 0; i < 1; i++){
-
-            
-        }
-
-        r = job.radius//+ 2*MAX_R*Math.random()-MAX_R
-
-            //r = 2*r*Math.random() - r
-        let step = Math.PI
-
-        let t = job.theta// + step*Math.random()
-        x = r*Math.cos(t);
-        y = r*Math.sin(t);
-        
-
-
-        ctx.fillStyle = job.color
-        ctx.beginPath();
-    
-        ctx.arc(mw + x, mw + y, 3, 0, TAU, true);
-        ctx.arc(mh - x, mh + y, 3, 0, TAU, true);
-        ctx.fill();
-
-    }
-
-    globalTime += step
-
-	requestAnimationFrame(draw);
-}
-
-window.onload = setup;
+window.start = startDemo
 },{"./libs/tone.js":1}]},{},[2]);
