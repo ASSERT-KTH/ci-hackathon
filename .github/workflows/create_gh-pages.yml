@@ -28,18 +28,10 @@ jobs:
       run: python3 site_generator/generate.py https://kth.github.io/ci-hackathon
     - name: Run Jekyll
       run: bundle exec jekyll build --config _config_build.yml
-    - name: GIT
+
+    - name: deploy
+      uses: peaceiris/actions-gh-pages@v2.3.1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: git remote add origin-tok https://Jacarte:${GITHUB_TOKEN}@github.com/KTH/ci-hackathon.git && git remote remove origin
-      
-    - name: GIT
-      run: git config --global user.email "javierca@kth.se" && git config --global user.name "Jacarte" 
-    
-    - name: GIT
-      run: git checkout -b gh-pages && git add build && git commit -m 'Creating gh-pages' 
-    - name: GIT
-      run: git push origin-tok --delete gh-pages
-    - name: GIT
-      run: git subtree push --prefix build origin-tok gh-pages
-    
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTION_SECRET_DEPLOY }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./build
