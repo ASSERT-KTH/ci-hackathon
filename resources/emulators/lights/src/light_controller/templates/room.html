@@ -56,13 +56,13 @@
         function addControls(){
 
             // Add camera and orbit control
-            var controls = new THREE.OrbitControls( camera, renderer.domElement );
+            /*var controls = new THREE.OrbitControls( camera, renderer.domElement );
             camera.position.set( 0, 100, 150 );
             camera.rotation.order = "YXZ"; // three.js r.65
 
-            controls.update();
+            controls.update();*/
             
-            /*var controls = new THREE.FirstPersonControls(camera);
+            var controls = new THREE.FirstPersonControls(camera, canvas);
             controls.lookSpeed = 0.2;
             controls.movementSpeed = 40;
             controls.noFly = false;
@@ -71,7 +71,7 @@
             controls.verticalMin = 1.0;
             controls.verticalMax = 2.0;
             controls.lon = 270;
-            controls.lat = 14;*/
+            controls.lat = 14;
 
 
             
