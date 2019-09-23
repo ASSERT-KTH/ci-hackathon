@@ -309,7 +309,7 @@ const roomCanvas = document.getElementById("map")
         // Setup listener
 
         var socket = io.connect('https://' + document.domain + ':' + location.port + '/simulator', {
-            query: sesssionName,
+            query: sessionName,
             timeout: 120000
         });
         socket.on('connect', function() {
