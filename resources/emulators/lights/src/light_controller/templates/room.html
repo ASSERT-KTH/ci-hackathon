@@ -16,7 +16,8 @@
 {% block scripts %}
     
     <script>
-        const spotLights = {{lights|tojson|safe}}
+        const spotLights = {{lights|tojson|safe}};
+        const sessionName='session={{session_name}}';
     </script>
     <script src="/static/js/bundle.js">
     </script>
