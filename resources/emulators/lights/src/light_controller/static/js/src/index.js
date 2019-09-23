@@ -230,7 +230,7 @@ const roomCanvas = document.getElementById("map")
             bulbLight.power = 0.25;
             bulbLight.decay = 1;
             bulbLight.exposure=0.5
-            /*
+            
 
             var bulbMat = new THREE.MeshStandardMaterial({
                 emissive: color,
@@ -238,7 +238,7 @@ const roomCanvas = document.getElementById("map")
                 color: color,
                 //metalness: 0.9,
                 roughness: 1
-            });*/
+            });
 
             spotLight.position.set(...position);
             bulbLight.position.set(...position);
@@ -268,9 +268,9 @@ const roomCanvas = document.getElementById("map")
             spotLight.target.updateMatrixWorld()
 
 
-            //bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
+            bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
             //bulbLight.position.set(...position);
-            //spotLight.castShadow = true;
+            spotLight.castShadow = true;
             lightHelper = new THREE.SpotLightHelper( spotLight );
             //scene.add( lightHelper );
             scene.add(spotLight.target)
