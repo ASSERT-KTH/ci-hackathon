@@ -121,13 +121,13 @@
 
         function addObjects(){
            
-            var mtlLoader = new THREE.MTLLoader();
-            mtlLoader.load("/static/r1.mtl", function(materials){
+            //var mtlLoader = new THREE.MTLLoader();
+            //mtlLoader.load("/static/r1.mtl", function(materials){
 
-                materials.preload();
+              //  materials.preload();
 
                 var loader = new THREE.OBJLoader();
-                loader.setMaterials(materials);
+                //loader.setMaterials(materials);
                 // load a resource
                 loader.load(
                     // resource URL
@@ -153,7 +153,7 @@
                     }
                 );
 
-            })
+            //})
 
         }
 
