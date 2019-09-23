@@ -2,6 +2,8 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+const THREE = require("three");
+
 THREE.OBJLoader = ( function () {
 
 	// o object_name | g group_name

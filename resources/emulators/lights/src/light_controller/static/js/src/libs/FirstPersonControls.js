@@ -4,6 +4,8 @@
  * @author paulirish / http://paulirish.com/
  */
 
+const THREE = require("three");
+
 THREE.FirstPersonControls = function ( object, domElement ) {
 
 	this.object = object;
@@ -135,6 +137,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		}
 
 	};
+
+	setInterval(() => {
+		this.mouseX = 0;
+		this.mouseY = 0;
+	}, 200)
 
 	this.onKeyDown = function ( event ) {
 

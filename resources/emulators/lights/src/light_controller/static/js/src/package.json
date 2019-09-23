@@ -1,0 +1,21 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify index.js  -p esmify -o ../bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pointerlockcontrols": "^1.0.2",
+    "socket-io": "^1.0.0",
+    "three": "^0.108.0"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "esmify": "^2.1.1"
+  }
+}
