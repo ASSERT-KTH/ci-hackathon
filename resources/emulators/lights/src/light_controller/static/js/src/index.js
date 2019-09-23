@@ -227,9 +227,10 @@ const roomCanvas = document.getElementById("map")
             var spotLight = new THREE.SpotLight(Number(color));
             var bulbLight = new THREE.PointLight(Number(color), 0.1);
             
-            /*bulbLight.power = 0.25;
+            bulbLight.power = 0.25;
             bulbLight.decay = 1;
             bulbLight.exposure=0.5
+            /*
 
             var bulbMat = new THREE.MeshStandardMaterial({
                 emissive: color,
@@ -280,7 +281,7 @@ const roomCanvas = document.getElementById("map")
             //group.position.z = 0;
             //group.position.x = 0;
 
-            return [spotLight];
+            return [spotLight, bulbLight];
         }
 
 
