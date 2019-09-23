@@ -204,7 +204,7 @@ const roomCanvas = document.getElementById("map")
 
             const obj = spotLights[ligth];
             
-            const threeLigth = addLigth( rgbtoHex(obj.color), 
+            const threeLigth = addLigth(0xff0000,// rgbtoHex(obj.color), 
             toGlobalPosition(obj.relativePosition))
             
             spotLights[ligth].obj = threeLigth;
@@ -275,11 +275,11 @@ const roomCanvas = document.getElementById("map")
             //scene.add( lightHelper );
             scene.add(spotLight.target)
             scene.add(spotLight)
-            scene.add(bulbLight)
-            //scene.add(group);
-            //group.position.y = 0;
-            //group.position.z = 0;
-            //group.position.x = 0;
+            group.add(bulbLight)
+            scene.add(group);
+            group.position.y = 0;
+            group.position.z = 0;
+            group.position.x = 0;
 
             return [spotLight, bulbLight];
         }
