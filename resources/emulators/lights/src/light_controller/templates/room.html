@@ -312,7 +312,7 @@
 
         // Setup listener
 
-        var socket = io.connect('http://' + document.domain + ':' + location.port + '/simulator', {
+        var socket = io.connect('https://' + document.domain + ':' + location.port + '/simulator', {
             query: 'session={{session_name}}',
             //transports: ['websocket'],
             //upgrade: 'false'
