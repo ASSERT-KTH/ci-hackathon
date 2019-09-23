@@ -156,9 +156,9 @@ def index_handler():
 
 if __name__ == '__main__':
 
-    APP_HOST = os.environ.get("APP_HOST", '127.0.0.1')
-    APP_PORT = os.environ.get("APP_PORT", 8000)
-    APP_DEBUG = os.environ.get("APP_DEBUG", True)
+    APP_HOST = os.environ.get("APP_HOST", '0.0.0.0')
+    APP_PORT = os.environ.get("APP_PORT", 80)
+    APP_DEBUG = os.environ.get("APP_DEBUG", False)
 
     HANDLER = initHandler()
     socketio.run(app, debug=APP_DEBUG, host=APP_HOST , port=APP_PORT)
