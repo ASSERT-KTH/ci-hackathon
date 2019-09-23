@@ -226,6 +226,7 @@ const roomCanvas = document.getElementById("map")
 
             var bulbGeometry = new THREE.SphereGeometry(1, boxSize[1]/4, boxSize[1]/4);
             var spotLight = new THREE.SpotLight(Number(color));
+            var bulbLight = new THREE.PointLight(Number(color), 0.1);
             
             /*bulbLight.power = 0.25;
             bulbLight.decay = 1;
@@ -240,6 +241,7 @@ const roomCanvas = document.getElementById("map")
             });*/
 
             spotLight.position.set(...position);
+            bulbLight.position.set(...position);
 
             spotLight.castShadow = true;
 
@@ -273,6 +275,7 @@ const roomCanvas = document.getElementById("map")
             //scene.add( lightHelper );
             scene.add(spotLight.target)
             scene.add(spotLight)
+            scene.add(bulbLight)
             //scene.add(group);
             //group.position.y = 0;
             //group.position.z = 0;
@@ -374,7 +377,7 @@ const roomCanvas = document.getElementById("map")
                 spotLights[msg.id].color = msg.color;
                 //console.log(spotLights[msg.id])
                 spotLights[msg.id].obj[0].color.setHex(rgbtoHex(msg.color));
-                //spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
+                spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
                 //spotLights[msg.id].obj[1].emissive.setHex(rgbtoHex(msg.color));
             
 
