@@ -205,7 +205,7 @@ const roomCanvas = document.getElementById("map")
 
             const obj = spotLights[ligth];
             
-            const threeLigth = addLigth(0xff0000,// rgbtoHex(obj.color), 
+            const threeLigth = addLigth( rgbtoHex(obj.color), 
             toGlobalPosition(obj.relativePosition))
             
             spotLights[ligth].obj = threeLigth;
