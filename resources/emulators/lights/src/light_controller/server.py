@@ -8,7 +8,7 @@ import threading
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
-socketio = SocketIO(app, logger=True, engineio_logger=True, ping_interval=1, ping_timeout=1)
+socketio = SocketIO(app, logger=True, engineio_logger=True, ping_interval=200, ping_timeout=120000)
 
 from views import room, index, h
  # SETTING WEBSOCKET FOR SIMULATOR
