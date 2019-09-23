@@ -13,6 +13,7 @@ const THREE = require("three");
 const PointerLockControls = require("./libs/PointerLockControls")
 const FirstPersonControls = require("./libs/FirstPersonControls")
 const OBJLoader = require("./libs/OBJLoader")
+const MTLLoader = require("./libs/MTLLoader")
 
 const roomCanvas = document.getElementById("map")
         const logBox = $("#logs");
@@ -107,7 +108,8 @@ const roomCanvas = document.getElementById("map")
         }
 
         function addAmbienLigth(){
-            var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+            //var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+            var light = new THREE.AmbientLight( 0x22222 ); // soft white light
             scene.add( light );
         }
 
@@ -122,7 +124,7 @@ const roomCanvas = document.getElementById("map")
             //var mtlLoader = new THREE.MTLLoader();
             //mtlLoader.load("/static/r1.mtl", function(materials){
 
-              //  materials.preload();
+                //materials.preload();
 
                 var loader = new THREE.OBJLoader();
                 //loader.setMaterials(materials);
@@ -133,8 +135,9 @@ const roomCanvas = document.getElementById("map")
                     // called when resource is loaded
                     function ( object ) {
 
-                        object.scale.set(0.05, 0.05, 0.05)
-                        scene.add( object );
+                        const obj  = object
+                        obj.scale.set(0.05, 0.05, 0.05)
+                        scene.add( obj );
 
                     },
                     // called when loading is in progresses
@@ -151,7 +154,7 @@ const roomCanvas = document.getElementById("map")
                     }
                 );
 
-            //})
+            //s})
 
         }
 
@@ -162,7 +165,7 @@ const roomCanvas = document.getElementById("map")
         addAmbienLigth();
         addObjects();
 
-        addLigth(0xaaaaaa, [0,300,0])
+        addLigth(0x555555, [0,300,0])
         // Add dynamic lights
 
         
@@ -339,7 +342,7 @@ const roomCanvas = document.getElementById("map")
             //enderer.render( scene, camera );
             //renderer.render( scene, camera );
         });
-},{"./libs/FirstPersonControls":2,"./libs/OBJLoader":3,"./libs/PointerLockControls":4,"three":5}],2:[function(require,module,exports){
+},{"./libs/FirstPersonControls":2,"./libs/MTLLoader":3,"./libs/OBJLoader":4,"./libs/PointerLockControls":5,"three":6}],2:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
@@ -631,7 +634,595 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 };
 
-},{"three":5}],3:[function(require,module,exports){
+},{"three":6}],3:[function(require,module,exports){
+/**
+ * Loads a Wavefront .mtl file specifying materials
+ *
+ * @author angelxuanchang
+ */
+const THREE = require("three");
+
+THREE.MTLLoader = function ( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+
+};
+
+THREE.MTLLoader.prototype = {
+
+	constructor: THREE.MTLLoader,
+
+	crossOrigin: 'anonymous',
+
+	/**
+	 * Loads and parses a MTL asset from a URL.
+	 *
+	 * @param {String} url - URL to the MTL file.
+	 * @param {Function} [onLoad] - Callback invoked with the loaded object.
+	 * @param {Function} [onProgress] - Callback for download progress.
+	 * @param {Function} [onError] - Callback for download errors.
+	 *
+	 * @see setPath setResourcePath
+	 *
+	 * @note In order for relative texture references to resolve correctly
+	 * you must call setResourcePath() explicitly prior to load.
+	 */
+	load: function ( url, onLoad, onProgress, onError ) {
+
+		var scope = this;
+
+		var path = ( this.path === undefined ) ? THREE.LoaderUtils.extractUrlBase( url ) : this.path;
+
+		var loader = new THREE.FileLoader( this.manager );
+		loader.setPath( this.path );
+		loader.load( url, function ( text ) {
+
+			onLoad( scope.parse( text, path ) );
+
+		}, onProgress, onError );
+
+	},
+
+	/**
+	 * Set base path for resolving references.
+	 * If set this path will be prepended to each loaded and found reference.
+	 *
+	 * @see setResourcePath
+	 * @param {String} path
+	 * @return {THREE.MTLLoader}
+	 *
+	 * @example
+	 *     mtlLoader.setPath( 'assets/obj/' );
+	 *     mtlLoader.load( 'my.mtl', ... );
+	 */
+	setPath: function ( path ) {
+
+		this.path = path;
+		return this;
+
+	},
+
+	/**
+	 * Set base path for additional resources like textures.
+	 *
+	 * @see setPath
+	 * @param {String} path
+	 * @return {THREE.MTLLoader}
+	 *
+	 * @example
+	 *     mtlLoader.setPath( 'assets/obj/' );
+	 *     mtlLoader.setResourcePath( 'assets/textures/' );
+	 *     mtlLoader.load( 'my.mtl', ... );
+	 */
+	setResourcePath: function ( path ) {
+
+		this.resourcePath = path;
+		return this;
+
+	},
+
+	setTexturePath: function ( path ) {
+
+		console.warn( 'THREE.MTLLoader: .setTexturePath() has been renamed to .setResourcePath().' );
+		return this.setResourcePath( path );
+
+	},
+
+	setCrossOrigin: function ( value ) {
+
+		this.crossOrigin = value;
+		return this;
+
+	},
+
+	setMaterialOptions: function ( value ) {
+
+		this.materialOptions = value;
+		return this;
+
+	},
+
+	/**
+	 * Parses a MTL file.
+	 *
+	 * @param {String} text - Content of MTL file
+	 * @return {THREE.MTLLoader.MaterialCreator}
+	 *
+	 * @see setPath setResourcePath
+	 *
+	 * @note In order for relative texture references to resolve correctly
+	 * you must call setResourcePath() explicitly prior to parse.
+	 */
+	parse: function ( text, path ) {
+
+		var lines = text.split( '\n' );
+		var info = {};
+		var delimiter_pattern = /\s+/;
+		var materialsInfo = {};
+
+		for ( var i = 0; i < lines.length; i ++ ) {
+
+			var line = lines[ i ];
+			line = line.trim();
+
+			if ( line.length === 0 || line.charAt( 0 ) === '#' ) {
+
+				// Blank line or comment ignore
+				continue;
+
+			}
+
+			var pos = line.indexOf( ' ' );
+
+			var key = ( pos >= 0 ) ? line.substring( 0, pos ) : line;
+			key = key.toLowerCase();
+
+			var value = ( pos >= 0 ) ? line.substring( pos + 1 ) : '';
+			value = value.trim();
+
+			if ( key === 'newmtl' ) {
+
+				// New material
+
+				info = { name: value };
+				materialsInfo[ value ] = info;
+
+			} else {
+
+				if ( key === 'ka' || key === 'kd' || key === 'ks' || key === 'ke' ) {
+
+					var ss = value.split( delimiter_pattern, 3 );
+					info[ key ] = [ parseFloat( ss[ 0 ] ), parseFloat( ss[ 1 ] ), parseFloat( ss[ 2 ] ) ];
+
+				} else {
+
+					info[ key ] = value;
+
+				}
+
+			}
+
+		}
+
+		var materialCreator = new THREE.MTLLoader.MaterialCreator( this.resourcePath || path, this.materialOptions );
+		materialCreator.setCrossOrigin( this.crossOrigin );
+		materialCreator.setManager( this.manager );
+		materialCreator.setMaterials( materialsInfo );
+		return materialCreator;
+
+	}
+
+};
+
+/**
+ * Create a new THREE-MTLLoader.MaterialCreator
+ * @param baseUrl - Url relative to which textures are loaded
+ * @param options - Set of options on how to construct the materials
+ *                  side: Which side to apply the material
+ *                        THREE.FrontSide (default), THREE.BackSide, THREE.DoubleSide
+ *                  wrap: What type of wrapping to apply for textures
+ *                        THREE.RepeatWrapping (default), THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping
+ *                  normalizeRGB: RGBs need to be normalized to 0-1 from 0-255
+ *                                Default: false, assumed to be already normalized
+ *                  ignoreZeroRGBs: Ignore values of RGBs (Ka,Kd,Ks) that are all 0's
+ *                                  Default: false
+ * @constructor
+ */
+
+THREE.MTLLoader.MaterialCreator = function ( baseUrl, options ) {
+
+	this.baseUrl = baseUrl || '';
+	this.options = options;
+	this.materialsInfo = {};
+	this.materials = {};
+	this.materialsArray = [];
+	this.nameLookup = {};
+
+	this.side = ( this.options && this.options.side ) ? this.options.side : THREE.FrontSide;
+	this.wrap = ( this.options && this.options.wrap ) ? this.options.wrap : THREE.RepeatWrapping;
+
+};
+
+THREE.MTLLoader.MaterialCreator.prototype = {
+
+	constructor: THREE.MTLLoader.MaterialCreator,
+
+	crossOrigin: 'anonymous',
+
+	setCrossOrigin: function ( value ) {
+
+		this.crossOrigin = value;
+		return this;
+
+	},
+
+	setManager: function ( value ) {
+
+		this.manager = value;
+
+	},
+
+	setMaterials: function ( materialsInfo ) {
+
+		this.materialsInfo = this.convert( materialsInfo );
+		this.materials = {};
+		this.materialsArray = [];
+		this.nameLookup = {};
+
+	},
+
+	convert: function ( materialsInfo ) {
+
+		if ( ! this.options ) return materialsInfo;
+
+		var converted = {};
+
+		for ( var mn in materialsInfo ) {
+
+			// Convert materials info into normalized form based on options
+
+			var mat = materialsInfo[ mn ];
+
+			var covmat = {};
+
+			converted[ mn ] = covmat;
+
+			for ( var prop in mat ) {
+
+				var save = true;
+				var value = mat[ prop ];
+				var lprop = prop.toLowerCase();
+
+				switch ( lprop ) {
+
+					case 'kd':
+					case 'ka':
+					case 'ks':
+
+						// Diffuse color (color under white light) using RGB values
+
+						if ( this.options && this.options.normalizeRGB ) {
+
+							value = [ value[ 0 ] / 255, value[ 1 ] / 255, value[ 2 ] / 255 ];
+
+						}
+
+						if ( this.options && this.options.ignoreZeroRGBs ) {
+
+							if ( value[ 0 ] === 0 && value[ 1 ] === 0 && value[ 2 ] === 0 ) {
+
+								// ignore
+
+								save = false;
+
+							}
+
+						}
+
+						break;
+
+					default:
+
+						break;
+
+				}
+
+				if ( save ) {
+
+					covmat[ lprop ] = value;
+
+				}
+
+			}
+
+		}
+
+		return converted;
+
+	},
+
+	preload: function () {
+
+		for ( var mn in this.materialsInfo ) {
+
+			this.create( mn );
+
+		}
+
+	},
+
+	getIndex: function ( materialName ) {
+
+		return this.nameLookup[ materialName ];
+
+	},
+
+	getAsArray: function () {
+
+		var index = 0;
+
+		for ( var mn in this.materialsInfo ) {
+
+			this.materialsArray[ index ] = this.create( mn );
+			this.nameLookup[ mn ] = index;
+			index ++;
+
+		}
+
+		return this.materialsArray;
+
+	},
+
+	create: function ( materialName ) {
+
+		if ( this.materials[ materialName ] === undefined ) {
+
+			this.createMaterial_( materialName );
+
+		}
+
+		return this.materials[ materialName ];
+
+	},
+
+	createMaterial_: function ( materialName ) {
+
+		// Create material
+
+		var scope = this;
+		var mat = this.materialsInfo[ materialName ];
+		var params = {
+
+			name: materialName,
+			side: this.side
+
+		};
+
+		function resolveURL( baseUrl, url ) {
+
+			if ( typeof url !== 'string' || url === '' )
+				return '';
+
+			// Absolute URL
+			if ( /^https?:\/\//i.test( url ) ) return url;
+
+			return baseUrl + url;
+
+		}
+
+		function setMapForType( mapType, value ) {
+
+			if ( params[ mapType ] ) return; // Keep the first encountered texture
+
+			var texParams = scope.getTextureParams( value, params );
+			var map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
+
+			map.repeat.copy( texParams.scale );
+			map.offset.copy( texParams.offset );
+
+			map.wrapS = scope.wrap;
+			map.wrapT = scope.wrap;
+
+			params[ mapType ] = map;
+
+		}
+
+		for ( var prop in mat ) {
+
+			var value = mat[ prop ];
+			var n;
+
+			if ( value === '' ) continue;
+
+			switch ( prop.toLowerCase() ) {
+
+				// Ns is material specular exponent
+
+				case 'kd':
+
+					// Diffuse color (color under white light) using RGB values
+
+					params.color = new THREE.Color().fromArray( value );
+
+					break;
+
+				case 'ks':
+
+					// Specular color (color when light is reflected from shiny surface) using RGB values
+					params.specular = new THREE.Color().fromArray( value );
+
+					break;
+
+				case 'ke':
+
+					// Emissive using RGB values
+					params.emissive = new THREE.Color().fromArray( value );
+
+					break;
+
+				case 'map_kd':
+
+					// Diffuse texture map
+
+					setMapForType( "map", value );
+
+					break;
+
+				case 'map_ks':
+
+					// Specular map
+
+					setMapForType( "specularMap", value );
+
+					break;
+
+				case 'map_ke':
+
+					// Emissive map
+
+					setMapForType( "emissiveMap", value );
+
+					break;
+
+				case 'norm':
+
+					setMapForType( "normalMap", value );
+
+					break;
+
+				case 'map_bump':
+				case 'bump':
+
+					// Bump texture map
+
+					setMapForType( "bumpMap", value );
+
+					break;
+
+				case 'map_d':
+
+					// Alpha map
+
+					setMapForType( "alphaMap", value );
+					params.transparent = true;
+
+					break;
+
+				case 'ns':
+
+					// The specular exponent (defines the focus of the specular highlight)
+					// A high exponent results in a tight, concentrated highlight. Ns values normally range from 0 to 1000.
+
+					params.shininess = parseFloat( value );
+
+					break;
+
+				case 'd':
+					n = parseFloat( value );
+
+					if ( n < 1 ) {
+
+						params.opacity = n;
+						params.transparent = true;
+
+					}
+
+					break;
+
+				case 'tr':
+					n = parseFloat( value );
+
+					if ( this.options && this.options.invertTrProperty ) n = 1 - n;
+
+					if ( n > 0 ) {
+
+						params.opacity = 1 - n;
+						params.transparent = true;
+
+					}
+
+					break;
+
+				default:
+					break;
+
+			}
+
+		}
+
+		this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
+		return this.materials[ materialName ];
+
+	},
+
+	getTextureParams: function ( value, matParams ) {
+
+		var texParams = {
+
+			scale: new THREE.Vector2( 1, 1 ),
+			offset: new THREE.Vector2( 0, 0 )
+
+		 };
+
+		var items = value.split( /\s+/ );
+		var pos;
+
+		pos = items.indexOf( '-bm' );
+
+		if ( pos >= 0 ) {
+
+			matParams.bumpScale = parseFloat( items[ pos + 1 ] );
+			items.splice( pos, 2 );
+
+		}
+
+		pos = items.indexOf( '-s' );
+
+		if ( pos >= 0 ) {
+
+			texParams.scale.set( parseFloat( items[ pos + 1 ] ), parseFloat( items[ pos + 2 ] ) );
+			items.splice( pos, 4 ); // we expect 3 parameters here!
+
+		}
+
+		pos = items.indexOf( '-o' );
+
+		if ( pos >= 0 ) {
+
+			texParams.offset.set( parseFloat( items[ pos + 1 ] ), parseFloat( items[ pos + 2 ] ) );
+			items.splice( pos, 4 ); // we expect 3 parameters here!
+
+		}
+
+		texParams.url = items.join( ' ' ).trim();
+		return texParams;
+
+	},
+
+	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
+
+		var texture;
+		var loader = THREE.Loader.Handlers.get( url );
+		var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
+
+		if ( loader === null ) {
+
+			loader = new THREE.TextureLoader( manager );
+
+		}
+
+		if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
+		texture = loader.load( url, onLoad, onProgress, onError );
+
+		if ( mapping !== undefined ) texture.mapping = mapping;
+
+		return texture;
+
+	}
+
+};
+
+},{"three":6}],4:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  */
@@ -1432,7 +2023,7 @@ THREE.OBJLoader = ( function () {
 
 } )();
 
-},{"three":5}],4:[function(require,module,exports){
+},{"three":6}],5:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author Mugen87 / https://github.com/Mugen87
@@ -1589,7 +2180,7 @@ THREE.PointerLockControls = PointerLockControls;
 THREE.PointerLockControls.prototype = Object.create( EventDispatcher.prototype );
 THREE.PointerLockControls.prototype.constructor = PointerLockControls;
 
-},{"three":5}],5:[function(require,module,exports){
+},{"three":6}],6:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.AmbientLight=AmbientLight;exports.AmbientLightProbe=AmbientLightProbe;exports.AnimationClip=AnimationClip;exports.AnimationLoader=AnimationLoader;exports.AnimationMixer=AnimationMixer;exports.AnimationObjectGroup=AnimationObjectGroup;exports.ArcCurve=ArcCurve;exports.ArrayCamera=ArrayCamera;exports.ArrowHelper=ArrowHelper;exports.Audio=Audio;exports.AudioAnalyser=AudioAnalyser;exports.AudioListener=AudioListener;exports.AudioLoader=AudioLoader;exports.AxesHelper=AxesHelper;exports.AxisHelper=AxisHelper;exports.BinaryTextureLoader=BinaryTextureLoader;exports.Bone=Bone;exports.BooleanKeyframeTrack=BooleanKeyframeTrack;exports.BoundingBoxHelper=BoundingBoxHelper;exports.Box2=Box2;exports.Box3=Box3;exports.Box3Helper=Box3Helper;exports.BoxBufferGeometry=BoxBufferGeometry;exports.CubeGeometry=exports.BoxGeometry=BoxGeometry;exports.BoxHelper=BoxHelper;exports.BufferAttribute=BufferAttribute;exports.BufferGeometry=BufferGeometry;exports.BufferGeometryLoader=BufferGeometryLoader;exports.Camera=Camera;exports.CameraHelper=CameraHelper;exports.CanvasRenderer=CanvasRenderer;exports.CanvasTexture=CanvasTexture;exports.CatmullRomCurve3=CatmullRomCurve3;exports.CircleBufferGeometry=CircleBufferGeometry;exports.CircleGeometry=CircleGeometry;exports.Clock=Clock;exports.ClosedSplineCurve3=ClosedSplineCurve3;exports.Color=Color;exports.ColorKeyframeTrack=ColorKeyframeTrack;exports.CompressedTexture=CompressedTexture;exports.CompressedTextureLoader=CompressedTextureLoader;exports.ConeBufferGeometry=ConeBufferGeometry;exports.ConeGeometry=ConeGeometry;exports.CubeCamera=CubeCamera;exports.CubeTexture=CubeTexture;exports.CubeTextureLoader=CubeTextureLoader;exports.CubicBezierCurve=CubicBezierCurve;exports.CubicBezierCurve3=CubicBezierCurve3;exports.CubicInterpolant=CubicInterpolant;exports.Curve=Curve;exports.CurvePath=CurvePath;exports.CylinderBufferGeometry=CylinderBufferGeometry;exports.CylinderGeometry=CylinderGeometry;exports.Cylindrical=Cylindrical;exports.DataTexture=DataTexture;exports.DataTexture2DArray=DataTexture2DArray;exports.DataTexture3D=DataTexture3D;exports.DataTextureLoader=DataTextureLoader;exports.DepthTexture=DepthTexture;exports.DirectionalLight=DirectionalLight;exports.DirectionalLightHelper=DirectionalLightHelper;exports.DirectionalLightShadow=DirectionalLightShadow;exports.DiscreteInterpolant=DiscreteInterpolant;exports.DodecahedronBufferGeometry=DodecahedronBufferGeometry;exports.DodecahedronGeometry=DodecahedronGeometry;exports.DynamicBufferAttribute=DynamicBufferAttribute;exports.EdgesGeometry=EdgesGeometry;exports.EdgesHelper=EdgesHelper;exports.EllipseCurve=EllipseCurve;exports.Euler=Euler;exports.EventDispatcher=EventDispatcher;exports.ExtrudeBufferGeometry=ExtrudeBufferGeometry;exports.ExtrudeGeometry=ExtrudeGeometry;exports.Face3=Face3;exports.Face4=Face4;exports.FaceNormalsHelper=FaceNormalsHelper;exports.FileLoader=FileLoader;exports.Float32Attribute=Float32Attribute;exports.Float32BufferAttribute=Float32BufferAttribute;exports.Float64Attribute=Float64Attribute;exports.Float64BufferAttribute=Float64BufferAttribute;exports.Fog=Fog;exports.FogExp2=FogExp2;exports.Font=Font;exports.FontLoader=FontLoader;exports.Frustum=Frustum;exports.Geometry=Geometry;exports.GridHelper=GridHelper;exports.Group=Group;exports.HemisphereLight=HemisphereLight;exports.HemisphereLightHelper=HemisphereLightHelper;exports.HemisphereLightProbe=HemisphereLightProbe;exports.IcosahedronBufferGeometry=IcosahedronBufferGeometry;exports.IcosahedronGeometry=IcosahedronGeometry;exports.ImageBitmapLoader=ImageBitmapLoader;exports.ImageLoader=ImageLoader;exports.ImmediateRenderObject=ImmediateRenderObject;exports.InstancedBufferAttribute=InstancedBufferAttribute;exports.InstancedBufferGeometry=InstancedBufferGeometry;exports.InstancedInterleavedBuffer=InstancedInterleavedBuffer;exports.Int16Attribute=Int16Attribute;exports.Int16BufferAttribute=Int16BufferAttribute;exports.Int32Attribute=Int32Attribute;exports.Int32BufferAttribute=Int32BufferAttribute;exports.Int8Attribute=Int8Attribute;exports.Int8BufferAttribute=Int8BufferAttribute;exports.InterleavedBuffer=InterleavedBuffer;exports.InterleavedBufferAttribute=InterleavedBufferAttribute;exports.Interpolant=Interpolant;exports.JSONLoader=JSONLoader;exports.KeyframeTrack=KeyframeTrack;exports.LOD=LOD;exports.LatheBufferGeometry=LatheBufferGeometry;exports.LatheGeometry=LatheGeometry;exports.Layers=Layers;exports.LensFlare=LensFlare;exports.Light=Light;exports.LightProbe=LightProbe;exports.LightProbeHelper=LightProbeHelper;exports.LightShadow=LightShadow;exports.Line=Line;exports.Line3=Line3;exports.LineBasicMaterial=LineBasicMaterial;exports.LineCurve=LineCurve;exports.LineCurve3=LineCurve3;exports.LineDashedMaterial=LineDashedMaterial;exports.LineLoop=LineLoop;exports.LineSegments=LineSegments;exports.LinearInterpolant=LinearInterpolant;exports.Loader=Loader;exports.LoadingManager=LoadingManager;exports.Material=Material;exports.MaterialLoader=MaterialLoader;exports.Matrix3=Matrix3;exports.Matrix4=Matrix4;exports.Mesh=Mesh;exports.MeshBasicMaterial=MeshBasicMaterial;exports.MeshDepthMaterial=MeshDepthMaterial;exports.MeshDistanceMaterial=MeshDistanceMaterial;exports.MeshFaceMaterial=MeshFaceMaterial;exports.MeshLambertMaterial=MeshLambertMaterial;exports.MeshMatcapMaterial=MeshMatcapMaterial;exports.MeshNormalMaterial=MeshNormalMaterial;exports.MeshPhongMaterial=MeshPhongMaterial;exports.MeshPhysicalMaterial=MeshPhysicalMaterial;exports.MeshStandardMaterial=MeshStandardMaterial;exports.MeshToonMaterial=MeshToonMaterial;exports.MultiMaterial=MultiMaterial;exports.NumberKeyframeTrack=NumberKeyframeTrack;exports.Object3D=Object3D;exports.ObjectLoader=ObjectLoader;exports.OctahedronBufferGeometry=OctahedronBufferGeometry;exports.OctahedronGeometry=OctahedronGeometry;exports.OrthographicCamera=OrthographicCamera;exports.ParametricBufferGeometry=ParametricBufferGeometry;exports.ParametricGeometry=ParametricGeometry;exports.Particle=Particle;exports.ParticleBasicMaterial=ParticleBasicMaterial;exports.ParticleSystem=ParticleSystem;exports.ParticleSystemMaterial=ParticleSystemMaterial;exports.Path=Path;exports.PerspectiveCamera=PerspectiveCamera;exports.Plane=Plane;exports.PlaneBufferGeometry=PlaneBufferGeometry;exports.PlaneGeometry=PlaneGeometry;exports.PlaneHelper=PlaneHelper;exports.PointCloud=PointCloud;exports.PointCloudMaterial=PointCloudMaterial;exports.PointLight=PointLight;exports.PointLightHelper=PointLightHelper;exports.Points=Points;exports.PointsMaterial=PointsMaterial;exports.PolarGridHelper=PolarGridHelper;exports.PolyhedronBufferGeometry=PolyhedronBufferGeometry;exports.PolyhedronGeometry=PolyhedronGeometry;exports.PositionalAudio=PositionalAudio;exports.PositionalAudioHelper=PositionalAudioHelper;exports.PropertyBinding=PropertyBinding;exports.PropertyMixer=PropertyMixer;exports.QuadraticBezierCurve=QuadraticBezierCurve;exports.QuadraticBezierCurve3=QuadraticBezierCurve3;exports.Quaternion=Quaternion;exports.QuaternionKeyframeTrack=QuaternionKeyframeTrack;exports.QuaternionLinearInterpolant=QuaternionLinearInterpolant;exports.RawShaderMaterial=RawShaderMaterial;exports.Ray=Ray;exports.Raycaster=Raycaster;exports.RectAreaLight=RectAreaLight;exports.RectAreaLightHelper=RectAreaLightHelper;exports.RingBufferGeometry=RingBufferGeometry;exports.RingGeometry=RingGeometry;exports.Scene=Scene;exports.ShaderMaterial=ShaderMaterial;exports.ShadowMaterial=ShadowMaterial;exports.Shape=Shape;exports.ShapeBufferGeometry=ShapeBufferGeometry;exports.ShapeGeometry=ShapeGeometry;exports.ShapePath=ShapePath;exports.Skeleton=Skeleton;exports.SkeletonHelper=SkeletonHelper;exports.SkinnedMesh=SkinnedMesh;exports.Sphere=Sphere;exports.SphereBufferGeometry=SphereBufferGeometry;exports.SphereGeometry=SphereGeometry;exports.Spherical=Spherical;exports.SphericalHarmonics3=SphericalHarmonics3;exports.Spline=Spline;exports.SplineCurve=SplineCurve;exports.SplineCurve3=SplineCurve3;exports.SpotLight=SpotLight;exports.SpotLightHelper=SpotLightHelper;exports.SpotLightShadow=SpotLightShadow;exports.Sprite=Sprite;exports.SpriteMaterial=SpriteMaterial;exports.StereoCamera=StereoCamera;exports.StringKeyframeTrack=StringKeyframeTrack;exports.TetrahedronBufferGeometry=TetrahedronBufferGeometry;exports.TetrahedronGeometry=TetrahedronGeometry;exports.TextBufferGeometry=TextBufferGeometry;exports.TextGeometry=TextGeometry;exports.Texture=Texture;exports.TextureLoader=TextureLoader;exports.TorusBufferGeometry=TorusBufferGeometry;exports.TorusGeometry=TorusGeometry;exports.TorusKnotBufferGeometry=TorusKnotBufferGeometry;exports.TorusKnotGeometry=TorusKnotGeometry;exports.Triangle=Triangle;exports.TubeBufferGeometry=TubeBufferGeometry;exports.TubeGeometry=TubeGeometry;exports.Uint16Attribute=Uint16Attribute;exports.Uint16BufferAttribute=Uint16BufferAttribute;exports.Uint32Attribute=Uint32Attribute;exports.Uint32BufferAttribute=Uint32BufferAttribute;exports.Uint8Attribute=Uint8Attribute;exports.Uint8BufferAttribute=Uint8BufferAttribute;exports.Uint8ClampedAttribute=Uint8ClampedAttribute;exports.Uint8ClampedBufferAttribute=Uint8ClampedBufferAttribute;exports.Uniform=Uniform;exports.Vector2=Vector2;exports.Vector3=Vector3;exports.Vector4=Vector4;exports.VectorKeyframeTrack=VectorKeyframeTrack;exports.Vertex=Vertex;exports.VertexNormalsHelper=VertexNormalsHelper;exports.VideoTexture=VideoTexture;exports.WebGLMultisampleRenderTarget=WebGLMultisampleRenderTarget;exports.WebGLRenderTarget=WebGLRenderTarget;exports.WebGLRenderTargetCube=WebGLRenderTargetCube;exports.WebGLRenderer=WebGLRenderer;exports.WebGLUtils=WebGLUtils;exports.WireframeGeometry=WireframeGeometry;exports.WireframeHelper=WireframeHelper;exports.XHRLoader=XHRLoader;exports.NotEqualStencilFunc=exports.NotEqualDepth=exports.NormalBlending=exports.NoToneMapping=exports.NoColors=exports.NoBlending=exports.NeverStencilFunc=exports.NeverDepth=exports.NearestMipmapNearestFilter=exports.NearestMipmapLinearFilter=exports.NearestMipMapNearestFilter=exports.NearestMipMapLinearFilter=exports.NearestFilter=exports.MultiplyOperation=exports.MultiplyBlending=exports.MixOperation=exports.MirroredRepeatWrapping=exports.MinEquation=exports.MaxEquation=exports.Math=exports.MOUSE=exports.LuminanceFormat=exports.LuminanceAlphaFormat=exports.LoopRepeat=exports.LoopPingPong=exports.LoopOnce=exports.LogLuvEncoding=exports.LoaderUtils=exports.LinearToneMapping=exports.LinearMipmapNearestFilter=exports.LinearMipmapLinearFilter=exports.LinearMipMapNearestFilter=exports.LinearMipMapLinearFilter=exports.LinearFilter=exports.LinearEncoding=exports.LineStrip=exports.LinePieces=exports.LessStencilFunc=exports.LessEqualStencilFunc=exports.LessEqualDepth=exports.LessDepth=exports.KeepStencilOp=exports.InvertStencilOp=exports.InterpolateSmooth=exports.InterpolateLinear=exports.InterpolateDiscrete=exports.IntType=exports.IncrementWrapStencilOp=exports.IncrementStencilOp=exports.ImageUtils=exports.HalfFloatType=exports.GreaterStencilFunc=exports.GreaterEqualStencilFunc=exports.GreaterEqualDepth=exports.GreaterDepth=exports.GeometryUtils=exports.GammaEncoding=exports.FrontSide=exports.FrontFaceDirectionCW=exports.FrontFaceDirectionCCW=exports.FloatType=exports.FlatShading=exports.FaceColors=exports.EquirectangularRefractionMapping=exports.EquirectangularReflectionMapping=exports.EqualStencilFunc=exports.EqualDepth=exports.DstColorFactor=exports.DstAlphaFactor=exports.DoubleSide=exports.DepthStencilFormat=exports.DepthFormat=exports.DefaultLoadingManager=exports.DecrementWrapStencilOp=exports.DecrementStencilOp=exports.CustomBlending=exports.CullFaceNone=exports.CullFaceFrontBack=exports.CullFaceFront=exports.CullFaceBack=exports.CubeUVRefractionMapping=exports.CubeUVReflectionMapping=exports.CubeRefractionMapping=exports.CubeReflectionMapping=exports.ClampToEdgeWrapping=exports.CineonToneMapping=exports.Cache=exports.ByteType=exports.BasicShadowMap=exports.BasicDepthPacking=exports.BackSide=exports.AudioContext=exports.AnimationUtils=exports.AlwaysStencilFunc=exports.AlwaysDepth=exports.AlphaFormat=exports.AdditiveBlending=exports.AddOperation=exports.AddEquation=exports.ACESFilmicToneMapping=void 0;exports.sRGBEncoding=exports.ZeroStencilOp=exports.ZeroSlopeEnding=exports.ZeroFactor=exports.ZeroCurvatureEnding=exports.WrapAroundEnding=exports.VertexColors=exports.VSMShadowMap=exports.UnsignedShortType=exports.UnsignedShort565Type=exports.UnsignedShort5551Type=exports.UnsignedShort4444Type=exports.UnsignedIntType=exports.UnsignedInt248Type=exports.UnsignedByteType=exports.UniformsUtils=exports.UniformsLib=exports.Uncharted2ToneMapping=exports.UVMapping=exports.TrianglesDrawMode=exports.TriangleStripDrawMode=exports.TriangleFanDrawMode=exports.TangentSpaceNormalMap=exports.TOUCH=exports.SubtractiveBlending=exports.SubtractEquation=exports.SrcColorFactor=exports.SrcAlphaSaturateFactor=exports.SrcAlphaFactor=exports.SphericalReflectionMapping=exports.SmoothShading=exports.ShortType=exports.ShapeUtils=exports.ShaderLib=exports.ShaderChunk=exports.SceneUtils=exports.ReverseSubtractEquation=exports.ReplaceStencilOp=exports.RepeatWrapping=exports.ReinhardToneMapping=exports.RedFormat=exports.RGB_S3TC_DXT1_Format=exports.RGB_PVRTC_4BPPV1_Format=exports.RGB_PVRTC_2BPPV1_Format=exports.RGB_ETC1_Format=exports.RGBM7Encoding=exports.RGBM16Encoding=exports.RGBFormat=exports.RGBEFormat=exports.RGBEEncoding=exports.RGBDEncoding=exports.RGBA_S3TC_DXT5_Format=exports.RGBA_S3TC_DXT3_Format=exports.RGBA_S3TC_DXT1_Format=exports.RGBA_PVRTC_4BPPV1_Format=exports.RGBA_PVRTC_2BPPV1_Format=exports.RGBA_ASTC_8x8_Format=exports.RGBA_ASTC_8x6_Format=exports.RGBA_ASTC_8x5_Format=exports.RGBA_ASTC_6x6_Format=exports.RGBA_ASTC_6x5_Format=exports.RGBA_ASTC_5x5_Format=exports.RGBA_ASTC_5x4_Format=exports.RGBA_ASTC_4x4_Format=exports.RGBA_ASTC_12x12_Format=exports.RGBA_ASTC_12x10_Format=exports.RGBA_ASTC_10x8_Format=exports.RGBA_ASTC_10x6_Format=exports.RGBA_ASTC_10x5_Format=exports.RGBA_ASTC_10x10_Format=exports.RGBAFormat=exports.RGBADepthPacking=exports.REVISION=exports.PCFSoftShadowMap=exports.PCFShadowMap=exports.OneMinusSrcColorFactor=exports.OneMinusSrcAlphaFactor=exports.OneMinusDstColorFactor=exports.OneMinusDstAlphaFactor=exports.OneFactor=exports.ObjectSpaceNormalMap=void 0;// Polyfills
 if(Number.EPSILON===undefined){Number.EPSILON=Math.pow(2,-52);}if(Number.isInteger===undefined){// Missing in IE
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger

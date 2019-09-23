@@ -12,6 +12,7 @@ const THREE = require("three");
 const PointerLockControls = require("./libs/PointerLockControls")
 const FirstPersonControls = require("./libs/FirstPersonControls")
 const OBJLoader = require("./libs/OBJLoader")
+const MTLLoader = require("./libs/MTLLoader")
 
 const roomCanvas = document.getElementById("map")
         const logBox = $("#logs");
@@ -106,7 +107,8 @@ const roomCanvas = document.getElementById("map")
         }
 
         function addAmbienLigth(){
-            var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+            //var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+            var light = new THREE.AmbientLight( 0x22222 ); // soft white light
             scene.add( light );
         }
 
@@ -121,7 +123,7 @@ const roomCanvas = document.getElementById("map")
             //var mtlLoader = new THREE.MTLLoader();
             //mtlLoader.load("/static/r1.mtl", function(materials){
 
-              //  materials.preload();
+                //materials.preload();
 
                 var loader = new THREE.OBJLoader();
                 //loader.setMaterials(materials);
@@ -132,8 +134,9 @@ const roomCanvas = document.getElementById("map")
                     // called when resource is loaded
                     function ( object ) {
 
-                        object.scale.set(0.05, 0.05, 0.05)
-                        scene.add( object );
+                        const obj  = object
+                        obj.scale.set(0.05, 0.05, 0.05)
+                        scene.add( obj );
 
                     },
                     // called when loading is in progresses
@@ -150,7 +153,7 @@ const roomCanvas = document.getElementById("map")
                     }
                 );
 
-            //})
+            //s})
 
         }
 
@@ -161,7 +164,7 @@ const roomCanvas = document.getElementById("map")
         addAmbienLigth();
         addObjects();
 
-        addLigth(0xaaaaaa, [0,300,0])
+        addLigth(0x555555, [0,300,0])
         // Add dynamic lights
 
         
