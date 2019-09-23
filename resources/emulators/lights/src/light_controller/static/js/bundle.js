@@ -109,7 +109,7 @@ const roomCanvas = document.getElementById("map")
 
         function addAmbienLigth(){
             //var light = new THREE.AmbientLight( 0xffffff ); // soft white light
-            var light = new THREE.AmbientLight( 0x22222 ); // soft white light
+            var light = new THREE.AmbientLight( 0x010101 ); // soft white light
             scene.add( light );
         }
 
