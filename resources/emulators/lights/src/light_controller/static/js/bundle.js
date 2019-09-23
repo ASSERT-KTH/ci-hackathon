@@ -109,7 +109,7 @@ const roomCanvas = document.getElementById("map")
 
         function addAmbienLigth(){
             //var light = new THREE.AmbientLight( 0xffffff ); // soft white light
-            var light = new THREE.AmbientLight( 0x010101 ); // soft white light
+            var light = new THREE.AmbientLight( 0x222222 ); // soft white light
             scene.add( light );
         }
 
@@ -165,7 +165,7 @@ const roomCanvas = document.getElementById("map")
         addAmbienLigth();
         addObjects();
 
-        addLigth(0x555555, [0,300,0])
+        addBulbLight(0x777777, [0,300,0])
         // Add dynamic lights
 
         
@@ -205,10 +205,19 @@ const roomCanvas = document.getElementById("map")
 
             const obj = spotLights[ligth];
             
-            const threeLigth = addLigth(rgbtoHex(obj.color), 
+            const threeLigth = addLigth(0xff0000, //rgbtoHex(obj.color), 
             toGlobalPosition(obj.relativePosition))
             
             spotLights[ligth].obj = threeLigth;
+
+        }
+
+        function addBulbLight(color, position){
+            var pointLight = new THREE.PointLight(Number(color), 0.3);
+
+            pointLight.position.set(...position);
+            scene.add(pointLight)
+            
         }
 
         function addLigth(color, position){
@@ -216,10 +225,11 @@ const roomCanvas = document.getElementById("map")
             group = new THREE.Group();
 
             var bulbGeometry = new THREE.SphereGeometry(1, boxSize[1]/4, boxSize[1]/4);
-            var bulbLight = new THREE.PointLight(Number(color), 0.1);
-            bulbLight.power = 2;
-            bulbLight.decay = 4;
-            bulbLight.exposure=0.3
+            var spotLight = new THREE.SpotLight(Number(color));
+            
+            /*bulbLight.power = 0.25;
+            bulbLight.decay = 1;
+            bulbLight.exposure=0.5
 
             var bulbMat = new THREE.MeshStandardMaterial({
                 emissive: color,
@@ -227,19 +237,48 @@ const roomCanvas = document.getElementById("map")
                 color: color,
                 //metalness: 0.9,
                 roughness: 1
-            });
+            });*/
 
-            bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
-            bulbLight.position.set(...position);
-            bulbLight.castShadow = true;
+            spotLight.position.set(...position);
 
-            group.add(bulbLight)
-            scene.add(group);
-            group.position.y = 0;
-            group.position.z = 0;
-            group.position.x = 0;
+            spotLight.castShadow = true;
 
-            return [bulbLight, bulbMat];
+            spotLight.penumbra = 0.35;
+            spotLight.angle=0.34;
+            spotLight.intensity = 1;
+            //spotLight.distance = 1.77*boxSize[0];
+            spotLight.decay=1.3;
+
+
+            spotLight.shadow.mapSize.width = 1024;
+            spotLight.shadow.mapSize.height = 1024;
+
+            spotLight.shadow.camera.near = 500;
+            spotLight.shadow.camera.far = 4000;
+            spotLight.shadow.camera.fov = 30;
+
+            var targetObject = new THREE.Object3D();
+            targetObject.position.set(
+                position[0], 
+                position[1] + 10,
+                position[2] - 3)
+            spotLight.target  = targetObject;
+            spotLight.target.updateMatrixWorld()
+
+
+            //bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
+            //bulbLight.position.set(...position);
+            //spotLight.castShadow = true;
+            lightHelper = new THREE.SpotLightHelper( spotLight );
+            //scene.add( lightHelper );
+            scene.add(spotLight.target)
+            scene.add(spotLight)
+            //scene.add(group);
+            //group.position.y = 0;
+            //group.position.z = 0;
+            //group.position.x = 0;
+
+            return [spotLight];
         }
 
 
