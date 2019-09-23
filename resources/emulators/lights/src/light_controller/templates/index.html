@@ -63,7 +63,7 @@
 
 {% block scripts %}
 <script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port + '/simulator');
+    var socket = io.connect('https://' + document.domain + ':' + location.port + '/simulator');
         
     socket.on('connect', function() {
             console.log("Connected")
