@@ -115,6 +115,7 @@ def initHandler():
     return SimulatorHandler(sessions, socketio)
 
 
+HANDLER = initHandler()
 ## REST HANDLERS
 
 @app.route('/setcolor', methods=["POST"])
