@@ -157,7 +157,7 @@ def index_handler():
 if __name__ == '__main__':
 
     APP_HOST = os.environ.get("APP_HOST", '0.0.0.0')
-    APP_PORT = os.environ.get("APP_PORT", 80)
+    APP_PORT = os.environ.get("APP_PORT", 8000)
     APP_DEBUG = os.environ.get("APP_DEBUG", False)
 
     HANDLER = initHandler()
