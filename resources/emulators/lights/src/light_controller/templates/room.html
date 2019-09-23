@@ -314,8 +314,8 @@
 
         var socket = io.connect('https://' + document.domain + ':' + location.port + '/simulator', {
             query: 'session={{session_name}}',
-            //transports: ['websocket'],
-            //upgrade: 'false'
+            transports: ['websocket'],
+            upgrade: 'false'
         });
         socket.on('connect', function() {
             console.log("Connected")
