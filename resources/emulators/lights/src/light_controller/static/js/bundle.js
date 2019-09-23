@@ -247,7 +247,7 @@ const roomCanvas = document.getElementById("map")
             spotLight.castShadow = true;
 
             spotLight.penumbra = 0.35;
-            spotLight.angle=0.34;
+            spotLight.angle=0.44;
             spotLight.intensity = 1;
             //spotLight.distance = 1.77*boxSize[0];
             spotLight.decay=1.3;
