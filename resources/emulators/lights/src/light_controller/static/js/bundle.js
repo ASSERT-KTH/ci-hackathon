@@ -205,7 +205,7 @@ const roomCanvas = document.getElementById("map")
 
             const obj = spotLights[ligth];
             
-            const threeLigth = addLigth(0xff0000, //rgbtoHex(obj.color), 
+            const threeLigth = addLigth( rgbtoHex(obj.color), 
             toGlobalPosition(obj.relativePosition))
             
             spotLights[ligth].obj = threeLigth;
@@ -374,8 +374,8 @@ const roomCanvas = document.getElementById("map")
                 spotLights[msg.id].color = msg.color;
                 //console.log(spotLights[msg.id])
                 spotLights[msg.id].obj[0].color.setHex(rgbtoHex(msg.color));
-                spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
-                spotLights[msg.id].obj[1].emissive.setHex(rgbtoHex(msg.color));
+                //spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
+                //spotLights[msg.id].obj[1].emissive.setHex(rgbtoHex(msg.color));
             
 
             //enderer.render( scene, camera );
