@@ -1,0 +1,11 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
+<script>
+  var socket = io.connect("http://localhost");
+  var synth = new Tone.Synth().toMaster();
+
+  // Listen to websocket note
+  socket.on("note", function({ note, length }) {
+    synth.triggerAttackRelease(note, length);
+  });
+</script>
