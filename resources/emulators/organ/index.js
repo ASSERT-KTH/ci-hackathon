@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Play note or chords of given length
+// Play note of given length
 app.get("/notes/:note/:length", (req, res) => {
   io.emit("note", { note: req.params.note, length: req.params.length });
   res.sendStatus(200, { note: req.params.note, length: req.params.length });

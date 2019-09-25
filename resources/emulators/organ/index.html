@@ -1,11 +1,44 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
-<script>
-  var socket = io.connect("localhost:3000");
-  var synth = new Tone.Synth().toMaster();
+<!DOCTYPE html>
 
-  // Listen to websocket note
-  socket.on("note", function({ note, length }) {
-    synth.triggerAttackRelease(note, length);
-  });
-</script>
+<head>
+  <link
+    href="https://fonts.googleapis.com/css?family=Fira+Sans:400,700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: "Fira Sans", sans-serif;
+      margin: 0;
+      height: 100vh;
+      background-color: #ffd137;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<html>
+  <body>
+    <h1>Organ Emulator</h1>
+    <h2>CASTOR SOFTWARE DAYS 2019</h2>
+    <h3>KTH</h3>
+    <p style="max-width: 300px; text-align: center;">
+      <em>
+        This webpage produces synthesized sounds triggered by API calls as
+        described in the documentation
+      </em>
+    </p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
+    <script>
+      var socket = io.connect("localhost:3000");
+      var synth = new Tone.Synth().toMaster();
+
+      // Listen to websocket note
+      socket.on("note", function({ note, length }) {
+        synth.triggerAttackRelease(note, length);
+      });
+    </script>
+  </body>
+</html>
