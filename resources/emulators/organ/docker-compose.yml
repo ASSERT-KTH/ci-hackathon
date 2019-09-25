@@ -1,0 +1,9 @@
+version: "3"
+services:
+  organ-web-app:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "3000:3000"

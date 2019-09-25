@@ -4,7 +4,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 
 // Start server
-server.listen(80, () => console.log("Listening on port 80!"));
+server.listen(3000, () => console.log("Listening on port 3000!"));
 
 // Serve web view on localhost root
 app.get("/", (req, res) => {
