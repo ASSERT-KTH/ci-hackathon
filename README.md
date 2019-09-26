@@ -18,15 +18,11 @@ The list of current participating teams and their ongoing CI art projects is ava
 ## Program of October 14 2019
 
 - 18:00 Welcome talk by hackathon curator Benoit Baudry
-- 18:20 Reading of Code (performer TBA)
-- 18:30 Demo and explanation of the Travis API / Websocket (Thomas Durieux)
-- 18:40 Demo and Explanation of the organ interface (Simone Stefani)
-- 18:50 Demo and Explanation of the light interface (TBA)
-- 19h00 - 22:00: Pizza, beer and coding
-- 22h00 CI Rain: Thomas Durieux
-- 22h15 TBA
-- 22h30 TBA
-- 22h45 TBA
+- 18:20 Reading of Code (Martin Monperrus)
+- 18:30 - 21h30 Coding
+- 21h30 - 22:00 Pizza break
+- 22h00 - 00h00 CI art show
+- 00h00 - 01h00 Rest and drinks
 
 ## Technology
 
