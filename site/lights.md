@@ -28,7 +28,11 @@ Here is an example of how lights work with our web service.
 
 ## Usage example
 
-[Here](https://github.com/KTH/ci-hackathon/blob/master/resources/emulators/lights/src/examples/traviss.py) you can find a piece of python codewhich actually uses this emulator to create a lights show with the Travis CI data. To access the emulator view, go to this [address](https://ci-lights.azurewebsites.net/). All room sessions are public, if for some reason you see a strange behavior in your code trying to command the lights, please check the ```session``` name in your data, maybe there is a collision with another colleague.
+[Here](https://github.com/KTH/ci-hackathon/blob/master/resources/emulators/lights/src/examples/traviss.py) you can find a piece of python code which uses this emulator to create a lights show (similar to the one that we tested [live in R1](www.youtube.com/embed/r8aUu9TcsdA)) with the Travis CI data. To access the emulator view, go to this [address](https://ci-lights.azurewebsites.net/). 
+
+### Troubleshooting
+
+All room sessions are public, if for some reason, you see a strange behavior in your code trying to command the lights, please check the ```session``` name in your data, because probably there is a collision with another colleague of yours. If you have any question about this, please do not hesitate to open an issue on the [hackathon repo](https://github.com/KTH/ci-hackathon).
 
 ## Environment variables
 
