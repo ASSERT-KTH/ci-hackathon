@@ -177,7 +177,22 @@ function handleJob(message){
                 mergeRing(key, message)
             }
 
-            const synth = new Tone.FMSynth().toMaster()
+            const fmSynth = new Tone.FMSynth().toMaster()
+
+            const scSynth = new Tone.MetalSynth({
+                "harmonicity" : 17,
+                "resonance" : 100,
+                "modulationIndex" : 10,
+                "octaves" : 2.3,
+                "envelope" : {
+                    "decay" : 0.21,
+                    "release" : 0.49,
+                    "attack" : 0.01,
+                    "sustain": 0.07
+                },
+                "volume" : 30
+
+            }).toMaster();
 
             let state = message.data.state
 
@@ -185,19 +200,19 @@ function handleJob(message){
             switch(state){
                 case "passed":
                     //color = '#42f5ce55'; // green
-                    synth.triggerAttackRelease("A1", "2n")
+                    scSynth.triggerAttackRelease("A1", "8n")
                     break;
                 case "errored":
                     //color = '#0088ff55'; // blue
-                    synth.triggerAttackRelease("F1", "2n")
+                    scSynth.triggerAttackRelease("F1", "8n")
                     break;
                 case "finished":
                     //color = '#ffbf0055'; // yellow
-                    synth.triggerAttackRelease("B1", "2n")
+                    scSynth.triggerAttackRelease("B1", "8n")
                     break;
                 case "failed":
                     //color = 'ff000055'; // gray
-                    synth.triggerAttackRelease("G1", "2n")
+                    scSynth.triggerAttackRelease("G1", "8n")
                     break;
             }
             // Todo sound or splash
@@ -426,6 +441,8 @@ function soundForJob(message) {
 
 
 function createSynth(position){
+
+    
 
     let which = null;
 
