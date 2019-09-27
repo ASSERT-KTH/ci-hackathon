@@ -19,10 +19,9 @@ The list of current participating teams and their ongoing CI art projects is ava
 
 - 18:00 Welcome talk by hackathon curator Benoit Baudry
 - 18:20 Reading of Code (Martin Monperrus)
-- 18:30 - 21h30 Coding
-- 21h30 - 22:00 Pizza break
-- 22h00 - 00h00 CI art show
-- 00h00 - 01h00 Rest and drinks
+- 18:30 - 20h00 Coding
+- 20:30 Pizza break
+- 22:00 CI art performance
 
 ## Technology
 
