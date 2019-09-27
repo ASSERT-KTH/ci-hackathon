@@ -157,6 +157,14 @@
   </li>
 </ul>
 
+<h2 id="usage-example">Usage example</h2>
+
+<p><a href="https://github.com/KTH/ci-hackathon/blob/master/resources/emulators/lights/src/examples/traviss.py">Here</a> you can find a piece of python code which uses this emulator to create a lights show (similar to the one that we tested <a href="www.youtube.com/embed/r8aUu9TcsdA">live in R1</a>) with the Travis CI data. To access the emulator view, go to this <a href="https://ci-lights.azurewebsites.net/">address</a>.</p>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+
+<p>All room sessions are public, if for some reason, you see a strange behavior in your code trying to command the lights, please check the <code class="highlighter-rouge">session</code> name in your data, because probably there is a collision with another colleague of yours. If you have any question about this, please do not hesitate to open an issue on the <a href="https://github.com/KTH/ci-hackathon">hackathon repo</a>.</p>
+
 <h2 id="environment-variables">Environment variables</h2>
 
 <p>To specify host Ip and Port you must set them as environment variables like:</p>
@@ -235,9 +243,6 @@ python src/server.py
   <li>In all browser tabs (opened in <code class="highlighter-rouge">http://localhost:8000/dashboard/test</code>) you will see command logs and drawing simulation</li>
 </ol>
 
-<h2 id="todo">TODO</h2>
-
-<p>We are working on lights blueprint to put a representation of the real lights setup in R1.</p>
 
 </div>
 
