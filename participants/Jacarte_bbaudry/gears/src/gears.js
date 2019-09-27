@@ -142,41 +142,46 @@ function getColor(message){
     return undefined;
 }
 
+
 function handleJob(message){
+
+    console.log(message)
+
     if (message.data.state === "started") {
-        console.log("Starting", message)
                 
-        let ring  = pickEmptyRing(message)
+        let ring = assignRing(message)
+
         if(ring){   
-            ring.sha1 = message.data.commit.sha
-            jobs[ring.sha1] = message
-            jobs[ring.sha1].ring = ring
+            ring.id = message.data.commit.id
+            jobs[ring.id] = message
+            jobs[ring.id].ring = ring
 
             
-            let synth = createSynth()
+            let synth = createSynth(ring.position)
             let sound = soundForJob(message)
+
+            
             synth.triggerAttackRelease(sound, '4n');
         }
          
     }
     else {
-        if ((message.data.commit.sha in jobs)) {
+        if ((message.data.commit.id in jobs)) {
 
 
 
             if(message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed"){
                 
-                console.log("update", message)
-                let key = message.data.commit.sha
+                let key = message.data.commit.id
                 
-                jobs[key].ring.sha1 = undefined
-                delete  jobs[key]
+                mergeRing(key, message)
             }
 
             const synth = new Tone.FMSynth().toMaster()
 
             let state = message.data.state
 
+            console.log("PLaying?")
             switch(state){
                 case "passed":
                     //color = '#42f5ce55'; // green
@@ -211,9 +216,52 @@ ws.onmessage = function (event) {
     handleJob(message)
 }
 
+function mergeRing(commitId, message){
 
-function pickEmptyRing(message){
+    let ring= getRing(commitId)
 
+    if(ring){
+        let size = ring.chunks.length - 1
+
+        if(size == 0){
+
+            jobs[commitId].ring.id = undefined
+            delete  jobs[commitId]
+        }
+        else{
+            splitRing(message, ring, ring.chunks.size - 1)
+        }
+    }
+
+}
+
+function splitRing(message, ring, size){
+
+    let theta = Math.PI*2/size;
+
+    ring.chunks = []
+
+    let last = 0
+    for(let i = 0; i < size; i++){
+        ring.chunks.push([last, last + theta - 0.2])
+        last += theta;
+    }
+
+    return ring
+}
+
+function getRing(id){
+    for(let ring of rings)
+        if(ring.id === id)
+            return ring
+    return undefined
+}
+
+function assignRing(message){
+
+    for(let ring of rings)
+        if(ring.id === message.data.commit.id)
+            return splitRing(message, ring, ring.chunks.length + 1)
 
     //let radiusRange = getRadius(message)
     
@@ -226,7 +274,7 @@ function pickEmptyRing(message){
 
 
         for(let ring of rings){
-            if(!ring.sha1)// && ring.innerRadius >= min && ring.innerRadius <= max)
+            if(!ring.id)// && ring.innerRadius >= min && ring.innerRadius <= max)
                 return ring
         }
     //}
@@ -249,44 +297,29 @@ function getRandomInt(min, max){
     return parseInt(Math.random() *(max- min )+ min)
 }
 
-function createRings(x, y, width, count, setRadius){
+function createRings(x, y, width, count, setRadius, which){
 
 
     for(let i = 1; i <= count; i++){
         // for each ring
 
         let innerRadius = i*width;
-        let theta = 0
-
-        let minimum = 0
-        let minAngle = Math.PI/20
-        let maxAngle = Math.PI/5
 
         if(setRadius)
             radius.push(innerRadius)
 
-        for(;;){
-
-            let randomTheta = getRandom(minimum, maxAngle + minimum)
-            let finalTheta = getRandom(randomTheta + minAngle, Math.PI/2 + randomTheta + minAngle)
-
-
-            if( Math.PI*2 - finalTheta < 0.02)
-                break;
-
-            rings.push({
-                color: "#000000",
-                innerRadius,
-                theta: randomTheta,
-                center: [x, y],
-                finalTheta,
-                sha1: undefined,
-                direction: i %2 == 0? -speed/i: speed/i,
-                outerRadius: width + innerRadius
-            })
-            
-            minimum = finalTheta;
-        }
+        rings.push({
+            color: "#000000",
+            innerRadius,
+            center: [x, y],
+            chunks: [[0, Math.PI*2]],
+            id: undefined,
+            position: which, // Left or right side
+            direction: i %2 == 0? -speed/i: speed/i,
+            outerRadius: width + innerRadius
+        })
+        
+        
     }
 
 }
@@ -299,8 +332,8 @@ function setup(){
 	document.body.appendChild(canvas);
     ctx = canvas.getContext('2d');
     
-    createRings(w/4, h/2, 10, 30, true)
-    createRings(3*w/4, h/2, 10, 30)
+    createRings(w/4, h/2, 10, 50, true, "left")
+    createRings(3*w/4, h/2, 10, 50, false, "right")
 
     requestAnimationFrame(draw);
     
@@ -391,8 +424,21 @@ function soundForJob(message) {
     return undefined;
 }
 
-function createSynth(){
-    return new Tone.Synth({
+
+function createSynth(position){
+
+    let which = null;
+
+    if(position === 'left'){
+        which = new Tone.Panner(-1);
+    }
+    else{
+        which = new Tone.Panner(1);
+    }
+
+    
+    
+    let synth =  new Tone.Synth({
         oscillator: {
             type: 'triangle8'
         },
@@ -403,6 +449,11 @@ function createSynth(){
             release: 4
         }
     }).toMaster();
+
+
+    synth.chain(which, Tone.Master)
+
+    return synth;
 }
 
 
@@ -412,12 +463,14 @@ function draw(){
 
     ctx.clearRect(0,0, w, h)
     for(var ring of rings){
+        for(var chunk of ring.chunks){
 
-        createRing(ring.center[0], ring.center[1], ring.innerRadius, 
-            
-            ring.outerRadius, ring.theta + ring.direction*globalTime, 
-            ring.finalTheta + globalTime*ring.direction, 
-            ring.sha1 === undefined? '#00000088': getColor(jobs[ring.sha1]))
+            createRing(ring.center[0], ring.center[1], ring.innerRadius, 
+                
+                ring.outerRadius, chunk[0] + ring.direction*globalTime, 
+                chunk[1] + globalTime*ring.direction, 
+                ring.id === undefined? '#00000088': getColor(jobs[ring.id]))
+        }
     }
 
     requestAnimationFrame(draw);
