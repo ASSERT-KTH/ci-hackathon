@@ -26,6 +26,10 @@ Here is an example of how lights work with our web service.
 - Help page: ```http://localhost:8000/help```
     - Shows API entrypoints and json schemas for lights controller
 
+## Usage example
+
+[Here](https://github.com/KTH/ci-hackathon/blob/master/resources/emulators/lights/src/examples/traviss.py) you can find a piece of python codewhich actually uses this emulator to create a lights show with the Travis CI data. To access the emulator view, go to this [address](https://ci-lights.azurewebsites.net/). All room sessions are public, if for some reason you see a strange behavior in your code trying to command the lights, please check the ```session``` name in your data, maybe there is a collision with another colleague.
+
 ## Environment variables
 
 To specify host Ip and Port you must set them as environment variables like:
@@ -104,6 +108,3 @@ Simulator app works recieving and processing sent API commands through a websock
 1. Send command to ```http://localhost:8000/setcolor``` with data ```{"id": "1", "color": [100, 200, 50], "session": "test"}```
 2. In all browser tabs (opened in ```http://localhost:8000/dashboard/test```) you will see command logs and drawing simulation
 
-## TODO
-
-We are working on lights blueprint to put a representation of the real lights setup in R1. 

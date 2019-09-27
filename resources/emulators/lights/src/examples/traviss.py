@@ -38,7 +38,7 @@ def color_by_status(data):
     return [0,0,0]
 
 def on_message(ws, message):
-    URL = "http://192.168.1.157:8000/setcolor"
+    URL = "https://ci-lights.azurewebsites.net/setcolor"
 
     
     obj = loads(message)
@@ -53,19 +53,19 @@ def on_message(ws, message):
             print(id, key, "Joining")
 
             r = requests.post(url = URL, data = json.dumps(
-                dict(session='test', id=id.__str__(), color=[0,0,255])
+                dict(session='main', id=id.__str__(), color=[0,0,255])
             )) 
         else:
             dc = random.choice(jobs)
             if dc:
                 r = requests.post(url = URL, data = json.dumps(
-                    dict(session='test', id=dc["id"].__str__(), color=[200,200,0]
+                    dict(session='main', id=dc["id"].__str__(), color=[200,200,0]
                 )))
 
                 time.sleep(0.3)
 
                 r = requests.post(url = URL, data = json.dumps(
-                    dict(session='test', id=dc["id"].__str__(), color=dc["color"]
+                    dict(session='main', id=dc["id"].__str__(), color=dc["color"]
                 )))
     
     else:
@@ -74,13 +74,13 @@ def on_message(ws, message):
 
         if dc:
             r = requests.post(url = URL, data = json.dumps(
-                dict(session='test', id=dc["id"].__str__(), color=color_by_status(obj["data"])
+                dict(session='main', id=dc["id"].__str__(), color=color_by_status(obj["data"])
             )))
 
             time.sleep(0.3)
 
             r = requests.post(url = URL, data = json.dumps(
-                dict(session='test', id=dc["id"].__str__(), color=dc["color"]
+                dict(session='main', id=dc["id"].__str__(), color=dc["color"]
             )))
         
 
@@ -88,7 +88,7 @@ def on_message(ws, message):
 
 
 def blackout():
-    URL = "http://192.168.1.157:8000/setcolor"
+    URL = "https://ci-lights.azurewebsites.net/setcolor"
 
         
     for i in range(1, 26):
@@ -97,7 +97,7 @@ def blackout():
 
         
         r = requests.post(url = URL, data = json.dumps(
-            dict(session='test', id=i.__str__(), color=[0,0,0])
+            dict(session='main', id=i.__str__(), color=[0,0,0])
         )) 
     
         # extracting response text  
