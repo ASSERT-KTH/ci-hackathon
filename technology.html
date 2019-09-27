@@ -121,7 +121,7 @@
 
 <div class="container" style="margin-top: 150px">
     <h1 style="margin-bottom:50px">Technology</h1>
-    <p>Here is a list of all the technologies involved in the hackathon and those we think may be useful.</p>
+    <p>The hackathon will involve Travis CI data, either online through a websocket, or offline with a <a href="https://zenodo.org/record/2560966">dump of 35M Travis jobs</a>.</p>
 
 <h2 id="input-stream--the-travis-ci-websocket">Input stream : the Travis CI WebSocket</h2>
 <p>A websocket with Travis builds is available at ws://travis.durieux.me. More information about the streamed objects is available <a href="https://github.com/KTH/ci-hackathon/blob/master/site/travis.md">here</a>. This tool uses <a href="https://www.npmjs.com/package/travis-ci">Travis-CI npm package</a> to gather jobs information. Job informations are gethered every 1.5 seconds and then exposed through the websocket channel in a “real-time” stream. More information about how Travis exposes information <a href="https://docs.travis-ci.com/api#jobs">here</a></p>
