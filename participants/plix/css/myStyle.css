@@ -1,0 +1,9 @@
+.center-content {
+  left: 0 auto;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px solid gray;
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
