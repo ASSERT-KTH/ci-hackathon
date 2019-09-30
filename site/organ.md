@@ -1,9 +1,7 @@
 ---
     link: Organ
-    title: Organ simulator
+    title: Organ emulator
 ---
-
-# Organ Emulator
 
 ### :warning: This is work in progress. The following instructions and specifications may be subject to changes.
 
