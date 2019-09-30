@@ -33,11 +33,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
     <script>
       var socket = io.connect("localhost:3000");
-      var synth = new Tone.Synth().toMaster();
+      var synth = new Tone.PolySynth(3, Tone.Synth).toMaster();
 
       // Listen to websocket note
       socket.on("note", function({ note, length }) {
+        console.log({ note, length });
         synth.triggerAttackRelease(note, length);
+      });
+
+      // Set the sound of the synth
+      socket.on("sound", function({ config }) {
+        console.log(config);
+        synth = new Tone.PolySynth(4, Tone.Synth, config).toMaster();
       });
     </script>
   </body>
