@@ -1,0 +1,10 @@
+version: "2"
+services:
+  web-app:
+    restart: always
+    build:
+      dockerfile: Dockerfile.prod
+      context: .
+    environment:
+      - VIRTUAL_HOST=lights.ciart.live
+      - LETSENCRYPT_HOST=lights.ciart.live

@@ -1,0 +1,19 @@
+FROM python:3
+
+ENV LIGHT_CONTROLLER=simulator
+ENV APP_PORT=80
+ENV APP_HOST=0.0.0.0
+ENV APP_DEBUG=False
+
+RUN apt-get update && apt-get install -y ca-certificates
+
+COPY  ./src/light_controller /app
+COPY requirements.txt /app
+
+WORKDIR /app
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python"]
+
+EXPOSE 80
+
+CMD ["server.py"]
