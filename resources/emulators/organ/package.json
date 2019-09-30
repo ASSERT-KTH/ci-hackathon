@@ -1,0 +1,16 @@
+{
+  "name": "r1-organ-server",
+  "version": "0.1.0",
+  "description": "Web server to experiment with sounds targeting the Wurlitzer organ in R1 at KTH\"",
+  "main": "index.js",
+  "scripts": {
+    "server": "node index.js"
+  },
+  "author": "Simone Stefani",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "tone": "^13.8.25"
+  }
+}
