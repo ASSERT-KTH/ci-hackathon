@@ -1,7 +1,7 @@
 ---
     layout: default
     link: technology
-    title: Technology 
+    title: Tech 
 ---
 
 The hackathon will involve Travis CI data, either online through a websocket, or offline with a [dump of 35M Travis jobs](https://zenodo.org/record/2560966).
