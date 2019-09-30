@@ -17,10 +17,11 @@ The list of current participating teams and their ongoing CI art projects is ava
 
 ## Program of October 14 2019
 
-- 18:00 Welcome talk by hackathon curator Benoit Baudry
-- 18:20 Reading of Code (Martin Monperrus)
-- 18:30 - 20h00 Coding
-- 20:30 Pizza break
+- 18:00 Participants arrive in R1
+- 18:30 Welcome talk by hackathon curator Benoit Baudry
+- 18:45 Reading of Code (Martin Monperrus)
+- 19:00 - 21h00 Coding
+- 21:00 Pizza break
 - 22:00 CI art performance
 
 ## Technology
