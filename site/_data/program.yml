@@ -1,27 +1,28 @@
 - time: "18:00" 
+  title: Hackathon participants arrive in R1
+  speaker: 
+  icon: door-open
+- time: "18:30" 
   title: Welcome talk by hackathon curator Benoit Baudry
   speaker: Benoit Baudry
   icon: user-tie
-- time: "18:20" 
+- time: "18:45" 
   title: Reading of Code
+  speaker: Martin Monperrus
   icon: book-reader
-- time: "18:30" 
-  title: Demo and explanation of the Travis API / Websocket
-  speaker: Thomas Durieux
+- time: "19:00" 
+  title: Coding
+  speaker: everyone
   icon: laptop-code
-- time: "18:40"
-  title: Demo and Explanation of the organ interface
-  speaker: Simone Stefani
-  icon: video
-- time: "18:50" 
-  title: Demo and Explanation of the light interface
-  icon: video
-- time: "19h00" 
-  title: Pizza, beer and coding
+- time: "21:00" 
+  title: pizza
+  speaker: everyone
   icon: drumstick-bite
 - time: "22:00" 
-  title: CI Rain
-  speaker: Thomas Durieux
-- time: "22:15"
-- time: "22:30"
-- time: "22:45"
+  title: Continuous Integration Art Performance
+  speaker: 
+  icon: record-vinyl
+- time:  
+  title: Celebrate the first ever CI art hackathon
+  speaker: everyone
+  icon: glass-cheers
