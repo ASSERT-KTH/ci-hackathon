@@ -1,6 +1,6 @@
 ---
     layout: default
-    link: technology
+    link: tech
     title: Tech 
 ---
 
