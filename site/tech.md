@@ -37,7 +37,7 @@ More information is available [here](/travis.html).
 
 ### openFrameworks and SuperCollider
 
-A template using a node.js program to "convert" the websocket packets of Travis data to OSC messages that can be parsed by anything that understands OSC and JSON. openFrameworks and SuperCollider examples are provided to build upon. See the templates section of the repository or [click this link.](../resources/templates/travis_to_of_sc/)
+A template using a node.js program to "convert" the websocket packets of Travis data to OSC messages that can be parsed by anything that understands OSC and JSON. openFrameworks and SuperCollider examples are provided to build upon. See the templates section of the repository or [click this link.](https://github.com/KTH/ci-hackathon/tree/master/resources/templates/travis_to_of_sc)
 
 ## Travis Listener (NodeJS)
 
