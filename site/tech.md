@@ -35,6 +35,10 @@ ws.onmessage = console.log
 ```
 More information is available [here](/travis.html).
 
+### openFrameworks and SuperCollider
+
+A template using a node.js program to "convert" the websocket packets of Travis data to OSC messages that can be parsed by anything that understands OSC and JSON. openFrameworks and SuperCollider examples are provided to build upon. See the templates section of the repository or [click this link.](../resources/templates/travis_to_of_sc/)
+
 ## Travis Listener (NodeJS)
 
 [Travis Listener](https://github.com/tdurieux/travis-listener) provides a websocket server for easier use ([documentation](https://durieux.me/projects/travis_listener.html))
