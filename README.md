@@ -30,7 +30,7 @@ The input stream of Travis CI continuous construction of open source software is
 
 Hackathon participants can use different hardware and software technology to build pieces of CI art that render this continuous software activity.
 
-Resources about these different technology are available in the [technology page](https://github.com/KTH/ci-hackathon/blob/master/site/technology.md)
+Resources about these different technology are available in the [technology page](https://github.com/KTH/ci-hackathon/blob/master/site/tech.md)
 
 ## Related projects
 
