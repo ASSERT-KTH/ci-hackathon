@@ -73,7 +73,7 @@
 
 <nav style="background: #212529"  class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-          <a class="navbar-brand js-scroll-trigger" href="https://kth.github.io/ci-hackathon/#page-top">CI Art Hackathon</a>
+          <a class="navbar-brand js-scroll-trigger" style="scale: 0.8" href="https://kth.github.io/ci-hackathon/#page-top">CI Art Hackathon</a>
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             Menu
             <i class="fas fa-bars"></i>
@@ -100,7 +100,7 @@
                 <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/lights.html">Lights</a></li>
               
               
-                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon/organ.html">Organ</a></li>
+                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon/organ.html">organ</a></li>
               
               
                 
@@ -124,7 +124,7 @@
 
 <div class="container" style="margin-top: 150px">
     <h1 style="margin-bottom:50px">Organ emulator</h1>
-    <h3 id="warning-this-is-work-in-progress-the-following-instructions-and-specifications-may-be-subject-to-changes">:warning: This is work in progress. The following instructions and specifications may be subject to changes.</h3>
+    <h3 id="this-is-work-in-progress-the-following-instructions-and-specifications-may-be-subject-to-changes">This is work in progress. The following instructions and specifications may be subject to changes.</h3>
 
 <h3 id="prerequisites">Prerequisites</h3>
 
@@ -147,6 +147,47 @@
   <li>Wait that the Docker container is built then open the page at the URL <a href="localhost:3000/">localhost:3000/</a> in the browser.</li>
   <li>Test the emulator by opening the page at the URL <a href="localhost:3000/notes/C3/1">localhost:3000/notes/C3/1</a> in the browser. A sound should be produced equivalent to the note <em>C3</em> of length <em>1</em>. If no sound is emitted please try to refresh both open pages.</li>
 </ol>
+
+<h3 id="api">API</h3>
+
+<p><strong>Play a chord</strong>: <code class="highlighter-rouge">POST localhost:3000/notes</code></p>
+
+<p>Request body:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"notes": ["C4", "E4", "G4"],
+	"duration": "64n" // note/chord duration
+}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">notes</code>: array of notes, max length 4</li>
+  <li><code class="highlighter-rouge">duration</code>: note/chord duration as a fraction of unit length (1 -&gt; base length, 2n -&gt; 1/2 base length, 4n -&gt; 1/4 base length, etc.)</li>
+</ul>
+
+<p><strong>Set instrument</strong>: <code class="highlighter-rouge">PUT localhost:3000/sound</code></p>
+
+<p>Request body:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"instrument": "organ"
+}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">instrument</code>: name of instrument, currently <code class="highlighter-rouge">piano</code> or <code class="highlighter-rouge">organ</code></li>
+</ul>
+
+<h3 id="roadmap">Roadmap</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />Add proper POST endpoint which allows to send a request with a payload containing note length and composition (chord)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />Add endpoint to change sound type in order to simulate organ stops (registration)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Split endpoints in notes on keyboard and pedals</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Deploy emulator to web server</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Run web server on Raspberry PI</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Interface server on Raspberry PI with MIDI system</li>
+</ul>
 
 </div>
 
