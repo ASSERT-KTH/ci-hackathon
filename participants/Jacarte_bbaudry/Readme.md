@@ -2,4 +2,4 @@
 * [The voice of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_voice_of_travis)
 * [The tale of Travis](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_tale_for_travis)
 * [Vortice](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_vortice)
-* [Gears](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_gears)
+* [Gears](https://kth.github.io/ci-hackathon/solutions/Jacarte_bbaudry_gears) [Inspired by](https://codepen.io/gcyrillo/pen/LdGdRG)
