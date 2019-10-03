@@ -131,9 +131,9 @@
 
 <p>We take the Travis Logo, and select some points. Then we solve a Traveling Salesman Problem taking those points as cities and the Euclidean distance in the 2D space. We finally draw the solution to obtain a nice drawing.</p>
 
-<image src="images/logo.png" width="300" alt="Travis Logo" />
+<image src="./images/logo.png" width="300" alt="Travis Logo" />
 
-<image src="images/solution.png" width="300" alt="Solution" />
+<image src="./images/solution.png" width="300" alt="Solution" />
 
 <p>To solve the TSP we use a <a href="https://en.wikipedia.org/wiki/Hill_climbing">Hill Climbing</a> implementation with <a href="https://en.wikipedia.org/wiki/Variable_neighborhood_search">variable neighborhood</a> starting from a random solution.
 We let Travis set the pace for the solution. Whenever we receive an event from the server, then we execute the next iteration of the algorithm. The implementation includes three neighborhood operators:</p>
