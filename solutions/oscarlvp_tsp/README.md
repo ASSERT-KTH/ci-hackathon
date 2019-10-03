@@ -4,8 +4,8 @@ This piece is inspired by [the work of Robert Bosch](http://www2.oberlin.edu/mat
 
 We take the Travis Logo, and select some points. Then we solve a Traveling Salesman Problem taking those points as cities and the Euclidean distance in the 2D space. We finally draw the solution to obtain a nice drawing.
 
-<image src="./images/logo.png" width="300" alt="Travis Logo"/>
-<image src="./images/solution.png" width="300" alt="Solution"/>
+<image src="./oscarlvp_tsp/images/logo.png" width="300" alt="Travis Logo"/>
+<image src="./oscarlvp_tsp/images/solution.png" width="300" alt="Solution"/>
 
 
 To solve the TSP we use a [Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing) implementation with [variable neighborhood](https://en.wikipedia.org/wiki/Variable_neighborhood_search) starting from a random solution.
