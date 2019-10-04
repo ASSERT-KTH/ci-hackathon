@@ -1,0 +1,146 @@
+
+Format(s): 
+Mono
+Stereo (Stereo Files)
+5.1 Surround (6 Channel Files)
+B-Format (4 Channel Files)
+
+Mono: 
+
+    r1_omni.wav
+
+Sample Rate: 44.1 kHz
+Number of Channels: 1
+Bits per Sample: 24
+Duration: 19.94 s
+File Size: 2.52 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+
+    r1_omni_48k.wav
+
+Sample Rate: 48 kHz
+Number of Channels: 1
+Bits per Sample: 24
+Duration: 19.94 s
+File Size: 2.74 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+Stereo: 
+
+    r1_ortf.wav
+
+Sample Rate: 44.1 kHz
+Number of Channels: 2
+Bits per Sample: 24
+Duration: 20.28 s
+File Size: 5.12 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Cardioid Microphone, Neumann KM 140
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+
+    r1_ortf-48k.wav
+
+Sample Rate: 48 kHz
+Number of Channels: 2
+Bits per Sample: 24
+Duration: 20.28 s
+File Size: 5.57 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Cardioid Microphone, Neumann KM 140
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+B-Format: Multichannel: 
+
+    r1_bformat.wav
+
+Sample Rate: 44.1 kHz
+Number of Channels: 4
+Bits per Sample: 24
+Duration: 14.8 s
+File Size: 7.47 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+
+    r1_bformat-48k.wav
+
+Sample Rate: 48 kHz
+Number of Channels: 4
+Bits per Sample: 24
+Duration: 8.8 s
+File Size: 4.83 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+5.1 Surround: 
+
+    r1_williams.wav
+
+Sample Rate: 44.1 kHz
+Number of Channels: 6
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 7.42 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+
+
+    r1_williams-48k.wav
+
+Sample Rate: 48 kHz
+Number of Channels: 6
+Bits per Sample: 24
+Duration: 8.8 s
+File Size: 7.25 MB
+File Format: wav
+Source Sound: Genelec 8240A loudspeaker, 15 second log. sine sweep
+Microphone: Soundfield Microphone, SPS422B
+Source Location: In the centre, on one side of the pit
+Microphone Location: In the centre, on other side of the pit
+Source Receiver Distance (m): 14.88 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
