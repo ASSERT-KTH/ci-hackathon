@@ -25,6 +25,7 @@ To specify host Ip and Port you must set them as environment variables like:
 export APP_PORT=9000
 export APP_HOST=0.0.0.0
 export APP_DEBUG=True
+export PROTOCOL=http
 
 python src/server.py
 
