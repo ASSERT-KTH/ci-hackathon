@@ -170,6 +170,9 @@
 
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/static/js/socket.io.js"></script>
+    <script>
+        const protocol = '{{PROTOCOL}}'
+    </script>
 
     {% block scripts %}
 
@@ -198,15 +201,15 @@
                 return;
             }
 
-            console.log(r, g, b)
-            if(!r || !g || !b ||  !(0 <= r <= 255) || !(0 <= g <= 255)  || !(0 <= b <= 255) ||r*g*b < 0 ){
+            
+            if(!(0 <= r <= 255) || !(0 <= g <= 255)  || !(0 <= b <= 255)){
 
                 alert("RGB value must be in between 0 and 255 values");
                 return;
             }
 
             $.ajax({
-                    url :'https://' + document.domain + ':' + location.port + '/setcolor',
+                    url : `${protocol}://${document.domain}:${location.port}/setcolor`,
                     data: JSON.stringify({
                         id,
                         session,

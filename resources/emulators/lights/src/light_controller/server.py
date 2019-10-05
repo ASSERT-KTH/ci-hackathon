@@ -138,6 +138,7 @@ def setBulkLight():
 
     return jsonify({'result': 'ok'})
 
+
 # STATIC CONTENT
 @app.route('/dashboard/<session_name>')
 def room_handler(session_name):

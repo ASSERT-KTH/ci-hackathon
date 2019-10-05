@@ -1,14 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-/*<script src="/static/three.min.js"></script>
-    <script src="/static/three.module.js"></script>
-    <script src="/static/OrbitControls.js"></script>
-    <script src="/static/FirstPersonControls.js"></script>
-    <script src="/static/PointerLockControls.js"></script>
-    
-    <script src="/static/OBJLoader.js"></script>
-    <script src="/static/MTLLoader.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-     */
 const THREE = require("three");
 const PointerLockControls = require("./libs/PointerLockControls")
 const FirstPersonControls = require("./libs/FirstPersonControls")
@@ -46,13 +36,6 @@ const roomCanvas = document.getElementById("map")
         renderer.setSize( roomCanvas.width, roomCanvas.height, false );
 
         function addControls(){
-
-            // Add camera and orbit control
-            /*var controls = new THREE.OrbitControls( camera, renderer.domElement );
-            camera.position.set( 0, 100, 150 );
-            camera.rotation.order = "YXZ"; // three.js r.65
-
-            controls.update();*/
             
             var controls = new THREE.FirstPersonControls(camera, roomCanvas);
             controls.lookSpeed = 0.2;
@@ -66,14 +49,6 @@ const roomCanvas = document.getElementById("map")
             controls.lat = 14;
 
 
-            /*var controls = new THREE.PointerLockControls(camera, roomCanvas);
-            var player = controls.getObject();
-
-            //player.position.set(4.5, 6, 1);
-
-            // camera.rotation.order = 'ZYX';
-            scene.add(player)*/
-            
             return controls;
         }
 
@@ -87,25 +62,6 @@ const roomCanvas = document.getElementById("map")
             scene.add( cube );
         }
 
-        function addGround(){
-            
-
-           /* const planeGeo = new THREE.PlaneGeometry(boxSize[0]*2.5, boxSize[2]*2.5);
-            const planeMat = new THREE.MeshStandardMaterial({
-                color: 0xffffff,
-                //side: THREE.DoubleSide,
-                //roughness: 0.3,
-                metalness: 0.65,
-            });
-            const mesh = new THREE.Mesh(planeGeo, planeMat);
-
-            //mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            
-            mesh.rotation.x = Math.PI * -.5;
-            mesh.position.y = -boxSize[1]/2;
-            scene.add(mesh);*/
-        }
 
         function addAmbienLigth(){
             //var light = new THREE.AmbientLight( 0xffffff ); // soft white light
@@ -159,7 +115,6 @@ const roomCanvas = document.getElementById("map")
         }
 
         var controls = addControls();
-        addGround();
 
         //addGrid();
         addAmbienLigth();
@@ -309,53 +264,9 @@ const roomCanvas = document.getElementById("map")
         animate()
 
 
-        
-        
-
-        /*roomCanvas.addEventListener('keydown',onDocumentKeyDown,false);
-        function onDocumentKeyDown(event){
-            var VIEW_INCREMENT = 1000;
-            event = event || window.event;
-            var keycode = event.keyCode;
-            console.log(keycode)
-
-            const KEYUP = 38;
-            const KEYDOWN = 40;
-            const KEYLEFT = 37
-            const KEYRIGHT = 39;
-
-            switch(keycode){
-                case KEYUP:
-                    if ( camera.getRotateX() < 90 ){ // restrict so they cannot look overhead
-                        camera.setRotateX( camera.getRotateX() + VIEW_INCREMENT );
-                    }
-                    break;
-
-                case KEYDOWN:
-                    if ( camera.getRotateX() > -90 ){ // restrict so they cannot look under feet
-                        camera.setRotateX( camera.getRotateX() - VIEW_INCREMENT );
-                    }
-                    break;
-
-                case KEYLEFT:
-                    camera.setRotateY( camera.getRotateY() + VIEW_INCREMENT );
-                    break;
-
-                case KEYRIGHT:
-                    camera.setRotateY( camera.getRotateY() - VIEW_INCREMENT );
-                    break;
-            }
-            document.updateProjectionMatrix();
-
-            //roomCanvas.addEventListener('keyup',onDocumentKeyUp,false);
-        }
-        function onDocumentKeyUp(event){
-            //roomCanvas.removeEventListener('keydown',onDocumentKeyDown,false);
-        }*/
-
         // Setup listener
 
-        var socket = io.connect('https://' + document.domain + ':' + location.port + '/simulator', {
+        var socket = io.connect(`${protocol}://${document.domain}:${location.port}/simulator`, {
             query: sessionName,
             timeout: 120000
         });
