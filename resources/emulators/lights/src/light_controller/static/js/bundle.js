@@ -159,8 +159,7 @@ const roomCanvas = document.getElementById("map")
         var fontLoader = new THREE.FontLoader();
 
         const materials = [
-            new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } ), // front
-            new THREE.MeshPhongMaterial( { color: 0xffffff } ) // side
+            new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
         ];
 
         fontLoader.load( '/static/roboto_regular.json', function ( font ) {
@@ -189,10 +188,10 @@ const roomCanvas = document.getElementById("map")
                 geometry.computeBoundingBox();
                 geometry.computeVertexNormals();
                 
-                textGeo = new THREE.BufferGeometry().fromGeometry( geometry, materials );
+                textGeo = new THREE.BufferGeometry().fromGeometry( geometry );
 
                 const pos = toGlobalPosition(obj.relativePosition)
-                textMesh1 = new THREE.Mesh( textGeo );
+                textMesh1 = new THREE.Mesh( textGeo , materials);
 				textMesh1.position.x = pos[0];
 				textMesh1.position.y = pos[1] + 20;
                 textMesh1.position.z = pos[2];
