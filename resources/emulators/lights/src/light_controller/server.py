@@ -3,6 +3,8 @@ from decorators import validate_schema
 from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 from config import LIGTHS_MAP
+from flask_basicauth import BasicAuth
+
 
 import os
 import threading
@@ -10,7 +12,14 @@ import json
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
+
+app.config['BASIC_AUTH_USERNAME'] = os.environ.get("ADMIN_USER", 'admin')
+app.config['BASIC_AUTH_PASSWORD'] = os.environ.get("ADMIN_PASSWORD", 'admin')
+
+
 socketio = SocketIO(app, logger=False, engineio_logger=False, ping_interval=10, ping_timeout=30)
+
+basic_auth = BasicAuth(app)
 
 from views import room, index, h, admin
  # SETTING WEBSOCKET FOR SIMULATOR
@@ -165,6 +174,7 @@ def setBlackout():
 
 
 @app.route('/filter', methods=["POST"])
+@basic_auth.required
 def filter():
     data = json.loads(request.get_data().decode())
 
@@ -199,8 +209,8 @@ def help_handler():
 
 # ADMIN CONTENT
 @app.route('/admin')
+@basic_auth.required
 def admin_handler():
-    print(FILTERED.FILTERED)
     return admin(sessions, FILTERED.FILTERED)
 
 # STATIC CONTENT

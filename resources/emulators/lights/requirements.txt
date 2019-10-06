@@ -4,9 +4,13 @@ certifi==2019.6.16
 chardet==3.0.4
 Click==7.0
 Flask==1.1.1
+Flask-BasicAuth==0.2.0
 Flask-json-schema==0.0.5
 Flask-SocketIO==4.1.0
 get==2019.4.13
+gevent==1.4.0
+greenlet==0.4.15
+gunicorn==19.9.0
 idna==2.8
 importlib-metadata==0.18
 itsdangerous==1.1.0
@@ -32,5 +36,7 @@ requests==2.22.0
 six==1.12.0
 urllib3==1.25.3
 wcwidth==0.1.7
+websocket==0.2.1
+websocket-client==0.56.0
 Werkzeug==0.15.4
 zipp==0.5.2
