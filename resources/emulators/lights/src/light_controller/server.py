@@ -13,6 +13,7 @@ import json
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
 
+# This is not the best solution, but its ok for the r-pi deployment
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get("ADMIN_USER", 'admin')
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get("ADMIN_PASSWORD", 'admin')
 
