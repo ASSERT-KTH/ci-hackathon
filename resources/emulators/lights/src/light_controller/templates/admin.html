@@ -41,7 +41,6 @@
         <h4>Enable filter to</h4>
         <label id="select_label">Toggle all</label>
 
-        {{filtered}}
         <div id="sessions">
             
         </div>
@@ -67,11 +66,12 @@
 
         $("#sessions").html("<h4>Opened sessions</h4>")
 
+        const FILTERED = {{filtered | safe }}
 
         Object.keys(e).forEach(t => {
 
             if(Object.keys(e[t]).length > 0)
-                $("#sessions").append($(`<label class="session_link ${t == selected? 'active': ''}"><input  class='session_chk' name='${t}' type='checkbox'/>${t}</label>`).click(
+                $("#sessions").append($(`<label class="session_link ${t == selected? 'active': ''}"><input ${FILTERED.indexOf(t) !== -1? 'checked': ''} class='session_chk' name='${t}' type='checkbox'/>${t}</label>`).click(
                     function(t){
                         const check = $(this)[0].children[0]
 

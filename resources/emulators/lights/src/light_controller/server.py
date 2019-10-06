@@ -21,8 +21,14 @@ sessions = {
 }
 
 # Filter who sends commands to the handler
-FILTERED = []
+class Filter(object):
 
+
+    def __init__(self):
+        self.FILTERED = []
+
+
+FILTERED = Filter()
 
 class SimulatorNamespace(Namespace):
 
@@ -162,9 +168,9 @@ def setBlackout():
 def filter():
     data = json.loads(request.get_data().decode())
 
-    FILTERED = data
+    FILTERED.FILTERED = data
 
-    HANDLER.set_filter(FILTERED)
+    HANDLER.set_filter(FILTERED.FILTERED)
 
     return jsonify({'result': data})
 
@@ -194,8 +200,8 @@ def help_handler():
 # ADMIN CONTENT
 @app.route('/admin')
 def admin_handler():
-    print(sessions)
-    return admin(sessions, FILTERED)
+    print(FILTERED.FILTERED)
+    return admin(sessions, FILTERED.FILTERED)
 
 # STATIC CONTENT
 @app.route('/')
