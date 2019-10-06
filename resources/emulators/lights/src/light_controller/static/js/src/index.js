@@ -155,16 +155,56 @@ const roomCanvas = document.getElementById("map")
         }
 
         // R1 lights
-        for(var ligth in spotLights){
+        var fontLoader = new THREE.FontLoader();
 
-            const obj = spotLights[ligth];
-            
-            const threeLigth = addLigth( rgbtoHex(obj.color), 
-            toGlobalPosition(obj.relativePosition))
-            
-            spotLights[ligth].obj = threeLigth;
+        const materials = [
+            new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } ), // front
+            new THREE.MeshPhongMaterial( { color: 0xffffff } ) // side
+        ];
 
-        }
+        fontLoader.load( '/static/roboto_regular.json', function ( font ) {
+
+            for(var ligth in spotLights){
+
+                const obj = spotLights[ligth];
+                
+                const threeLigth = addLigth( rgbtoHex(obj.color), 
+                toGlobalPosition(obj.relativePosition))
+                
+                spotLights[ligth].obj = threeLigth;
+    
+                var geometry = new THREE.TextGeometry( ligth, {
+                    font: font,
+                    size: 10,
+                    height: 2,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 1,
+                    bevelSize: 0.5,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                } );
+
+                geometry.computeBoundingBox();
+                geometry.computeVertexNormals();
+                
+                textGeo = new THREE.BufferGeometry().fromGeometry( geometry, materials );
+
+                const pos = toGlobalPosition(obj.relativePosition)
+                textMesh1 = new THREE.Mesh( textGeo );
+				textMesh1.position.x = pos[0];
+				textMesh1.position.y = pos[1] + 20;
+                textMesh1.position.z = pos[2];
+                
+                scene.add(textMesh1)
+    
+                //geometry.position.set(toGlobalPosition(obj.relativePosition))
+    
+            }
+
+            
+        } );
+        
 
         function addBulbLight(color, position){
             var pointLight = new THREE.PointLight(Number(color), 0.3);
