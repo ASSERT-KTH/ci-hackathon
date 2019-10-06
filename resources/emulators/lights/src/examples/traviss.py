@@ -88,22 +88,18 @@ def on_message(ws, message):
 
 
 def blackout():
-    URL = "https://ci-lights.azurewebsites.net/setcolor"
+    URL = "https://ci-lights.azurewebsites.net/blackout"
 
         
-    for i in range(1, 26):
-
-        print("Sending Single", i)
-
         
-        r = requests.post(url = URL, data = json.dumps(
-            dict(session='main', id=i.__str__(), color=[0,0,0])
-        )) 
-    
-        # extracting response text  
-        body = r.text 
+    r = requests.post(url = URL, data = json.dumps(
+        dict(session='main')
+    )) 
 
-        print("The response is:%s"%body) 
+    # extracting response text  
+    body = r.text 
+
+    print("The response is:%s"%body) 
 
 blackout()
 websocket.enableTrace(True)

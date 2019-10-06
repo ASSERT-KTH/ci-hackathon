@@ -7,6 +7,9 @@ class BaseHandler(object):
     def illuminate_with(self, id, color, extra):
         raise "Not implemented"
 
+    def set_filter(self, sessions):
+        self.filtered_sessions = sessions
+
 class SimulatorHandler(BaseHandler):
 
     # Handle light commands sending them to websocket clients
@@ -32,9 +35,10 @@ class ControllerHandler(BaseHandler):
         self.fixture_map = LIGTHS_MAP
 
     def illuminate_with(self, id, color, extra):
-        for chan, color in enumerate(color, start=self.fixture_map[id]["dmxId"]):
-            self.dmx.setChannel(chan, color)
-        self.dmx.render()
+        if extra in self.filtered_sessions:
+            for chan, color in enumerate(color, start=self.fixture_map[id]["dmxId"]):
+                self.dmx.setChannel(chan, color)
+            self.dmx.render()
 
 class CompundHandler(BaseHandler):
 
@@ -46,4 +50,8 @@ class CompundHandler(BaseHandler):
     def illuminate_with(self, id, color, extra):
         self.simulator.illuminate_with(id, color, extra)
         self.controller.illuminate_with(id, color, extra)
+
+    def set_filter(self, sessions):
+        self.simulator.set_filter(sessions)
+        self.controller.set_filter(sessions)
         

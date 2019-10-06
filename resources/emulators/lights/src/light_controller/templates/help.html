@@ -71,11 +71,28 @@
             </pre>
         </div>
         <div class="help">
-                <h4 class="title">reset</h4>
+                <h4 class="title">blackout</h4>
                 <p class="method">POST</p>
-                <p>Reset lights (TODO)</p>
-                <p class="schema">
+                <p>Reset lights </p>
+                <h5>Json schema</h5>
+            <pre class="schema">
+
+blackout_schema = {
+    'required': ['session'],
+    'properties': {
+        'session': {'type': 'string'}
+    }
+}
+            </pre>
+            <h5>Example</h5>
+            <pre>
+
+{
+    "session": "main"
+}
+            </pre>
     
+
                 </p>
             </div>
     </div>

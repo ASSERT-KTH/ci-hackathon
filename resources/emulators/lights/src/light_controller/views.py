@@ -15,6 +15,7 @@ def index():
 
 
 def h(schema1, schema2):
-    return render_template("help.html", schema1=dumps(schema1, indent=4, sort_keys=True, PROTOCOL=PROTOCOL), 
+    return render_template("help.html", schema1=dumps(schema1, indent=4, sort_keys=True), schema2=dumps(schema2, indent=4, sort_keys=True), PROTOCOL=PROTOCOL)
 
-schema2=dumps(schema2, indent=4, sort_keys=True))
+def admin(sessions, filtered):
+    return render_template("admin.html", sessions=sessions.keys(), filtered=filtered, PROTOCOL=PROTOCOL)

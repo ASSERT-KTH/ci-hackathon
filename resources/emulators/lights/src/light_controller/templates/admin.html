@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block head %}
+   <style>
+        #help_container{
+            display: flex;
+            flex-direction: column;
+
+            padding: 20px;
+
+            margin-top: 100px;
+
+            max-width: 400px;
+        }
+        .help{
+            padding: 10px;
+            border: 1px solid white;
+
+            margin: 20px;
+        }
+        .title{
+            color:  gold;
+        }
+        #select_label{
+            border-bottom: 2px solid white;
+            padding: 12px;
+        }
+
+        label{
+            padding: 12px;
+            margin: 10px;
+        }
+   </style>
+{% endblock %}
+
+{% block title %} Admin {% endblock %}
+
+{% block content %}
+   
+    <div id="help_container">
+        <h4>Enable filter to</h4>
+        <label id="select_label">Toggle all</label>
+
+        {{filtered}}
+        <div id="sessions">
+            
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block command_form %}{%endblock%}
+
+{% block scripts %}
+<script>
+
+    var socket = io.connect(`${protocol}://${document.domain}:${location.port}/simulator`);
+        
+    socket.on('connect', function() {
+            console.log("Connected")
+        });
+
+    let selected = "main";
+
+    socket.on('sessions', function(e) {
+        console.log(e)
+
+        $("#sessions").html("<h4>Opened sessions</h4>")
+
+
+        Object.keys(e).forEach(t => {
+
+            if(Object.keys(e[t]).length > 0)
+                $("#sessions").append($(`<label class="session_link ${t == selected? 'active': ''}"><input  class='session_chk' name='${t}' type='checkbox'/>${t}</label>`).click(
+                    function(t){
+                        const check = $(this)[0].children[0]
+
+                        console.log(check)
+
+                        check.checked = !check.checked
+
+                        sendState()
+                    }
+                ))
+        })
+    });
+
+    function getOverallState(){
+        var selected = [];
+        $('input.session_chk:checked').each(function() {
+            selected.push($(this).attr('name'));
+        });
+
+        return selected;
+    }
+
+    function sendState(){
+        $.ajax({
+                url : `${protocol}://${document.domain}:${location.port}/filter`,
+                data: JSON.stringify(getOverallState()),
+                method: 'POST',
+                error: function(e){
+                    alert( e.responseJSON.errors.join("\n"))
+                }
+            }
+        )
+    }
+
+    // Toggle
+    $("#select_label").click(() => {
+        $.each($(".session_chk"), (index, item)=> {
+            const check = $(item)[0];
+            check.checked = !check.checked
+
+            sendState()
+        })
+    })
+
+</script>
+{% endblock %}

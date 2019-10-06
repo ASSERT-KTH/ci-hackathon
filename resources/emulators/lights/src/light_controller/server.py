@@ -2,21 +2,26 @@ from flask import Flask, jsonify, request,url_for
 from decorators import validate_schema
 from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
+from config import LIGTHS_MAP
 
 import os
 import threading
+import json
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
-socketio = SocketIO(app, logger=True, engineio_logger=True, ping_interval=200, ping_timeout=120000)
+socketio = SocketIO(app, logger=False, engineio_logger=False, ping_interval=10, ping_timeout=30)
 
-from views import room, index, h
+from views import room, index, h, admin
  # SETTING WEBSOCKET FOR SIMULATOR
 
 
 sessions = {
     
 }
+
+# Filter who sends commands to the handler
+FILTERED = []
 
 
 class SimulatorNamespace(Namespace):
@@ -46,9 +51,16 @@ class SimulatorNamespace(Namespace):
         sId = request.sid
 
         if sId:
+            toDelete = None
             for k, v in sessions.items():
                 if sId in list(v.keys()):
                     del v[sId] 
+                if len(v.keys()) == 0:
+                    print("Removing room...")
+                    toDelete = k
+
+            if toDelete:
+                del sessions[toDelete] 
 
         socketio.emit("sessions", sessions , json=True,namespace='/simulator')
 socketio.on_namespace(SimulatorNamespace("/simulator"))
@@ -63,6 +75,14 @@ light_schema = {
         'session': {'type': 'string'},
         'color': { 'type': 'array', "items": { "type": 'number', "minimum": 0,
   "maximum": 255} },
+    }
+}
+
+
+blackout_schema = {
+    'required': ['session'],
+    'properties': {
+        'session': {'type': 'string'}
     }
 }
 
@@ -127,6 +147,27 @@ def setlight():
     return jsonify({'result': 'ok'})
 
 
+@app.route('/blackout', methods=["POST"])
+@validate_schema(blackout_schema)
+def setBlackout():
+    
+    data = request.get_json()
+    for l in LIGTHS_MAP.keys():
+        HANDLER.illuminate_with(l, [0, 0, 0], data["session"])
+
+    return jsonify({'result': 'ok'})
+
+
+@app.route('/filter', methods=["POST"])
+def filter():
+    data = json.loads(request.get_data().decode())
+
+    FILTERED = data
+
+    HANDLER.set_filter(FILTERED)
+
+    return jsonify({'result': data})
+
 
 @app.route('/setbulk', methods=["POST"])
 @validate_schema(bulk_schema)
@@ -149,6 +190,12 @@ def room_handler(session_name):
 @app.route('/help')
 def help_handler():
     return h(light_schema, bulk_schema)
+
+# ADMIN CONTENT
+@app.route('/admin')
+def admin_handler():
+    print(sessions)
+    return admin(sessions, FILTERED)
 
 # STATIC CONTENT
 @app.route('/')
