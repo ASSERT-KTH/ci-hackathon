@@ -22,7 +22,7 @@ var values = [-0.04,
 
   function event(job) {
     if (job.started_at) {
-      var d = moment(job.started_at).add(35, 'seconds')
+      var d = moment(job.started_at).add(60, 'seconds')
       var key = d.format('YYYYMMDDhhmmss')
       var key_minute = d.format('YYYYMMDDhhmm')
       if (!bpm[key_minute]) {
@@ -50,7 +50,7 @@ var values = [-0.04,
         value *= -1
       }
       var key = moment().format('YYYYMMDDhhmmss')
-      var key_minute = moment().subtract(2, 'minutes').format('YYYYMMDDhhmm')
+      var key_minute = moment().subtract(1, 'minutes').format('YYYYMMDDhhmm')
       $('#bpm .value').text(bpm[key_minute] || 0)
       
       if (jobs[key]) {
