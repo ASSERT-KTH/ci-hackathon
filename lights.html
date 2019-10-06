@@ -236,6 +236,22 @@ python src/server.py
 
 </code></pre></div></div>
 
+<ul>
+  <li><code class="highlighter-rouge">blackout</code> Reset lights state to a complete black:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+{
+    "required": ["set", "session"],
+    "properties": {
+        "session": {
+            "type": "string"
+        }
+    }
+}
+
+</code></pre></div></div>
+
 <h2 id="access-simulator-view">Access simulator view</h2>
 <p>Simulator app works recieving and processing sent API commands through a websocket channel. Each simulator web app runs in an specific session_name, for example, <code class="highlighter-rouge">http://localhost:8000/dashboard/test</code> will process and draw all sent messages with <code class="highlighter-rouge">test</code> as session id. Opened sessions are shown in the home page of the simulator (<code class="highlighter-rouge">http://localhost:8000/</code>). Clicking a session name will show the session view.</p>
 
