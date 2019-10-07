@@ -9,7 +9,21 @@ const WebSocket = require('isomorphic-ws');
 var scene = new THREE.Scene();
 //scene.background = new THREE.Color(0xAAAAAA);
 scene.add( new THREE.AmbientLight( 0xffffff, 0.3 ) );
-scene.background = new THREE.Color( 0xcccccc );
+//scene.background = new THREE.Color( 0xcccccc );
+const loader = new THREE.TextureLoader();
+const bgTexture = loader.load('assets/pos-x.jpg');
+scene.background = bgTexture;
+/*
+const loader = new THREE.CubeTextureLoader();
+  const texture = loader.load([
+    'assets/pos-x.jpg',
+    'assets/pos-x.jpg',
+    'assets/pos-x.jpg',
+    'assets/pos-x.jpg',
+    'assets/pos-x.jpg',
+    'assets/pos-x.jpg'
+  ]);
+scene.background = texture;*/
 /**
  * Create a camera to watch
  */
@@ -65,7 +79,10 @@ cube.material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
 /**
  * Create a render
  */
-var renderer = new THREE.WebGLRenderer();
+
+var renderer = new THREE.WebGLRenderer({alpha: true});
+renderer.autoClearColor = false;
+
 /**
  * To set resolution and size
  */
@@ -74,6 +91,7 @@ renderer.setSize(window.innerWidth, window.innerHeight /** false to half resolut
  * Add our game into html dom
  */
 document.body.appendChild(renderer.domElement);
+
 
 
 /**
@@ -102,6 +120,7 @@ wss.onclose = (() => {
 const passed = 'passed';
 const failed = 'failed';
 const error = 'errored';
+const canceled = 'canceled'
 
 wss.onmessage = (message => {
   if (message.data[0] != '{') return;
@@ -205,19 +224,23 @@ function addOrUpdateBuildCube(cubeMeta, job) {
 function updateCubeState(cube, state) {
   switch (state) {
     case passed: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0x3CAEA3 });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0x7ac74f });
       break;
     }
     case failed: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0xF6D55C });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0xe87461 });
       break;
     }
     case error: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0xED553B });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0xe0c879 });
+      break;
+    }
+    case canceled: {
+      cube.material = new THREE.MeshPhongMaterial({ color: 0xdedede});
       break;
     }
     default: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0x20639B });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0x7eb09b });
     }
   }
 }
@@ -285,6 +308,20 @@ animation(
     controller.domElement=renderer.domElement;
   },
   () => {
+    // Set the repeat and offset properties of the background texture
+    // to keep the image's aspect correct.
+    // Note the image may not have loaded yet.
+    const canvasAspect = renderer.domElement.clientWidth / renderer.domElement.clientHeight;
+    const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
+    const aspect = imageAspect / canvasAspect;
+  
+    bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
+    bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
+  
+    bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
+    bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
+
+
     // Update cube
     //cube.rotation.x += 0.01;
     //controller.update( clock.getDelta() );
