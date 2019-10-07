@@ -1,6 +1,5 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: './src/index.js',
     devServer: {
@@ -13,8 +12,6 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
-        new CopyPlugin([
-          { from: 'public', to: '.' },
-        ]),
+        new HtmlWebpackPlugin({title: "Roaming CI", template: './public/index.html'})
     ],
 };
