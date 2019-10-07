@@ -1,4 +1,5 @@
 const Tone = require("./libs/tone.js");
+const StartAudioContext = require("./libs/StartAudioContext.js");
 
 
 ws = new WebSocket('wss://travis.durieux.me');
@@ -13,6 +14,27 @@ https://codepen.io/Godje/post/spinning-stars-mechanics
 let jobs = {
 
 }
+
+let sampler;
+
+StartAudioContext(Tone.context, 'start-stop').then(function(){
+    //callback is invoked when the AudioContext.state is 'running'
+    console.log("Starts audio context");
+    
+    // Setup sound
+    
+    sampler = new Tone.Sampler({
+    	"G1" : "samples/bellg1-1.mp3",
+    	"D2" : "samples/belld2-1.mp3",
+    	"B3" : "samples/bellb3-1.mp3",
+      "D4" : "samples/belld4-1.mp3",
+      "G4" : "samples/bellg4-1.mp3",
+      "E2" : "samples/belle2-1.mp3",
+    }, function(){
+    	//sampler will repitch the closest sample
+    	sampler.triggerAttack("D3")
+    }).toMaster();
+})
 
 function getRadius(message){
 
@@ -157,11 +179,13 @@ function handleJob(message){
             jobs[ring.id].ring = ring
 
             
-            let synth = createSynth(ring.position)
+            let synth = sampler //createSynth(ring.position)
             let sound = soundForJob(message)
 
             
-            synth.triggerAttackRelease(sound, '4n');
+            //synth.triggerAttackRelease(sound, '4n');
+            synth.releaseAll();
+            synth.triggerAttack(sound);
         }
          
     }
@@ -351,7 +375,6 @@ function setup(){
     createRings(3*w/4, h/2, 10, 50, false, "right")
 
     requestAnimationFrame(draw);
-    
 }
 
 let speed = 4
