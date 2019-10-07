@@ -1,5 +1,5 @@
 var jobs = {};
-var bpm = {}
+var lastJobs = [];
 var even = false;
 var current = -1;
 var values = [-0.04, 
@@ -22,13 +22,10 @@ var values = [-0.04,
 
   function event(job) {
     if (job.started_at) {
+      lastJobs.push(moment(job.started_at))
+      lastJobs.sort()
       var d = moment(job.started_at).add(60, 'seconds')
       var key = d.format('YYYYMMDDhhmmss')
-      var key_minute = d.format('YYYYMMDDhhmm')
-      if (!bpm[key_minute]) {
-        bpm[key_minute] = 0
-      }
-      bpm[key_minute]++
       if (!jobs[key]) {
         jobs[key] = 0
       }
@@ -49,10 +46,14 @@ var values = [-0.04,
       if (even) {
         value *= -1
       }
-      var key = moment().format('YYYYMMDDhhmmss')
-      var key_minute = moment().subtract(1, 'minutes').format('YYYYMMDDhhmm')
-      $('#bpm .value').text(bpm[key_minute] || 0)
+      var now = moment().subtract(1, 'minutes');
       
+      while(lastJobs.length > 0 && lastJobs[0] < now) {
+        lastJobs.shift();
+      }
+      $('#bpm .value').text(lastJobs.length)
+      
+      var key = moment().format('YYYYMMDDhhmmss')
       if (jobs[key]) {
         current = values.length -1;
         delete jobs[key];
