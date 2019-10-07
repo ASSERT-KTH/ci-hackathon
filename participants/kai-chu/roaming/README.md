@@ -30,6 +30,7 @@ Visit http://localhost:8080
 
 ## Latest GUI screenshot 
 * Add gui to show project, name and number of repos which has been received 
+https://workshop.chromeexperiments.com
 ![Roaming CI screenshop](screenshot-latest.png)
 
 ## Color palette

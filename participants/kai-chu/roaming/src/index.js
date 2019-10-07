@@ -13,6 +13,7 @@ scene.add( new THREE.AmbientLight( 0xffffff, 0.3 ) );
 const loader = new THREE.TextureLoader();
 const bgTexture = loader.load('assets/pos-x.jpg');
 scene.background = bgTexture;
+        
 /*
 const loader = new THREE.CubeTextureLoader();
   const texture = loader.load([
@@ -33,6 +34,10 @@ var camera = new THREE.OrthographicCamera(window.innerWidth / - 16, window.inner
 				//camera.setLens( 5 );
 camera.position.set( 200, 200, -400 );
 camera.lookAt(0,0,0);
+
+var listener = new THREE.AudioListener();
+camera.add( listener );
+var audioLoader = new THREE.AudioLoader();
 /*********************************************/
 /**   Create a object and add it into scene **/
 /*********************************************/
@@ -92,6 +97,16 @@ renderer.setSize(window.innerWidth, window.innerHeight /** false to half resolut
  */
 document.body.appendChild(renderer.domElement);
 
+/**
+ * Audio player
+ */
+
+var sound1 = new THREE.Audio( listener );
+audioLoader.load( 'assets/358232_j_s_song.ogg', function ( buffer ) {
+  sound1.setBuffer( buffer );
+  sound1.setRefDistance( 20 );
+} );
+cube.add( sound1 );
 
 
 /**
@@ -103,6 +118,7 @@ document.body.appendChild(renderer.domElement);
  * Render it 
  */
 renderer.render(scene, camera);
+
 
 
 
@@ -202,6 +218,7 @@ function addOrUpdateRepoCube(job) {
     repoIdToCube.set(repoId, cubeMeta)
     scene.add(cube);
     addOrUpdateBuildCube(cubeMeta, job);
+   
   }
 }
 
@@ -277,9 +294,11 @@ scene.add(floor);
 */
 var FizzyText = function() {
   this.title = "CI Romaing";
-  this.project = "KTH CI hackathon"
+  this.project = "KTH CI hackathon";
   this.numOfRepos = 0;
+  this.audio=false;
 };
+
 
 
 var text = new FizzyText();
@@ -287,7 +306,13 @@ var text = new FizzyText();
   gui.add(text, 'title');
   gui.add(text, 'project');
   gui.add(text, 'numOfRepos', 0).listen();
-
+  gui.add(text, 'audio').onChange(value=> {
+    if(value) {
+      sound1.play();
+    }else{
+      sound1.stop();
+    }
+  });
 // Resize
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -320,7 +345,6 @@ animation(
   
     bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
     bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-
 
     // Update cube
     //cube.rotation.x += 0.01;
