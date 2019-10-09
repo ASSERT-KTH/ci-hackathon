@@ -262,6 +262,7 @@ layout: layout_index
         <div class="col-sm-4">
           <div class="team-container">
           {% for member in team.team %}
+          {% assign remainder = forloop.index | modulo:2 %}
           <div class="team-member">
             <a  href="{{site.absolute}}{{team.url}}">
               <img class="mx-auto rounded-circle" src="{{member.avatar_url}}" alt="">
@@ -294,6 +295,10 @@ layout: layout_index
               </li>
             </ul>-->
           </div>
+          {% if remainder == 0 %}
+          </div>
+          <div class="team-container">
+          {% endif %}
           {% endfor %}
 
         </div>
