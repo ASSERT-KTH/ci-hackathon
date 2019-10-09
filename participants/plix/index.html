@@ -8,24 +8,27 @@
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
-      <script src="./lib/p5.js"></script>
-      <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2/webcomponents-bundle.js"></script>
-<script src="https://unpkg.com/tone"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
 
 
-<tone-demo autoplay></tone-demo>
+<script src="./lib/tone.js"></script>
+<tone-demo muted autoplay></tone-demo>
   </head>
   <body>
     <div class="center-content">
-      <video id="myVideo" width="640" height="480" controls>
-    <source src="./assets/dog.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
+    <canvas id="myCanvas" width=640 height="480"></canvas>
 
     </div>
     <div id="container" style="width:100%; height:200px;"></div>
+    <video id="myVideo" width="640" height="480" controls>
+    <source src="./assets/dog.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+   </video>
 
+   <audio controls loop id="audioloop">
+    <source src="./assets/loop2.wav" type="audio/wav" >
+    Your browser does not support the audio element.
+    </audio>
       <script src="./js/myScript.js"></script>
   </body>
 
