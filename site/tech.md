@@ -45,15 +45,11 @@ A template using a node.js program to "convert" the websocket packets of Travis 
 
 ## Tangible output technology
 
-### Reaktorhallen unique setup
-
 We have setup hardware bridges to exploit the unique space of reaktorhallen. Participants have the opportunity to hook on two hardware interfaces
-- [Light fixtures](lights). We will setup 20 light fixtures in reaktorhallen, which can be controlled through a simple web interface. Hackathon participants can use the [ligth fixtures emulator](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights) to prepare their piece of CI art. The same code can be reused to control real light fixtures on the day of the hackathon. More documentation about this interface is available [here](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights)
-- The organ. 
 
-### The reverb of the hall
+### Light fixtures
 
-Impulse response files recorded in the reactor hall can be used to simulate its reverb in the computer. [Read more here](https://github.com/KTH/ci-hackathon/tree/master/resources/impulse-response_of_reaktorhallen/) or go to `resources/impulse-response_of_reaktorhallen`.
+We will setup 20 [light fixtures](lights) in reaktorhallen, which can be controlled through a simple web interface. Hackathon participants can use the [ligth fixtures emulator](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights) to prepare their piece of CI art. The same code can be reused to control real light fixtures on the day of the hackathon. More documentation about this interface is available [here](https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights)
 
 ### Visualization
 
@@ -63,6 +59,14 @@ Here are popular Javascript libraries for data vizualization
 - [Vega Lite](https://vega.github.io/vega-lite/)
 
 For example, the [Travis CI drum machine](https://github.com/KTH/ci-hackathon/tree/master/participants/oscarlvp/drum-machine) uses the [P5.js](https://p5js.org/) library.
+
+### Organ
+
+To be documented.
+
+### Sound & reverb of the hall
+
+Impulse response files recorded in the reactor hall can be used to simulate its reverb in the computer. [Read more here](https://github.com/KTH/ci-hackathon/tree/master/resources/impulse-response_of_reaktorhallen/) or go to `resources/impulse-response_of_reaktorhallen`.
 
 ### Sonification
 
