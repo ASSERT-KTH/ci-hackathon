@@ -16,24 +16,12 @@ let jobs = {
 }
 
 let sampler;
+let swooshSampler;
+let droneSampler;
 
 StartAudioContext(Tone.context, 'start-stop').then(function(){
     //callback is invoked when the AudioContext.state is 'running'
     console.log("Starts audio context");
-    
-    // Setup sound
-    
-    sampler = new Tone.Sampler({
-    	"G1" : "samples/bellg1-1.mp3",
-    	"D2" : "samples/belld2-1.mp3",
-    	"B3" : "samples/bellb3-1.mp3",
-      "D4" : "samples/belld4-1.mp3",
-      "G4" : "samples/bellg4-1.mp3",
-      "E2" : "samples/belle2-1.mp3",
-    }, function(){
-    	//sampler will repitch the closest sample
-    	sampler.triggerAttack("D3")
-    }).toMaster();
 })
 
 function getRadius(message){
@@ -167,7 +155,7 @@ function getColor(message){
 
 function handleJob(message){
 
-    console.log(message)
+    //console.log(message)
 
     if (message.data.state === "started") {
                 
@@ -178,13 +166,10 @@ function handleJob(message){
             jobs[ring.id] = message
             jobs[ring.id].ring = ring
 
+            // reuse the sampler synth, it is polyphonic
+            let synth = sampler
+            let sound = soundForJob(message) // get the pitch associated with the language of the job
             
-            let synth = sampler //createSynth(ring.position)
-            let sound = soundForJob(message)
-
-            
-            //synth.triggerAttackRelease(sound, '4n');
-            synth.releaseAll();
             synth.triggerAttack(sound);
         }
          
@@ -198,53 +183,60 @@ function handleJob(message){
                 
                 let key = message.data.commit.id
                 
-                mergeRing(key, message)
-            }
+                mergeRing(key, message)            
 
-            const fmSynth = new Tone.FMSynth().toMaster()
-
-            const scSynth = new Tone.MetalSynth({
-                "harmonicity" : 17,
-                "resonance" : 100,
-                "modulationIndex" : 10,
-                "octaves" : 2.3,
-                "envelope" : {
-                    "decay" : 0.21,
-                    "release" : 0.49,
-                    "attack" : 0.01,
-                    "sustain": 0.07
-                },
-                "volume" : 30
-
-            }).toMaster();
+            // const fmSynth = new Tone.FMSynth(
+            //   {
+            //     harmonicity : 2 ,
+            //     modulationIndex : 8 ,
+            //     detune : 0.05 ,
+            //     oscillator : {
+            //       type : "sine"
+            //     },
+            //     envelope : {
+            //       attack : 0.5 ,
+            //       decay : 0.01 ,
+            //       sustain : 1 ,
+            //       release : 3
+            //     },
+            //     modulation : {
+            //       type : "square"
+            //     },
+            //     modulationEnvelope : {
+            //       attack : 0.5 ,
+            //       decay : 0 ,
+            //       sustain : 1 ,
+            //       release : 0.5
+            //     }
+            //   }
+            // ).toMaster()
 
             let state = message.data.state
 
             console.log("PLaying?")
+            let pitch = "A1";
             switch(state){
                 case "passed":
                     //color = '#42f5ce55'; // green
-                    scSynth.triggerAttackRelease("A1", "8n")
+                    pitch = "G1";
                     break;
                 case "errored":
                     //color = '#0088ff55'; // blue
-                    scSynth.triggerAttackRelease("F1", "8n")
+                    pitch = "F1";
                     break;
                 case "finished":
                     //color = '#ffbf0055'; // yellow
-                    scSynth.triggerAttackRelease("B1", "8n")
+                    pitch = "B1";
                     break;
                 case "failed":
                     //color = 'ff000055'; // gray
-                    scSynth.triggerAttackRelease("G1", "8n")
+                    pitch = "G#1";
                     break;
             }
-            // Todo sound or splash
-
-
+            pitch = Tone.Frequency(Math.random() * 30 + 31, "midi")
+            swooshSampler.triggerAttack(pitch);            
+            }
             //delete jobs[message.data.commit.sha]
-
-
         }
     }
 }
@@ -257,18 +249,18 @@ ws.onmessage = function (event) {
 
 function mergeRing(commitId, message){
 
-    let ring= getRing(commitId)
+    let ring = getRing(commitId)
 
     if(ring){
         let size = ring.chunks.length - 1
 
-        if(size == 0){
+        if(size <= 0){
 
             jobs[commitId].ring.id = undefined
             delete  jobs[commitId]
         }
         else{
-            splitRing(message, ring, ring.chunks.size - 1)
+            splitRing(message, ring, ring.chunks.length - 1)
         }
     }
 
@@ -375,6 +367,41 @@ function setup(){
     createRings(3*w/4, h/2, 10, 50, false, "right")
 
     requestAnimationFrame(draw);
+    
+    // Setup sound
+    sampler = new Tone.Sampler({
+    	"G1" : "samples/bellg1-1.mp3",
+    	"D2" : "samples/belld2-1.mp3",
+    	"B3" : "samples/bellb3-1.mp3",
+      "D4" : "samples/belld4-1.mp3",
+      "G4" : "samples/bellg4-1.mp3",
+      "E2" : "samples/belle2-1.mp3",
+    }, {
+      "release" : 12,
+    }).toMaster();
+    sampler.volume.value = -24;
+    
+    swooshSampler = new Tone.Sampler({
+    	"G1" : "swoosh1-1.mp3",
+    	"F1" : "swoosh2-1.mp3",
+    	"B1" : "swoosh3-1.mp3",
+      "G#1" : "swoosh4-1.mp3",
+    }, {
+      baseUrl : "samples/",
+      "release" : 1,
+    }).toMaster();
+    swooshSampler.volume.value = -16;
+    
+    droneSampler = new Tone.Sampler({
+    	"C1" : "drone.mp3",
+    }, {
+      baseUrl : "samples/",
+      release : 200,
+      onload : () => {
+        droneSampler.triggerAttack("C1");
+      }
+    }).toMaster();
+    droneSampler.volume.value = -16;
 }
 
 let speed = 4

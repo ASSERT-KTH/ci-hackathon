@@ -28,7 +28,7 @@ SynthDef(\bell, {
 	var sig, exciter, env;
 
 	env = EnvGen.ar(
-		Env.perc(\atk.kr(0.01), t60),
+		Env.perc(\atk.kr(0.5), t60),
 		doneAction:2
 	);
 
@@ -42,7 +42,7 @@ SynthDef(\bell, {
 		],
 		exciter,
 		freqscale:fs*pitchy);
-	sig = FreeVerb.ar(sig) * amp;
+	sig = FreeVerb.ar(sig, 0.05) * amp * env;
 	DetectSilence.ar(sig, 0.001, 0.5, doneAction:2);
 	Out.ar(0, sig!2);
 }).add
