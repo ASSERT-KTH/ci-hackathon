@@ -6,7 +6,7 @@ var config = {
     rows: 8,
     width: window.innerWidth,
     height: window.innerHeight,
-    speed: 10,
+    speed: 20,
     tile: {
         border: 0,
         color: {
