@@ -43,7 +43,7 @@ public class Player {
 	}
 
 	public PlayerDeathMessage getPlayerDeathMessage(int timestamp) {
-		return new PlayerDeathMessage(timestamp,playerid,color1,color2,h,w,x,y);
+		return new PlayerDeathMessage(timestamp,playerid,h,w,x,y);
 	}
 
 	public IdAssignementMessage getIdAssignementMessage(int timestamp) {

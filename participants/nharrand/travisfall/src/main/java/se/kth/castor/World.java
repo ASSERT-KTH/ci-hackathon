@@ -7,6 +7,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import se.kth.castor.message.AbstractMessage;
 import se.kth.castor.message.MessageParsingException;
+import se.kth.castor.message.PlayerDeathMessage;
 import se.kth.castor.message.TrajectoryChangeMessage;
 
 import java.util.ArrayDeque;
@@ -122,7 +123,7 @@ public class World {
 		Player p = getInstance().registry.createNewPlayer(user);
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": connected");
 		AbstractMessage.sendTo(p.session, p.getIdAssignementMessage(getTimestamp()));
-		getInstance().registry.broadCastMessage(p.getMessage(getTimestamp()));
+		getInstance().registry.broadCastMessageMinusSender(p.getMessage(getTimestamp()), user);
 		for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
 			AbstractMessage.sendTo(p.session, m);
 		}
@@ -152,6 +153,14 @@ public class World {
 				p.y = tcm.y;
 				p.dx = tcm.dx;
 				p.dy = tcm.dy;
+			} else if (msg instanceof PlayerDeathMessage) {
+				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
+				Player p = getInstance().registry.getPlayer(pdm.playerId);
+				if(user ==  p.session) {
+					registry.killPlayer(p, timestamp);
+					getInstance().registry.broadCastMessage(msg);
+					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");
+				}
 			}
 		} catch (MessageParsingException e) {
 			e.printStackTrace();

@@ -1,5 +1,5 @@
 h1 {
-    color: #BF4D28;
+    color: #fffbc9;
     font-size: 3em;
     line-height: 1em;
     margin-bottom: 15px;
@@ -13,7 +13,7 @@ p {
 }
 
 div {
-    color: #BF4D28;
+    color: #fffbc9;
     font-family: sans-serif;
     line-height: 1em;
     margin: 2%;
@@ -32,4 +32,6 @@ div {
 body {
     max-height: height: 100%;;
     overflow-y: hidden;
+    background-color: #660000;
+    color: #fffbc9;
 }
