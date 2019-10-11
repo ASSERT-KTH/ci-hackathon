@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The pulse of Travis</title>
+    <style>
+      .button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      #stop-btn{
+
+        background-color: red;
+      }
+
+      #start-btn{
+
+        background-color: #4CAF50;
+      }
+      .canvas{
+        border: 1px solid black;
+      }
+
+      body{
+        margin: 0;
+        background-color: black;
+      }
+
+      #canvas{
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      #start-btn, #stop-btn{
+        position: fixed;
+        top: 0;
+      }
+      </style>
+</head>
+<body>
+
+    <div style="display:flex; flex-direction: row;">
+
+      <canvas id="canvas" class="canvas"  ></canvas>
+      <canvas id="debug" class="canvas"  ></canvas>
+    </div>
+    <button id="start-btn" class="button" >START!</button>
+    <button id="stop-btn" class="button" style="display: none" >STOP!</button>
+
+
+    <script src='bundle.js'>
+    </script>
+</body>
+</html>

@@ -9,22 +9,7 @@ const WebSocket = require('isomorphic-ws');
 var scene = new THREE.Scene();
 //scene.background = new THREE.Color(0xAAAAAA);
 scene.add( new THREE.AmbientLight( 0xffffff, 0.3 ) );
-//scene.background = new THREE.Color( 0xcccccc );
-const loader = new THREE.TextureLoader();
-const bgTexture = loader.load('assets/pos-x.jpg');
-scene.background = bgTexture;
-        
-/*
-const loader = new THREE.CubeTextureLoader();
-  const texture = loader.load([
-    'assets/pos-x.jpg',
-    'assets/pos-x.jpg',
-    'assets/pos-x.jpg',
-    'assets/pos-x.jpg',
-    'assets/pos-x.jpg',
-    'assets/pos-x.jpg'
-  ]);
-scene.background = texture;*/
+scene.background = new THREE.Color( 0xcccccc );
 /**
  * Create a camera to watch
  */
@@ -34,10 +19,6 @@ var camera = new THREE.OrthographicCamera(window.innerWidth / - 16, window.inner
 				//camera.setLens( 5 );
 camera.position.set( 200, 200, -400 );
 camera.lookAt(0,0,0);
-
-var listener = new THREE.AudioListener();
-camera.add( listener );
-var audioLoader = new THREE.AudioLoader();
 /*********************************************/
 /**   Create a object and add it into scene **/
 /*********************************************/
@@ -84,10 +65,7 @@ cube.material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
 /**
  * Create a render
  */
-
-var renderer = new THREE.WebGLRenderer({alpha: true});
-renderer.autoClearColor = false;
-
+var renderer = new THREE.WebGLRenderer();
 /**
  * To set resolution and size
  */
@@ -96,17 +74,6 @@ renderer.setSize(window.innerWidth, window.innerHeight /** false to half resolut
  * Add our game into html dom
  */
 document.body.appendChild(renderer.domElement);
-
-/**
- * Audio player
- */
-
-var sound1 = new THREE.Audio( listener );
-audioLoader.load( 'assets/358232_j_s_song.ogg', function ( buffer ) {
-  sound1.setBuffer( buffer );
-  sound1.setRefDistance( 20 );
-} );
-cube.add( sound1 );
 
 
 /**
@@ -118,7 +85,6 @@ cube.add( sound1 );
  * Render it 
  */
 renderer.render(scene, camera);
-
 
 
 
@@ -136,7 +102,6 @@ wss.onclose = (() => {
 const passed = 'passed';
 const failed = 'failed';
 const error = 'errored';
-const canceled = 'canceled'
 
 wss.onmessage = (message => {
   if (message.data[0] != '{') return;
@@ -218,7 +183,6 @@ function addOrUpdateRepoCube(job) {
     repoIdToCube.set(repoId, cubeMeta)
     scene.add(cube);
     addOrUpdateBuildCube(cubeMeta, job);
-   
   }
 }
 
@@ -241,23 +205,19 @@ function addOrUpdateBuildCube(cubeMeta, job) {
 function updateCubeState(cube, state) {
   switch (state) {
     case passed: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0x7ac74f });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0x3CAEA3 });
       break;
     }
     case failed: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0xe87461 });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0xF6D55C });
       break;
     }
     case error: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0xe0c879 });
-      break;
-    }
-    case canceled: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0xdedede});
+      cube.material = new THREE.MeshPhongMaterial({ color: 0xED553B });
       break;
     }
     default: {
-      cube.material = new THREE.MeshPhongMaterial({ color: 0x7eb09b });
+      cube.material = new THREE.MeshPhongMaterial({ color: 0x20639B });
     }
   }
 }
@@ -294,11 +254,9 @@ scene.add(floor);
 */
 var FizzyText = function() {
   this.title = "CI Romaing";
-  this.project = "KTH CI hackathon";
+  this.project = "KTH CI hackathon"
   this.numOfRepos = 0;
-  this.audio=false;
 };
-
 
 
 var text = new FizzyText();
@@ -306,13 +264,7 @@ var text = new FizzyText();
   gui.add(text, 'title');
   gui.add(text, 'project');
   gui.add(text, 'numOfRepos', 0).listen();
-  gui.add(text, 'audio').onChange(value=> {
-    if(value) {
-      sound1.play();
-    }else{
-      sound1.stop();
-    }
-  });
+
 // Resize
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -333,19 +285,6 @@ animation(
     controller.domElement=renderer.domElement;
   },
   () => {
-    // Set the repeat and offset properties of the background texture
-    // to keep the image's aspect correct.
-    // Note the image may not have loaded yet.
-    const canvasAspect = renderer.domElement.clientWidth / renderer.domElement.clientHeight;
-    const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
-    const aspect = imageAspect / canvasAspect;
-  
-    bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
-    bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
-  
-    bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
-    bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-
     // Update cube
     //cube.rotation.x += 0.01;
     //controller.update( clock.getDelta() );
