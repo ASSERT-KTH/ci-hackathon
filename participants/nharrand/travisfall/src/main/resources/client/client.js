@@ -15,7 +15,7 @@ var canvas = document.getElementById("canvas"),
     players = new Map(),
     keys = [],
     boxes = [],
-    powerup = [],
+    ephemerals = [],
     events = [];
 
 var width = 1400,
@@ -193,7 +193,12 @@ function update() {
         //check for keys
         processInputs();
 
+
+        if(timestamp % 3*fps == 0) {
+            updateRanks(Array.from(players.values()));
+        }
         cleanUp();
+
         timestamp++;
     }
 }
@@ -219,7 +224,8 @@ function cleanUp() {
 
 function processInputs() {
     if(alive) {
-    let myPlayer = players.get(myId);
+        let myPlayer = players.get(myId);
+        //Jump
         if(doJump) {
             myPlayer.dy = -myPlayer.jump;
             if(!myPlayer.grounded && myPlayer.sliding_left) {
@@ -233,13 +239,22 @@ function processInputs() {
             //log("jump");
             doJump = false;
         }
+
+        //left
         if(keys[37]){
             myPlayer.dx -= myPlayer.speed;
             trajectoryChange();
         }
+
+        //right
         if(keys[39]){
             myPlayer.dx += myPlayer.speed;
             trajectoryChange();
+        }
+
+        //power
+        if(keys[17]){
+            power(myPlayer);
         }
     }
 }
@@ -262,21 +277,19 @@ function physic() {
     canJump = false;
 
     for (let player of players.values()) {
-        //let player = players.get(i);
-
         player.score++;
 
+        //Reset context
         player.grounded = false;
         player.sliding_left = false;
         player.sliding_right = false;
 
-
-
+        //Gravity anticiptation (if collision, this effect will be nullified)
         player.dy += player.gravity;
         player.y += player.dy;
 
 
-
+        //Collision detection
         for (j in boxes) {
             colCheck(player, boxes[j]);
             cj = contact(player, boxes[j]);
@@ -284,23 +297,16 @@ function physic() {
             player.grounded |= (cj == 'b');
             player.sliding_left |= (cj == 'l');
             player.sliding_right |= (cj == 'r');
-            /*if(player.sliding_left) {
-                player.color1 = '#FF0000';
-            } else {
-                player.color1 = '#000000';
-            }*/
 
             if(alive && player.playerId == myId) {
                 if ((cj != '0' && cj != 't')) {
-                    //canJump = true;
-                    //canJump = wallJumpTolerance;
                     cj = contact(player, boxes[j]);
                     canJump |= (cj != '0' && cj != 't');
                 }
             }
         }
 
-
+        //Players movement
         if(player.grounded) {
             player.dx *= friction;
         } else {
@@ -327,7 +333,7 @@ function physic() {
             player.dx = -maxDx;
         }
 
-
+        //Apply movement
         player.x += player.dx;
     }
 }
@@ -353,24 +359,20 @@ function colCheck(player, obj) {
         if (oX >= oY) {
             if (vY > 0) {
                 col = 't';
-                //player.y = obj.y + obj.h;
                 player.y += oY;
                 player.dy = 1;
             } else {
                 col = 'b';
-                //player.y = obj.y - player.h;
                 player.y -= oY;
                 player.dy = 0;
             }
         } else {
             if (vX > 0) {
                 col = 'l';
-                //player.x += oX + 1;
                 player.dx = 0;
                 player.x += oX;
             } else {
                 col = 'r';
-                //player.x -= oX - 1;
                 player.dx = 0;
                 player.x -= oX;
             }
@@ -411,13 +413,43 @@ function contact(player, obj) {
  }
 
 function drawElements() {
+    //Reset canvas
     ctx.clearRect(0, 0, width, height);
+
+    //Ephemerals
+    for (i in ephemerals) {
+        let eph = ephemerals[i];
+        ctx.fillStyle = eph.color;
+
+        ctx.beginPath();
+        ctx.arc(eph.x, eph.y, eph.curSize, 0, 2 * Math.PI);
+        ctx.fill();
+
+        if(eph.up) {
+            if(eph.curSize < eph.maxSize) {
+                eph.curSize += eph.step
+            } else {
+                eph.up = false
+            }
+        } else {
+            if(eph.curSize > 0) {
+                eph.curSize -= eph.step
+            } else {
+                delete ephemerals[i];
+            }
+        }
+    }
+
+    //Boxes
     for (i in boxes) {
         let box = boxes[i];
         ctx.fillStyle = box.color;
         ctx.fillRect(box.x, box.y, box.w, box.h);
     }
+
+    //Players
     for (let player of players.values()) {
+        //Player's shadow
         ctx.fillStyle = player.color1;
         let smooth_dy = player.dy;
         if(Math.abs(smooth_dy) < 2*player.gravity) {
@@ -429,14 +461,30 @@ function drawElements() {
             player.w + 8,
             player.h + 8
         );
+
+        //Player's body
         ctx.fillStyle = player.color2;
         ctx.fillRect(player.x, player.y, player.w, player.h);
     }
 }
 
+function power(player) {
+    ephemerals.push({
+        type: 0,
+        playerId: player.playerId,
+        x: player.x,
+        y: player.y,
+        maxSize: 75,
+        curSize: 0,
+        step: 5,
+        up: true,
+        color: '#FF0000'
+    });
+}
 
-
+//Keep track of keys
 document.body.addEventListener("keydown", function(e) {
+    //Disallow perma jump
     if((e.keyCode == 32 || e.keyCode == 38) && !keys[e.keyCode]
     && (players.get(myId).sliding_right || players.get(myId).sliding_left || players.get(myId).grounded)) {
         doJump = true;
@@ -452,14 +500,18 @@ window.addEventListener("load", function() {
     update();
 });
 
+//Display scores
 function updateRanks(playerList) {
     let copy = playerList;
     copy.sort(comparePlayer);
     let table = "<thead><td>Rank</td><td>Player</td></thead>";
     let i = 1;
-    for (let player of players.values()) {
+    for (j in copy) {
+        let player = copy[j];
+        let score = Math.round(player.score/fps);
         table += "<tr><td>" + i + "</td>";
         table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 +";\">&#x25a0;</td>";
+        table += "<td>" + score + "</td></tr>";
         i++;
     }
 
@@ -469,10 +521,10 @@ function updateRanks(playerList) {
 }
 
 function comparePlayer( a, b ) {
-  if ( a.score < b.score ){
+  if ( a.score > b.score ){
     return -1;
   }
-  if ( a.score > b.score ){
+  if ( a.score < b.score ){
     return 1;
   }
   return 0;

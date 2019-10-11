@@ -15,7 +15,7 @@ public class App  {
     public static void main(String[] args) {
         System.out.println("[Server] starting on port " + PORT);
         port(PORT);
-        staticFileLocation("/client"); //index.html is served at localhost:4567 (default port)
+        staticFileLocation("/client");
 
         World.initInstance();
 

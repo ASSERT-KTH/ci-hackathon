@@ -35,7 +35,7 @@ public class Player {
 	}
 
 	public NewPlayerMessage getMessage(int timestamp) {
-		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed,jump,h,w,x,y,dx,dy);
+		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed,jump,h,w,x,y,dx,dy,score);
 	}
 
 	public TrajectoryChangeMessage getTrajectoryChangeMessage(int timestamp) {
