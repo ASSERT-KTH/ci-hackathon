@@ -57,13 +57,12 @@ body{
     /*display: none;*/
     max-height: 200px;
     /*max-width: 500px;*/
-    width: 100%;
     border: 1px solid white;
 
 }
 
 #menuContainer img:hover{
-    transform: scaleX(2);
+    transform: scaleX(1.1);
 }
 .visible{
     display: block;
