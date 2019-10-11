@@ -20,7 +20,7 @@
    
 - **Can I register together with a friend so we can be  on the same team?**   
    
-You are very welcome to do so! Follow the instructions of previous question and create a folder named with all github ids separated by underscore
+Unfornateelly we are full of capacity inside R1 for the event day, and no more registration is allowed. But, you still can upload your examples here.
 
 - **Where is the hackathon happening?**
 
