@@ -375,7 +375,7 @@ function setup(){
     ctx = canvas.getContext('2d');
     
     let numRings = 50;
-    let ringWidth = w/(numRings*4);
+    let ringWidth = w/((numRings+1)*4);
     
     createRings(w/4, h/2, ringWidth, numRings, true, "left")
     createRings(3*w/4, h/2, ringWidth, numRings, false, "right")
