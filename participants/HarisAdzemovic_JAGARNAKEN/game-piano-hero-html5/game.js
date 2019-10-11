@@ -143,7 +143,6 @@ function drawText(c) {
     c.font = config.font;
     c.fillStyle = config.accent;
     c.textAlign = "center";
-    c.fillText(config.score, config.width / 2, 30);
 }
 
 function controleSpeed() {
@@ -240,36 +239,7 @@ function gameMouseClick(e) {
             startGame();
         }
     }
-
-    
     var clickedTile = getTileInPosition({x: x, y: y});
-
-    if (clickedTile != null) {
-        if (clickedTile.clickable) {
-            if (!clickedTile.isClicked) {
-                console.log("Nice!");
-                clickedTile.isClicked = true;
-                clickedTile.bgColor = config.tile.color.grey;
-                config.score++;
-                tock(); //Play note(?)
-
-            } else {
-                clickedTile.bgColor = config.tile.color.red;
-//                            clickedTile.y += config.speed;
-                drawTile(clickedTile);
-                console.log("Wrong Tile. Game Over");
-                gameOver();
-            }
-        } else {
-            clickedTile.bgColor = config.tile.color.red;
-//                        clickedTile.y += config.speed;
-            drawTile(clickedTile);
-            console.log("Wrong Tile. Game OVER")
-            gameOver();
-        }
-    } else {
-        console.log("Tile Not Found");
-    }
 }
 
 function getTileInPosition(coords) {
