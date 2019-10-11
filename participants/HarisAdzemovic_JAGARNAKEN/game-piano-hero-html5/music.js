@@ -21,6 +21,9 @@ function tock(){
     MIDI.noteOff(0, note, delay);
 
     notaAtual++;
+    if(notaAtual >= notas.length){
+        gameOver();
+    }
 }
 
 function dataURLtoFile(dataurl, filename) {
@@ -59,7 +62,6 @@ function pegaNotas(song){
             notas.push(nota);
         }
     }
-
 }
 
 window.onload = function () {

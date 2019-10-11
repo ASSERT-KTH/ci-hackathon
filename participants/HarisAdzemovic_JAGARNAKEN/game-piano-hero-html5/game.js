@@ -194,7 +194,6 @@ function moveToNextFrame() {
 
     if (tempTileHolder.length > 0) {
         var randomeNumber = Math.ceil(Math.random() * config.cols - 1);
-        console.log("Randome Number ->" + randomeNumber);
         makeTileClickable(tempTileHolder[randomeNumber]);
     }
 
