@@ -2,7 +2,9 @@
 name: CREATE_GH_PAGES
 
 on:
-  push:
+  push: 
+    branches:    
+      - master 
     paths:
       # '*' matches any character except '/'
       - 'participants/*'
