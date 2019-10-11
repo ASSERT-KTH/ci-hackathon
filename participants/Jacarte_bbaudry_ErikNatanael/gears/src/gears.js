@@ -420,7 +420,7 @@ function setup(){
 let speed = 4
 let globalTime  = 0
 let step = 0.005
-let space = 0
+let space = -0.1
 
 let rings = [
 
