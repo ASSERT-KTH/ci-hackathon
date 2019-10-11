@@ -9,8 +9,9 @@ public class NewBlockMessage extends AbstractMessage {
 	int h, w;
 	double gravity;
 	double x,y, dx, dy;
+	int type;
 
-	public NewBlockMessage(int timestamp, int boxId, int color, int h, int w, double gravity, double x, double y, double dx, double dy) {
+	public NewBlockMessage(int timestamp, int boxId, int color, int h, int w, double gravity, double x, double y, double dx, double dy, int type) {
 		this.timestamp = timestamp;
 		this.boxId = boxId;
 		this.color = color;
@@ -21,6 +22,7 @@ public class NewBlockMessage extends AbstractMessage {
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
+		this.type = type;
 	}
 
 	public JSONObject toJSON() {
@@ -35,6 +37,7 @@ public class NewBlockMessage extends AbstractMessage {
 		res.put("y", y);
 		res.put("dx", dx);
 		res.put("dy", dy);
+		res.put("type", type);
 		return res;
 	}
 
@@ -49,6 +52,7 @@ public class NewBlockMessage extends AbstractMessage {
 		this.y = in.getDouble("y");
 		this.dx = in.getDouble("dx");
 		this.dy = in.getDouble("dy");
+		this.type = in.getInt("type");
 	}
 
 	@Override

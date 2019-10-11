@@ -11,16 +11,19 @@ public class Player {
 	public int color1;
 	public int color2;
 	public double gravity;
-	public int speed;
+	public int jump;
+	public double speed;
 	public int h,w;
 	public double x, y, dx, dy;
+	public long score = 0;
 	Session session;
 
-	public Player(int playerid, int color1, int color2, double gravity, int speed, int h, int w, double x, double y, double dx, double dy, Session session) {
+	public Player(int playerid, int color1, int color2, double gravity, double speed, int jump, int h, int w, double x, double y, double dx, double dy, Session session) {
 		this.playerid = playerid;
 		this.color1 = color1;
 		this.color2 = color2;
 		this.gravity = gravity;
+		this.jump = jump;
 		this.speed = speed;
 		this.h = h;
 		this.w = w;
@@ -32,7 +35,7 @@ public class Player {
 	}
 
 	public NewPlayerMessage getMessage(int timestamp) {
-		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed,h,w,x,y,dx,dy);
+		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed,jump,h,w,x,y,dx,dy);
 	}
 
 	public TrajectoryChangeMessage getTrajectoryChangeMessage(int timestamp) {

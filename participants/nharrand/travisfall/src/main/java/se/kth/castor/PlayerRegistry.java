@@ -25,8 +25,9 @@ public class PlayerRegistry {
 		return null;
 	}
 
-	public void killPlayer(Session session) {
-		players.remove(session);
+	public void killPlayer(Player p, int timestamp) {
+		broadCastMessage(p.getPlayerDeathMessage(timestamp));
+		players.remove(p.session);
 	}
 
 	public Player createNewPlayer(Session session) {
@@ -36,6 +37,7 @@ public class PlayerRegistry {
 		Player player = new Player(nextID, col1, col2,
 				World.def_Player_Gravity,
 				World.def_Player_Speed,
+				World.def_Player_Jump,
 				World.def_Player_h,
 				World.def_Player_w,
 				World.def_Player_x,

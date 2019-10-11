@@ -11,7 +11,10 @@ import se.kth.castor.message.TrajectoryChangeMessage;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.Executors;
 
 @WebSocket
 public class World {
@@ -19,8 +22,9 @@ public class World {
 	//Default settings
 	public static  double def_Friction = 0.8;
 
-	public static double def_Player_Gravity = 0.4;
-	public static int def_Player_Speed = 3;
+	public static double def_Player_Gravity = 0.8;
+	public static double def_Player_Speed = 0.6;
+	public static int def_Player_Jump = 16;
 	public static double def_Player_x = 500;
 	public static double def_Player_y = 0;
 	public static double def_Player_dx = 0;
@@ -29,6 +33,7 @@ public class World {
 	public static int def_Player_h = 25;
 
 	public static double def_Block_Gravity = 1;
+	public static int def_Block_w = 30;
 
 	//Ugly singleton
 	static World instance;
@@ -60,24 +65,43 @@ public class World {
 
 
 	public void initWorld() {
-		Block b0 = new Block(0x9999FF,25, 200, def_Block_Gravity, 400, 200, 0, 0);
-		Block b1 = new Block(0x9999FF,25, 200, def_Block_Gravity, 200, 50, 0, 0);
-		Block b2 = new Block(0x9999FF,25, 200, def_Block_Gravity, 600, 50, 0, 0);
-		Block b4 = new Block(0x9999FF,200, 25, def_Block_Gravity, 380, 20, 0, 0);
+		Block b00 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 400, -100, 0, 0, 0);
+		Block b10 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 200, -250, 0, 0, 0);
+		Block b20 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 600, -250, 0, 0, 0);
+
+		Block b01 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 400, -100, 0, 0, 0);
+		Block b11 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 200, -250, 0, 0, 0);
+		Block b21 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 600, -250, 0, 0, 0);
+
+		Block b0 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 400, 200, 0, 0, 0);
+		Block b1 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 200, 50, 0, 0, 0);
+		Block b2 = new Block(0x9999FF,def_Block_w, 200, def_Block_Gravity, 600, 50, 0, 0, 0);
+
+		//Block b4 = new Block(0x9999FF,200, 30, def_Block_Gravity, 370, 20, 0, 0);
 
 
-		Block bottom = new Block(0x999999,25, worldWidth, 0, 25, 775, 0, 0);
-		Block left = new Block(0x999999, worldHeight+200, 25, 0, 0, 0, 0, 0);
-		Block right = new Block(0x999999, worldHeight+200, 25, 0, worldWidth - 25, 0, 0, 0);
+		Block bottom = new Block(0x999999,def_Block_w, worldWidth, 0, def_Block_w, 770, 0, 0, 0);
+		Block left = new Block(0x999999, worldHeight+500, def_Block_w, 0, 0, -500, 0, 0, 0);
+		Block right = new Block(0x999999, worldHeight+500, def_Block_w, 0, worldWidth - def_Block_w, -500, 0, 0, 0);
 
-		blocks.add(bottom);
+		//blocks.add(bottom);
 		blocks.add(left);
 		blocks.add(right);
 
 		blocks.add(b0);
 		blocks.add(b1);
 		blocks.add(b2);
-		blocks.add(b4);
+
+		blocks.add(b00);
+		blocks.add(b10);
+		blocks.add(b20);
+
+		blocks.add(b01);
+		blocks.add(b11);
+		blocks.add(b21);
+
+
+		//blocks.add(b4);
 
 
 	}
@@ -108,7 +132,7 @@ public class World {
 	public void onClose(Session user, int statusCode, String reason) {
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": leaving");
 		Player p = getInstance().registry.getPlayer(user);
-		getInstance().registry.killPlayer(p.session);
+		getInstance().registry.killPlayer(p, timestamp);
 		getInstance().registry.broadCastMessage(p.getPlayerDeathMessage(getTimestamp()));
 	}
 
@@ -134,32 +158,62 @@ public class World {
 		}
 	}
 
-	public void tic() {
+	/*Date date = new Date();
+	long then = date.getTime();
 
-		for(Block b: blocks.clone()) {
-			b.dy += b.gravity;
-			b.y += b.dy;
-			if(b.y > worldHeight) {
+	long fps = 30;
+	long now;
+	long interval = 1000/fps;
+	long delta;*/
+
+	static class BlockInfo {
+		public BlockInfo(String lang, int type) {
+			this.lang = lang;
+			this.type = type;
+		}
+		String lang;
+		int type;
+	}
+
+	public static int MAX_FRONT = 50;
+	public static int MAX_BACK = 200;
+	public ArrayDeque<BlockInfo> front = new ArrayDeque();
+	public ArrayDeque<BlockInfo> back = new ArrayDeque();
+
+	Random r = new Random();
+
+	public void tic() {
+		for (Block b : blocks.clone()) {
+			//b.dy += b.gravity;
+			b.y += b.gravity;
+			if (b.y > worldHeight) {
 				blocks.remove(b);
 				System.out.println("[World] remove block at (" + b.x + ", " + b.y + ")");
 			}
 		}
 
-		for(Player p : registry.players.values()) {
-			p.dx *= def_Friction;
-			p.dy += p.gravity;
-			p.x += p.dx;
-			p.y += p.dy;
-			if(p.y > worldHeight) {
-				registry.killPlayer(p.session);
-				registry.broadCastMessage(p.getPlayerDeathMessage(getTimestamp()));
-				System.out.println("[World] kill player " + p.playerid + " at (" + p.x + ", " + p.y + ")");
+		//checkCollision();
+		for (Player p: registry.players.values()) {
+			if (p.y > (worldHeight + 200)) {
+				System.out.println("[World] Player " + p.playerid + " died!!!!");
+				registry.killPlayer(p, timestamp);
+			} else {
+				p.score++;
 			}
 		}
 
-		checkCollision();
-
 		//create new Blocks
+
+		if(!front.isEmpty() && timestamp % 30 == 0) {
+			//x,w,col
+			BlockInfo bi = front.pop();
+			int x = r.nextInt(worldWidth + 200) - 100;
+			int w = r.nextInt(120) + 30;
+			int col = Colors.getColorForLang(bi.lang);
+			Block b = new Block(col, def_Block_w, w, def_Block_Gravity, x, 0, 0, 0, bi.type);
+			registry.broadCastMessage(b.getMessage(timestamp));
+			blocks.add(b);
+		}
 
 		timestamp++;
 	}

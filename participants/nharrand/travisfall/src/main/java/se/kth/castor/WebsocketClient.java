@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WebsocketClient {
 
-	public static void main(String[] args) {
+	public static void init(String[] args) {
 		String destUri = "wss://travis.durieux.me";
 		if (args.length > 0)
 		{
@@ -36,8 +36,13 @@ public class WebsocketClient {
 			client.connect(socket, echoUri, request);
 			System.out.printf("Connecting to : %s%n", echoUri);
 
-			// wait for closed socket connection.
-			socket.awaitClose(10, TimeUnit.SECONDS);
+			boolean stop = false;
+
+			while (!stop) {
+				stop = socket.isClosed();
+				Thread.sleep(1000);
+			}
+
 		} catch (Throwable t) {
 			t.printStackTrace();
 		} finally {

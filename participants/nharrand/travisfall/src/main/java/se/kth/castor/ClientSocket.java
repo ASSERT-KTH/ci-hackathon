@@ -1,30 +1,30 @@
 package se.kth.castor;
 
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.StatusCode;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.JSONObject;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayDeque;
+
 
 @WebSocket(maxTextMessageSize = 64 * 1024)
 public class ClientSocket {
-	private final CountDownLatch closeLatch;
+	private boolean closed = false;
+	public boolean isClosed() {
+		return closed;
+	}
+
+
 	@SuppressWarnings("unused")
 	private Session session;
 
 	public ClientSocket()
 	{
-		this.closeLatch = new CountDownLatch(1);
-	}
 
-	public boolean awaitClose(int duration, TimeUnit unit) throws InterruptedException
-	{
-		return this.closeLatch.await(duration, unit);
 	}
 
 	@OnWebSocketClose
@@ -32,7 +32,7 @@ public class ClientSocket {
 	{
 		System.out.printf("Connection closed: %d - %s%n", statusCode, reason);
 		this.session = null;
-		this.closeLatch.countDown(); // trigger latch
+		closed = true;
 	}
 
 	@OnWebSocketConnect
@@ -40,16 +40,27 @@ public class ClientSocket {
 	{
 		System.out.printf("Got connect: %s%n", session);
 		this.session = session;
+		closed = false;
 	}
 
 	@OnWebSocketMessage
 	public void onMessage(String msg)
 	{
-		System.out.printf("Got msg: %s%n", msg);
-		if (msg.contains("Thanks"))
-		{
-			session.close(StatusCode.NORMAL, "I'm done");
+		try {
+			JSONObject event = new JSONObject(msg);
+			String lang = event.getJSONObject("data").getJSONObject("config").getString("language");
+			int type = typeFromState(event.getJSONObject("data").getString("state"));
+			if(World.getInstance().front.size() < World.MAX_FRONT) {
+				World.getInstance().front.add(new World.BlockInfo(lang, type));
+			} else if (World.getInstance().back.size() < World.MAX_BACK) {
+				World.getInstance().back.add(new World.BlockInfo(lang, type));
+			}
+			//System.out.println("lang: " + lang);
+
+		} catch (Exception _ignore) {
+			System.out.printf("Got msg: %s%n", msg);
 		}
+		//System.out.printf("Got msg: %s%n", msg);
 	}
 
 	@OnWebSocketError
@@ -57,5 +68,17 @@ public class ClientSocket {
 	{
 		System.out.print("WebSocket Error: ");
 		cause.printStackTrace(System.out);
+	}
+
+	public static int typeFromState(String state) {
+		if(state == null) return 0;
+		switch (state) {
+			case "passed":
+				return 1;
+			case "failed":
+				return 2;
+			default:
+				return 0;
+		}
 	}
 }

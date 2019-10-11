@@ -9,8 +9,9 @@ public class Block {
 	int h, w;
 	double gravity;
 	double x,y, dx, dy;
+	int type;
 
-	public Block(int color, int h, int w, double gravity, double x, double y, double dx, double dy) {
+	public Block(int color, int h, int w, double gravity, double x, double y, double dx, double dy, int type) {
 		this.boxId = nextId++;
 		this.color = color;
 		this.h = h;
@@ -20,9 +21,10 @@ public class Block {
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
+		this.type = type;
 	}
 
 	public NewBlockMessage getMessage(int timestamp) {
-		return new NewBlockMessage(timestamp,boxId,color,h,w,gravity,x,y,dx,dy);
+		return new NewBlockMessage(timestamp,boxId,color,h,w,gravity,x,y,dx,dy,type);
 	}
 }
