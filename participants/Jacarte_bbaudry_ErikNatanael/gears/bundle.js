@@ -20,9 +20,12 @@ let sampler;
 let swooshSampler;
 let droneSampler;
 
+let audioInitiated = false;
+
 StartAudioContext(Tone.context, 'start-stop').then(function(){
     //callback is invoked when the AudioContext.state is 'running'
     console.log("Starts audio context");
+    audioInitiated = true;
 })
 
 function getRadius(message){
@@ -171,7 +174,9 @@ function handleJob(message){
             let synth = sampler
             let sound = soundForJob(message) // get the pitch associated with the language of the job
             
-            synth.triggerAttack(sound);
+            if(audioInitiated) {
+              synth.triggerAttack(sound);
+            }
         }
          
     }
@@ -235,9 +240,9 @@ function handleJob(message){
                     break;
             }
             pitch = Tone.Frequency(Math.random() * 30 + 31, "midi")
-            swooshSampler.triggerAttack(pitch);
-            console.log("swooshed");
-            
+            if(audioInitiated) {
+              swooshSampler.triggerAttack(pitch);    
+            }        
             }
             //delete jobs[message.data.commit.sha]
         }
@@ -256,7 +261,6 @@ function mergeRing(commitId, message){
 
     if(ring){
         let size = ring.chunks.length - 1
-        console.log("size: " + size);
 
         if(size <= 0){
 
@@ -264,9 +268,7 @@ function mergeRing(commitId, message){
             delete  jobs[commitId]
         }
         else{
-            let changedRing = splitRing(message, ring, ring.chunks.length - 1)
-            let newRing = getRing(commitId);
-            console.log("changed size: " + changedRing.chunks.length + " new size: " + newRing.chunks.length);
+            splitRing(message, ring, ring.chunks.length - 1)
         }
     }
 
@@ -321,7 +323,8 @@ function assignRing(message){
 
 
 let ctx, r;
-const w = 1200, h = 1200, TAU = 2*Math.PI, MAX_R = 1500;
+let w = 1200, h = 1200;
+const TAU = 2*Math.PI, MAX_R = 1500;
 
 const colors = ["#ff000080", "#00ff0080", "#0000ff80", "#00ffff80"]
 let width = 10
@@ -364,13 +367,18 @@ function createRings(x, y, width, count, setRadius, which){
 function setup(){
 
 	r, canvas = document.createElement('canvas');
+  w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 	canvas.width = w;
 	canvas.height = h;
 	document.body.appendChild(canvas);
     ctx = canvas.getContext('2d');
     
-    createRings(w/4, h/2, 10, 50, true, "left")
-    createRings(3*w/4, h/2, 10, 50, false, "right")
+    let numRings = 50;
+    let ringWidth = w/(numRings*4);
+    
+    createRings(w/4, h/2, ringWidth, numRings, true, "left")
+    createRings(3*w/4, h/2, ringWidth, numRings, false, "right")
 
     requestAnimationFrame(draw);
     
@@ -396,7 +404,7 @@ function setup(){
       baseUrl : "samples/",
       "release" : 1,
     }).toMaster();
-    swooshSampler.volume.value = -16;
+    swooshSampler.volume.value = -24;
     
     droneSampler = new Tone.Sampler({
     	"C1" : "drone.mp3",
