@@ -20,7 +20,7 @@ let deviations = 0.03;
 Tone.Transport.bpm.value = 200;
 let maxLiveTime = 10000
 
-let patternLength = 8;
+let patternLength = 6;
 
 // Deep House Drum Samples from soundpacks.com.
 // https://soundpacks.com/free-sound-packs/deep-house-drum-samples/
@@ -246,6 +246,7 @@ const drumFileNames = {
         if (this.model.active) {
             this.timeout = setTimeout(() => {
                 this.toggle()
+                triggerLight(this.lightId(), "#000000")
             }, maxLiveTime);
         }
     }
@@ -265,8 +266,22 @@ const drumFileNames = {
       this.model = model;
       this.playing = model.playing;
     }
+
+    lightId() {
+      var parent = this.el.parentNode;
+      var y = Array.prototype.indexOf.call(parent.parentNode.children, parent);
+      var x = 4 - Array.prototype.indexOf.call(parent.children, this.el) - 1;
+      if (y % 2 != 0) {
+        x = 4 - x;
+      }
+      return (x * patternLength) + y + 1
+    }
   
     triggerAnimation(playing, baseColor) {
+      const parent = this.el.parentNode;
+      if (this.el && parent && playing != null) {
+        triggerLight(this.lightId(), this.color)
+      }
       if (playing === 'all' && this.playing !== 'all') {
         this.animateTrigger(this.el, this.color, baseColor);
       }
@@ -336,11 +351,11 @@ const drumFileNames = {
     const activeDrums = [
       _.sample(drumBuffers.bd_kick),
       _.sample(drumBuffers.hat),
-      _.sample(drumBuffers.prc),
+      // _.sample(drumBuffers.prc),
       _.sample(drumBuffers.tom),
-      _.sample(drumBuffers.snare),
+      // _.sample(drumBuffers.snare),
       _.sample(drumBuffers.clap),
-      _.sample(drumBuffers.shaker_tam)
+      // _.sample(drumBuffers.shaker_tam)
     ];
     return _.range(patternLength).map(step => ({
       step,
@@ -440,4 +455,28 @@ const drumFileNames = {
     }, 5000);
   });
   
-  StartAudioContext(Tone.context, '#sequencer');  
+  StartAudioContext(Tone.context, '#sequencer');
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+function triggerLight(lightId, color) {
+  color = hexToRgb(color)
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("POST", "https://lights.ciart.live/setcolor", true);
+  xhttp.send(JSON.stringify({
+    "id": lightId,
+    "color": [color.r, color.g, color.b],
+    "session": "main"
+  }));
+}
