@@ -26,7 +26,7 @@ public class PlayerRegistry {
 	}
 
 	public void killPlayer(Player p, int timestamp) {
-		broadCastMessage(p.getPlayerDeathMessage(timestamp));
+		//broadCastMessage(p.getPlayerDeathMessage(timestamp));
 		players.remove(p.session);
 	}
 

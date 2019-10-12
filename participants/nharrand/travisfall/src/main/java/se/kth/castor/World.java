@@ -134,8 +134,9 @@ public class World {
 	public void onClose(Session user, int statusCode, String reason) {
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": leaving");
 		Player p = getInstance().registry.getPlayer(user);
+		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp());
 		getInstance().registry.killPlayer(p, timestamp);
-		getInstance().registry.broadCastMessage(p.getPlayerDeathMessage(getTimestamp()));
+		getInstance().registry.broadCastMessage(pdm);
 	}
 
 	@OnWebSocketMessage
