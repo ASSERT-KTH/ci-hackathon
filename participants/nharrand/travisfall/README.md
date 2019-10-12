@@ -10,3 +10,16 @@
  * **Up arrow and space**: jump
 
 ![Screenshot](/participants/nharrand/travisfall/img/screenshot.png)
+
+### Build
+
+```sh
+mvn install
+docker build -t travisfall .
+```
+
+### Run
+
+```sh
+docker run travisfall -p 80:80 -p8060:8060
+```
