@@ -1,3 +1,5 @@
+//----------------- Parse incoming ephemerals --------------------------- //
+
 function createEphemeralFromMsg(event, ephemerals, players) {
     if(event.type == 0 && players.has(event.playerId)) {
         ephemerals.push({
@@ -20,6 +22,8 @@ function createEphemeralFromMsg(event, ephemerals, players) {
         });
     }
 }
+
+//----------------- Killing ray --------------------------- //
 
 function rayDraw(eph, ctx, width, players) {
     let player = players.get(eph.playerId);
@@ -100,7 +104,7 @@ function rayCreate(player, socket, timestamp) {
       range: 400,
       maxSize: 12,
       curSize: 0,
-      step: 1,
+      step: 2,
       right: right,
       up: true,
       color: '#0000FF',
@@ -114,7 +118,7 @@ function rayCreate(player, socket, timestamp) {
         range: 400,
         maxSize: 12,
         curSize: 0,
-        step: 1,
+        step: 2,
         right: right,
         up: true,
         color: '#0000FF',
@@ -126,4 +130,26 @@ function rayCreate(player, socket, timestamp) {
    };
 }
 
+//----------------- Dash --------------------------- //
 
+function dashDraw(eph, ctx, width, players) {
+    let player = players.get(eph.playerId);
+
+    //if(eph.right)
+}
+
+function dashContact(eph, other, players) {
+
+}
+
+function dashApply(player) {
+    iamDead();
+}
+
+function dashEnd(player) {
+
+}
+
+function dashCreate(player, socket, timestamp) {
+
+}

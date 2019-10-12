@@ -35,39 +35,73 @@ var width = 1400,
     doJump = false,
     right = false,
     alive = false,
-    power_cd = 3*fps,
-    power_cd_max = 3*fps,
+    power_cd = 2 * fps,
+    power_cd_max = 2 * fps,
     power_type = 0,
     timestamp = 0;
+
+function reset() {
+    friction = 0.90;
+    wallBump = 4;
+    airFriction = 0.95;
+    maxDx = 8;
+    maxSlidingDy = 8;
+    maxDy = 20;
+    wallJumpTolerance = 2;
+    myId = 0;
+    canJump = false;
+    doJump = false;
+    right = false;
+    alive = false;
+    power_cd = 2 * fps;
+    power_cd_max = 2 * fps;
+    power_type = 0;
+    timestamp = 0;
+    players = new Map();
+    keys = [];
+    boxes = [];
+    ephemerals = [];
+    events = [];
+}
 
 
 canvas.width = width;
 canvas.height = height;
 
 function trajectoryChange() {
-    webSocket.send(JSON.stringify({
-      t: 0,
-      playerId: myId,
-      timestamp: timestamp,
-      x: players.get(myId).x,
-      y: players.get(myId).y,
-      dx: players.get(myId).dx,
-      dy: players.get(myId).dy
-    }));
+    if (players.has(myId)) {
+        let player = players.get(myId);
+        webSocket.send(JSON.stringify({
+          t: 0,
+          playerId: myId,
+          timestamp: timestamp,
+          x: player.x,
+          y: player.y,
+          dx: player.dx,
+          dy: player.dy
+        }));
+    } else {
+        console.log("[trajectoryChange] no player: " + myId);
+    }
 }
 
 function iamDead() {
-    webSocket.send(JSON.stringify({
-      t: 3,
-      playerId: myId,
-      timestamp: timestamp,
-      x: players.get(myId).x,
-      y: players.get(myId).y,
-      color1: players.get(myId).color1,
-      color2: players.get(myId).color2,
-      h: players.get(myId).h,
-      w: players.get(myId).w
-    }));
+    if (players.has(myId)) {
+        let player = players.get(myId);
+        webSocket.send(JSON.stringify({
+          t: 3,
+          playerId: myId,
+          timestamp: timestamp,
+          x: player.x,
+          y: player.y,
+          color1: player.color1,
+          color2: player.color2,
+          h: player.h,
+          w: player.w
+        }));
+    } else {
+        console.log("[iamDead] no player: " + myId);
+    }
 }
 
 function getColor(raw) {
@@ -80,16 +114,22 @@ function log(txt) {
     logDiv.scrollTop = logDiv.scrollHeight;
 }
 
+// --------------------------------- Message handling ------------------------------------ //
+
 function parseEvent(msg) {
    let event = JSON.parse(msg.data);
 
-    if(event.t == 0) {
-        let player = players.get(event.playerId);
-        //TrajectoryChangeMessageType
-        player.x = event.x;
-        player.y = event.y;
-        player.dx = event.dx;
-        player.dy = event.dy;
+    if (event.t == 0) {
+        if (players.has(event.playerId)) {
+            let player = players.get(event.playerId);
+            //TrajectoryChangeMessageType
+            player.x = event.x;
+            player.y = event.y;
+            player.dx = event.dx;
+            player.dy = event.dy;
+        } else {
+            console.log("[parseEvent][TrajectoryChange] no player: " + myId);
+        }
 
     } else if (event.t == 1) {
         //log("box");
@@ -135,7 +175,11 @@ function parseEvent(msg) {
         }
         updateRanks(Array.from(players.values()));
     } else if (event.t == 3) {
-        players.get(event.playerId).dead = true;
+        if(players.has(event.playerId)) {
+            players.get(event.playerId).dead = true;
+        } else {
+            console.log("[parseEvent][PlayerDeath] no player: " + myId);
+        }
         updateRanks(Array.from(players.values()));
         //log("Player " + event.playerId + " died");
         if(event.playerId == myId) {
@@ -144,12 +188,6 @@ function parseEvent(msg) {
             bo.style["background-color"] = "#660000";
             let gameOver = document.getElementById('go');
             gameOver.innerHTML = "<b>GAME OVER</b>";
-            //webSocket.close();
-            //PlayerDeathMessageType
-            //updateRanks();
-            /*alert("      GAME OVER!\n" +
-            "    ----------------------\n" +
-            "Refresh to play again.")*/
 
         }
     } else if (event.t == 4) {
@@ -169,11 +207,15 @@ function parseEvent(msg) {
     } else if (event.t == 5) {
         //DeleteBoxMessage
         boxes[event.boxId].dead = true;
+        reset();
     } else if (event.t == 6) {
          //EphemeralMessage
          createEphemeralFromMsg(event, ephemerals, players);
      }
 }
+
+
+// ------------------------ Main loop ----------------------------- //
 
 var now;
 var then = Date.now();
@@ -181,7 +223,7 @@ var delta;
 
 function update() {
     requestAnimationFrame(update);
-    for(i in events) {
+    for (i in events) {
         let e = events.pop();
         parseEvent(e);
     }
@@ -203,7 +245,7 @@ function update() {
 
         updatePowerCd();
 
-        if(timestamp % 3*fps == 0) {
+        if (timestamp % 3*fps == 0) {
             updateRanks(Array.from(players.values()));
         }
         cleanUp();
@@ -238,12 +280,12 @@ function cleanUp() {
 }
 
 function processInputs() {
-    if(alive) {
+    if (alive && players.has(myId)) {
         let myPlayer = players.get(myId);
         //Jump
-        if(doJump) {
+        if (doJump) {
             myPlayer.dy = -myPlayer.jump;
-            if(!myPlayer.grounded && myPlayer.sliding_left) {
+            if (!myPlayer.grounded && myPlayer.sliding_left) {
                 myPlayer.dx = 3 * maxDx;
                 myPlayer.x += 2;
             } else if (!myPlayer.grounded && myPlayer.sliding_right) {
@@ -256,28 +298,28 @@ function processInputs() {
         }
 
         //left
-        if(keys[37]){
+        if (keys[37]){
             myPlayer.dx -= myPlayer.speed;
             trajectoryChange();
             right = false;
         }
 
         //right
-        if(keys[39]){
+        if (keys[39]){
             myPlayer.dx += myPlayer.speed;
             trajectoryChange();
             right = true;
         }
 
         //power
-        if(keys[17]){
+        if (keys[17]){
             power(myPlayer);
         }
     }
 }
 
 function physic() {
-    if(alive) {
+    if (alive) {
         if(players.get(myId).y > (height + 100)) {
             iamDead();
         }
@@ -295,9 +337,6 @@ function physic() {
         box.y += box.gravity;
     }
 
-    /*if(canJump > 0) {
-        canJump--;
-    }*/
     canJump = false;
 
     for (let player of players.values()) {
@@ -322,7 +361,7 @@ function physic() {
             player.sliding_left |= (cj == 'l');
             player.sliding_right |= (cj == 'r');
 
-            if(alive && player.playerId == myId) {
+            if (alive && player.playerId == myId) {
                 if ((cj != '0' && cj != 't')) {
                     cj = contact(player, boxes[j]);
                     canJump |= (cj != '0' && cj != 't');
@@ -331,29 +370,29 @@ function physic() {
         }
 
         //Players movement
-        if(player.grounded) {
+        if (player.grounded) {
             player.dx *= friction;
         } else {
             player.dx *= airFriction;
         }
 
         //Cap vertical speed
-        if(player.sliding_left || player.sliding_right) {
-            if(player.dy > maxSlidingDy) {
+        if (player.sliding_left || player.sliding_right) {
+            if (player.dy > maxSlidingDy) {
                 player.dy = maxSlidingDy;
             }
         } else {
             if(player.dy > maxDy) {
                 player.dy = maxDy;
-            } else if(player.dy < -maxDy) {
+            } else if (player.dy < -maxDy) {
                 player.dy = -maxDy;
             }
         }
 
         //Cap horizontal speed
-        if(player.dx > maxDx) {
+        if (player.dx > maxDx) {
             player.dx = maxDx;
-        } else if(player.dx < -maxDx) {
+        } else if (player.dx < -maxDx) {
             player.dx = -maxDx;
         }
 
@@ -373,7 +412,7 @@ function colCheck(player, obj) {
 
     // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
     if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
-        if(obj.type == 2 && obj.ttl < 0) {
+        if (obj.type == 2 && obj.ttl < 0) {
             obj.color = '#FF0000';
             obj.ttl = 15;
         }
@@ -472,24 +511,28 @@ function drawElements() {
         //Player's body
         ctx.fillStyle = player.color2;
         ctx.fillRect(player.x, player.y, player.w, player.h);
+
+        if (alive && player.id == myId) {
+            //Arrow
+            ctx.fillStyle = player.color1;
+            ctx.beginPath();
+            if (right) {
+                ctx.moveTo(player.x + player.w + 6, player.y + 4);
+                ctx.lineTo(player.x + player.w + 6, player.y + player.h - 4);
+                ctx.lineTo(player.x + player.w + 12, player.y + player.h / 2);
+            } else {
+                ctx.moveTo(player.x - 6, player.y + 4);
+                ctx.lineTo(player.x - 6, player.y + player.h - 4);
+                ctx.lineTo(player.x - 12, player.y + player.h / 2);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
     }
 }
 
 function power(player) {
     if(power_cd == power_cd_max) {
-        /*ephemerals.push({
-            type: 0,
-            playerId: player.id,
-            x: player.x,
-            y: player.y,
-            maxSize: 12,
-            curSize: 0,
-            step: 5,
-            right: right,
-            up: true,
-            color: '#0000FF',
-            toRemove: false
-        });*/
         ephemerals.push(rayCreate(player, webSocket));
         power_cd = 0;
     }
