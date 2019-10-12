@@ -6,6 +6,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import se.kth.castor.message.AbstractMessage;
+import se.kth.castor.message.EphemeralMessage;
 import se.kth.castor.message.MessageParsingException;
 import se.kth.castor.message.PlayerDeathMessage;
 import se.kth.castor.message.TrajectoryChangeMessage;
@@ -161,6 +162,8 @@ public class World {
 					getInstance().registry.broadCastMessage(msg);
 					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");
 				}
+			} else if (msg instanceof EphemeralMessage) {
+				getInstance().registry.broadCastMessageMinusSender(msg, user);
 			}
 		} catch (MessageParsingException e) {
 			e.printStackTrace();

@@ -16,6 +16,7 @@ public class Player {
 	public int h,w;
 	public double x, y, dx, dy;
 	public long score = 0;
+	public int cd;
 	Session session;
 
 	public Player(int playerid, int color1, int color2, double gravity, double speed, int jump, int h, int w, double x, double y, double dx, double dy, Session session) {

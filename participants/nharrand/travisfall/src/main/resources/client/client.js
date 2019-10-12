@@ -18,6 +18,9 @@ var canvas = document.getElementById("canvas"),
     ephemerals = [],
     events = [];
 
+const fps = 30;
+const interval = 1000/fps;
+
 var width = 1400,
     height = 800,
     friction = 0.90,
@@ -30,7 +33,11 @@ var width = 1400,
     myId = 0,
     canJump = false,
     doJump = false,
+    right = false,
     alive = false,
+    power_cd = 3*fps,
+    power_cd_max = 3*fps,
+    power_type = 0,
     timestamp = 0;
 
 
@@ -162,11 +169,12 @@ function parseEvent(msg) {
     } else if (event.t == 5) {
         //DeleteBoxMessage
         boxes[event.boxId].dead = true;
-    }
+    } else if (event.t == 6) {
+         //EphemeralMessage
+         createEphemeralFromMsg(event, ephemerals, players);
+     }
 }
 
-const fps = 30;
-const interval = 1000/fps;
 var now;
 var then = Date.now();
 var delta;
@@ -193,6 +201,7 @@ function update() {
         //check for keys
         processInputs();
 
+        updatePowerCd();
 
         if(timestamp % 3*fps == 0) {
             updateRanks(Array.from(players.values()));
@@ -210,7 +219,7 @@ function cleanUp() {
         }
     }
     for (i in boxes) {
-    let box = boxes[i];
+        let box = boxes[i];
         if(box.ttl > 0) {
             box.ttl--;
         } else if (box.ttl == 0) {
@@ -218,6 +227,12 @@ function cleanUp() {
         }
         if (boxes[i].dead) {
             delete boxes[i];
+        }
+    }
+    for (i in ephemerals) {
+        let eph = ephemerals[i];
+        if (eph.toRemove) {
+            delete ephemerals[i];
         }
     }
 }
@@ -244,12 +259,14 @@ function processInputs() {
         if(keys[37]){
             myPlayer.dx -= myPlayer.speed;
             trajectoryChange();
+            right = false;
         }
 
         //right
         if(keys[39]){
             myPlayer.dx += myPlayer.speed;
             trajectoryChange();
+            right = true;
         }
 
         //power
@@ -263,6 +280,13 @@ function physic() {
     if(alive) {
         if(players.get(myId).y > (height + 100)) {
             iamDead();
+        }
+    }
+
+    for (i in ephemerals) {
+        var eph = ephemerals[i];
+        if(eph.contact(eph, players.get(myId), players)) {
+            eph.apply(players.get(myId));
         }
     }
 
@@ -419,25 +443,8 @@ function drawElements() {
     //Ephemerals
     for (i in ephemerals) {
         let eph = ephemerals[i];
-        ctx.fillStyle = eph.color;
-
-        ctx.beginPath();
-        ctx.arc(eph.x, eph.y, eph.curSize, 0, 2 * Math.PI);
-        ctx.fill();
-
-        if(eph.up) {
-            if(eph.curSize < eph.maxSize) {
-                eph.curSize += eph.step
-            } else {
-                eph.up = false
-            }
-        } else {
-            if(eph.curSize > 0) {
-                eph.curSize -= eph.step
-            } else {
-                delete ephemerals[i];
-            }
-        }
+        //rayDraw(eph, ctx, width, players);
+        eph.draw(eph, ctx, width, players);
     }
 
     //Boxes
@@ -469,17 +476,23 @@ function drawElements() {
 }
 
 function power(player) {
-    ephemerals.push({
-        type: 0,
-        playerId: player.playerId,
-        x: player.x,
-        y: player.y,
-        maxSize: 75,
-        curSize: 0,
-        step: 5,
-        up: true,
-        color: '#FF0000'
-    });
+    if(power_cd == power_cd_max) {
+        /*ephemerals.push({
+            type: 0,
+            playerId: player.id,
+            x: player.x,
+            y: player.y,
+            maxSize: 12,
+            curSize: 0,
+            step: 5,
+            right: right,
+            up: true,
+            color: '#0000FF',
+            toRemove: false
+        });*/
+        ephemerals.push(rayCreate(player, webSocket));
+        power_cd = 0;
+    }
 }
 
 //Keep track of keys
@@ -528,4 +541,13 @@ function comparePlayer( a, b ) {
     return 1;
   }
   return 0;
+}
+
+function updatePowerCd() {
+    if(power_cd < power_cd_max) {
+        power_cd++;
+        let progress = document.getElementById('cd');
+        cd.setAttribute('max', power_cd_max);
+        cd.setAttribute('value', power_cd);
+    }
 }

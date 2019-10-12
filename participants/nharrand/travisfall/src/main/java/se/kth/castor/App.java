@@ -22,6 +22,8 @@ public class App  {
         webSocket("/game", World.class);
         init();
         System.out.println("[Server] Started");
+
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
