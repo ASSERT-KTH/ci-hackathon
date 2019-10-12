@@ -9,18 +9,20 @@ public class NewPlayerMessage extends AbstractMessage {
 	int color2;
 	double gravity;
 	double speed;
+	double maxSpeed;
 	int jump;
 	int h,w;
 	double x, y, dx, dy;
 	long score;
 
-	public NewPlayerMessage(int timestamp, int playerId, int color1, int color2, double gravity, double speed, int jump, int h, int w, double x, double y, double dx, double dy, long score) {
+	public NewPlayerMessage(int timestamp, int playerId, int color1, int color2, double gravity, double speed, double maxSpeed, int jump, int h, int w, double x, double y, double dx, double dy, long score) {
 		this.timestamp = timestamp;
 		this.playerId = playerId;
 		this.color1 = color1;
 		this.color2 = color2;
 		this.gravity = gravity;
 		this.speed = speed;
+		this.maxSpeed = maxSpeed;
 		this.jump = jump;
 		this.h = h;
 		this.w = w;
@@ -39,6 +41,7 @@ public class NewPlayerMessage extends AbstractMessage {
 		res.put("color2", color2);
 		res.put("gravity", gravity);
 		res.put("speed", speed);
+		res.put("maxSpeed", maxSpeed);
 		res.put("jump", jump);
 		res.put("x", x);
 		res.put("y", y);
@@ -56,7 +59,8 @@ public class NewPlayerMessage extends AbstractMessage {
 		this.color1 = in.getInt("color1");
 		this.color2 = in.getInt("color2");
 		this.gravity = in.getDouble("gravity");
-		this.speed = in.getInt("speed");
+		this.speed = in.getDouble("speed");
+		this.maxSpeed = in.getDouble("maxSpeed");
 		this.jump = in.getInt("jump");
 		this.x = in.getDouble("x");
 		this.y = in.getDouble("y");

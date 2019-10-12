@@ -37,6 +37,7 @@ public class PlayerRegistry {
 		Player player = new Player(nextID, col1, col2,
 				World.def_Player_Gravity,
 				World.def_Player_Speed,
+				World.def_Player_maxSpeed,
 				World.def_Player_Jump,
 				World.def_Player_h,
 				World.def_Player_w,

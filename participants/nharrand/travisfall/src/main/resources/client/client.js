@@ -26,7 +26,6 @@ var width = 1400,
     friction = 0.90,
     wallBump = 4,
     airFriction = 0.95,
-    maxDx = 8,
     maxSlidingDy = 8,
     maxDy = 20,
     wallJumpTolerance = 2,
@@ -44,7 +43,6 @@ function reset() {
     friction = 0.90;
     wallBump = 4;
     airFriction = 0.95;
-    maxDx = 8;
     maxSlidingDy = 8;
     maxDy = 20;
     wallJumpTolerance = 2;
@@ -157,6 +155,7 @@ function parseEvent(msg) {
             w: event.w,
             h: event.h,
             jump: event.jump,
+            maxSpeed: event.maxSpeed,
             speed: event.speed,
             gravity: event.gravity,
             dx: event.dx,
@@ -274,6 +273,7 @@ function cleanUp() {
     for (i in ephemerals) {
         let eph = ephemerals[i];
         if (eph.toRemove) {
+            eph.end(eph, players);
             delete ephemerals[i];
         }
     }
@@ -286,10 +286,10 @@ function processInputs() {
         if (doJump) {
             myPlayer.dy = -myPlayer.jump;
             if (!myPlayer.grounded && myPlayer.sliding_left) {
-                myPlayer.dx = 3 * maxDx;
+                myPlayer.dx = myPlayer.maxSpeed;
                 myPlayer.x += 2;
             } else if (!myPlayer.grounded && myPlayer.sliding_right) {
-                myPlayer.dx = -3 * maxDx;
+                myPlayer.dx = -myPlayer.maxSpeed;
                 myPlayer.x -= 2;
             }
             trajectoryChange();
@@ -328,7 +328,7 @@ function physic() {
     for (i in ephemerals) {
         var eph = ephemerals[i];
         if(eph.contact(eph, players.get(myId), players)) {
-            eph.apply(players.get(myId));
+            eph.apply(eph, players.get(myId));
         }
     }
 
@@ -390,10 +390,10 @@ function physic() {
         }
 
         //Cap horizontal speed
-        if (player.dx > maxDx) {
-            player.dx = maxDx;
-        } else if (player.dx < -maxDx) {
-            player.dx = -maxDx;
+        if (player.dx > player.maxSpeed) {
+            player.dx = player.maxSpeed;
+        } else if (player.dx < -player.maxSpeed) {
+            player.dx = -player.maxSpeed;
         }
 
         //Apply movement
@@ -533,7 +533,8 @@ function drawElements() {
 
 function power(player) {
     if(power_cd == power_cd_max) {
-        ephemerals.push(rayCreate(player, webSocket));
+        //ephemerals.push(rayCreate(player, webSocket));
+        ephemerals.push(dashCreate(player, webSocket));
         power_cd = 0;
     }
 }

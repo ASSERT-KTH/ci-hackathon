@@ -25,6 +25,7 @@ public class World {
 	public static  double def_Friction = 0.8;
 
 	public static double def_Player_Gravity = 0.8;
+	public static double def_Player_maxSpeed = 8;
 	public static double def_Player_Speed = 0.6;
 	public static int def_Player_Jump = 16;
 	public static double def_Player_x = 500;
@@ -83,8 +84,8 @@ public class World {
 
 
 		Block bottom = new Block(0x999999,def_Block_w, worldWidth, 0, def_Block_w, 770, 0, 0, 0);
-		Block left = new Block(0x999999, worldHeight+500, def_Block_w, 0, 0, -500, 0, 0, 0);
-		Block right = new Block(0x999999, worldHeight+500, def_Block_w, 0, worldWidth - def_Block_w, -500, 0, 0, 0);
+		Block left = new Block(0x999999, worldHeight+500, 10 * def_Block_w, 0, - 9 * def_Block_w, -500, 0, 0, 0);
+		Block right = new Block(0x999999, worldHeight+500, 10 * def_Block_w, 0, worldWidth - def_Block_w, -500, 0, 0, 0);
 
 		//blocks.add(bottom);
 		blocks.add(left);
