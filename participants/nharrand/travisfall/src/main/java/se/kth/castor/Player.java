@@ -24,7 +24,8 @@ public class Player {
 	public int h,w;
 	public double x, y, dx, dy;
 	public long score = 0;
-	public int cd;
+	public int kill = 0;
+	public int death = 0;
 	Session session;
 
 	public Player(int playerid, int color1, int color2, double gravity, double speed, double maxSpeed, int jump, int h, int w, double x, double y, double dx, double dy, Session session) {
@@ -46,7 +47,7 @@ public class Player {
 	}
 
 	public NewPlayerMessage getMessage(int timestamp) {
-		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed, maxSpeed,jump,h,w,x,y,dx,dy,score, nick);
+		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed, maxSpeed,jump,h,w,x,y,dx,dy,score, nick, kill, death);
 	}
 
 	public TrajectoryChangeMessage getTrajectoryChangeMessage(int timestamp) {

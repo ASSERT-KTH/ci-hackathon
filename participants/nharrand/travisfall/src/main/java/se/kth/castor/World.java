@@ -173,6 +173,7 @@ public class World {
 				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
 				if(user ==  p.session) {
+					p.death++;
 					registry.killPlayer(p, timestamp);
 					getInstance().registry.broadCastMessage(msg);
 					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");

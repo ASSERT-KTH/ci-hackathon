@@ -178,7 +178,9 @@ function parseEvent(msg) {
             color2: getColor(event.color2),
             nick: event.nick,
             score: event.score,
-            dead: false
+            dead: false,
+            kill: event.kill,
+            death: event.death
         });
         if(myId == event.playerId) {
             let colTd = document.getElementById('colors');
@@ -653,14 +655,16 @@ function power(player, pid) {
 function updateRanks(playerList) {
     let copy = playerList;
     copy.sort(comparePlayer);
-    let table = "<thead><td>Rank</td><td>Player</td></thead>";
+    let table = "<thead><td>Rank</td><td>&#x25a0;</td><td>Player</td><td>Kill</td><td>Death</td></thead>";
     let i = 1;
     for (j in copy) {
         let player = copy[j];
         let score = Math.round(player.score/fps);
         table += "<tr><td>" + i + "</td>";
         table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 + ";\">&#x25a0;</td>";
-        table += "<td>" + score + "</td></tr>";
+        table += "<td>" + player.nick + "</td>";
+        table += "<td>" + player.kill + "</td>";
+        table += "<td>" + player.death + "</td></tr>";
         i++;
     }
 

@@ -8,19 +8,8 @@ h1 {
     @media {}
 }
 
-p {
-    line-height: 1em;
-}
-
-div {
-    color: #fffbc9;
-    font-family: sans-serif;
-    line-height: 1em;
-    margin: 2%;
-}
-
 #canvas {
-    margin-left: 2%;
+    margin-top: 20px;
     background: linear-gradient(#80BCA3, #B6D8C0);
 }
 
@@ -58,4 +47,16 @@ progress[value] {
   /* Dimensions */
   width: 150px;
   height: 20px;
+}
+
+
+.left {
+    width: 1460px;
+    float: left;
+}
+
+.right {
+    min-width: 200px;
+    float: right;
+    margin-top: 28px;
 }
