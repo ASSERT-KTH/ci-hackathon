@@ -42,6 +42,31 @@ var width = 1400,
     power_type = 0,
     timestamp = 0;
 
+canvas.width = width;
+canvas.height = height;
+
+var now;
+var then = Date.now();
+var delta;
+
+//Keep track of keys
+document.body.addEventListener("keydown", function(e) {
+    //Disallow perma jump
+    if((e.keyCode == 32 || e.keyCode == 38) && !keys[e.keyCode]
+    && (players.get(myId).sliding_right || players.get(myId).sliding_left || players.get(myId).grounded)) {
+        doJump = true;
+    }
+    keys[e.keyCode] = true;
+});
+
+document.body.addEventListener("keyup", function(e) {
+    keys[e.keyCode] = false;
+});
+
+window.addEventListener("load", function() {
+    update();
+});
+
 function reset() {
     friction = 0.90;
     wallBump = 4;
@@ -63,46 +88,6 @@ function reset() {
     boxes = [];
     ephemerals = [];
     events = [];
-}
-
-
-canvas.width = width;
-canvas.height = height;
-
-function trajectoryChange() {
-    if (players.has(myId)) {
-        let player = players.get(myId);
-        webSocket.send(JSON.stringify({
-          t: 0,
-          playerId: myId,
-          timestamp: timestamp,
-          x: player.x,
-          y: player.y,
-          dx: player.dx,
-          dy: player.dy
-        }));
-    } else {
-        console.log("[trajectoryChange] no player: " + myId);
-    }
-}
-
-function iamDead() {
-    if (players.has(myId)) {
-        let player = players.get(myId);
-        webSocket.send(JSON.stringify({
-          t: 3,
-          playerId: myId,
-          timestamp: timestamp,
-          x: player.x,
-          y: player.y,
-          color1: player.color1,
-          color2: player.color2,
-          h: player.h,
-          w: player.w
-        }));
-    } else {
-        console.log("[iamDead] no player: " + myId);
-    }
 }
 
 function getColor(raw) {
@@ -216,12 +201,45 @@ function parseEvent(msg) {
      }
 }
 
+function trajectoryChange() {
+    if (players.has(myId)) {
+        let player = players.get(myId);
+        webSocket.send(JSON.stringify({
+          t: 0,
+          playerId: myId,
+          timestamp: timestamp,
+          x: player.x,
+          y: player.y,
+          dx: player.dx,
+          dy: player.dy
+        }));
+    } else {
+        console.log("[trajectoryChange] no player: " + myId);
+    }
+}
+
+function iamDead() {
+    if (players.has(myId)) {
+        let player = players.get(myId);
+        webSocket.send(JSON.stringify({
+          t: 3,
+          playerId: myId,
+          timestamp: timestamp,
+          x: player.x,
+          y: player.y,
+          color1: player.color1,
+          color2: player.color2,
+          h: player.h,
+          w: player.w
+        }));
+    } else {
+        console.log("[iamDead] no player: " + myId);
+    }
+}
+
 
 // ------------------------ Main loop ----------------------------- //
 
-var now;
-var then = Date.now();
-var delta;
 
 function update() {
     requestAnimationFrame(update);
@@ -250,6 +268,8 @@ function update() {
         if (timestamp % 3*fps == 0) {
             updateRanks(Array.from(players.values()));
         }
+
+        //Remove dead objects
         cleanUp();
 
         timestamp++;
@@ -536,30 +556,13 @@ function drawElements() {
 
 function power(player) {
     if(power_cd == power_cd_max) {
-        ephemerals.push(rayCreate(player, webSocket));
+        //ephemerals.push(rayCreate(player, webSocket));
         //ephemerals.push(dashCreate(player, webSocket));
+        ephemerals.push(stoprayCreate(player, webSocket));
         power_cd = 0;
         //audio_power.play();
     }
 }
-
-//Keep track of keys
-document.body.addEventListener("keydown", function(e) {
-    //Disallow perma jump
-    if((e.keyCode == 32 || e.keyCode == 38) && !keys[e.keyCode]
-    && (players.get(myId).sliding_right || players.get(myId).sliding_left || players.get(myId).grounded)) {
-        doJump = true;
-    }
-    keys[e.keyCode] = true;
-});
-
-document.body.addEventListener("keyup", function(e) {
-    keys[e.keyCode] = false;
-});
-
-window.addEventListener("load", function() {
-    update();
-});
 
 //Display scores
 function updateRanks(playerList) {

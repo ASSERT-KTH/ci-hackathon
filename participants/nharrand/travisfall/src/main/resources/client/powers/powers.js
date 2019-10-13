@@ -39,7 +39,26 @@ function createEphemeralFromMsg(event, ephemerals, players) {
             apply: dashApply,
             end: dashEnd
         });
-    }
+    } else if(event.type == 2 && players.has(event.playerId)) {
+             ephemerals.push({
+                 type: event.type,
+                 playerId: event.playerId,
+                 x: event.x,
+                 y: event.y,
+                 range: event.range,
+                 maxSize: event.maxSize,
+                 curSize: event.curSize,
+                 step: event.step,
+                 right: event.right,
+                 up: event.up,
+                 color: event.color,
+                 toRemove: event.toRemove,
+                contact: stoprayContact,
+                draw: stoprayDraw,
+                apply: stoprayApply,
+                end: stoprayEnd
+             });
+         }
 }
 
 //----------------- Killing ray --------------------------- //
@@ -154,6 +173,95 @@ function rayCreate(player, socket, timestamp) {
         draw: rayDraw,
         apply: rayApply,
         end: rayEnd
+   };
+}
+
+//----------------- Stop ray --------------------------- //
+
+function stoprayDraw(eph, ctx, width, players) {
+    let player = players.get(eph.playerId);
+
+    rayDrawLayer(ctx, player, eph.curSize, eph, eph.color, width);
+    if(eph.curSize > 2) {
+        rayDrawLayer(ctx, player, eph.curSize-2, eph, '#FFFFFF', width);
+    }
+
+    if(eph.up) {
+        if(eph.curSize < eph.maxSize) {
+            eph.curSize += eph.step;
+        } else {
+            eph.up = false
+        }
+    } else {
+        if(eph.curSize > 0) {
+            eph.curSize -= 1;
+        } else {
+            eph.toRemove = true;
+        }
+    }
+}
+
+function stoprayContact(eph, other, players) {
+    let player = players.get(eph.playerId);
+    let x = player.x;
+    let y0 = player.y + 0.5 * player.h - eph.curSize;
+    let y1 = player.y + 0.5 * player.h + eph.curSize;
+
+    let xCol = (((other.x + other.w) > (x - eph.range) && other.x < x && !eph.right)
+                || (other.x < (x + eph.range) && other.x > x && eph.right));
+   let yCol = ((other.y > y0 && other.y < y1)
+                || ((other.y + other.h) > y0 && (other.y + other.h) < y1)
+                || (other.y < y0 && (other.y + other.h) > y1));
+
+    return xCol && yCol;
+}
+
+function stoprayApply(eph, player) {
+    //iamDead();
+    player.dx = 0;
+    if(player.dy < 0) {
+        player.dy = 0;
+    }
+    trajectoryChange();
+}
+
+function stoprayEnd(eph, players) {
+
+}
+
+function stoprayCreate(player, socket, timestamp) {
+    socket.send(JSON.stringify({
+      t: 6,
+      type: 2,
+      playerId: player.id,
+      x: player.x,
+      y: player.y,
+      range: 1000,
+      maxSize: 4,
+      curSize: 0,
+      step: 2,
+      right: right,
+      up: true,
+      color: '#00FF00',
+      toRemove: false
+    }));
+    return {
+        type: 2,
+        playerId: player.id,
+        x: player.x,
+        y: player.y,
+        range: 1000,
+        maxSize: 4,
+        curSize: 0,
+        step: 2,
+        right: right,
+        up: true,
+        color: '#00FF00',
+        toRemove: false,
+        contact: stoprayContact,
+        draw: stoprayDraw,
+        apply: stoprayApply,
+        end: stoprayEnd
    };
 }
 
