@@ -31,6 +31,10 @@ public class PlayerRegistry {
 		p.status = 0;
 	}
 
+	public void removePlayer(Player p) {
+		players.remove(p.session);
+	}
+
 	public Player createNewPlayer(Session session, int x) {
 		int col1 = r.nextInt(256*256*256-1);
 		int col2 = r.nextInt(256*256*256-1);

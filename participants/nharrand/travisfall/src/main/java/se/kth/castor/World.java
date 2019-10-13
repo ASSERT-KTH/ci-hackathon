@@ -190,6 +190,7 @@ public class World {
 				RequestForLifeMessage rflm = (RequestForLifeMessage) msg;
 				p.nick = rflm.nick;
 				p.status = 1;
+				p.deathAck = false;
 				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
 				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
 					AbstractMessage.sendTo(user, m);
@@ -251,18 +252,25 @@ public class World {
 
 		//checkCollision();
 		for (Player p: registry.players.values()) {
-			if(p.heartbeat == 0) {
-				registry.killPlayer(p, timestamp);
-				registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
-			} else {
-				p.heartbeat--;
-			}
-			if (p.y > (worldHeight + 200)) {
-				System.out.println("[World] Player " + p.playerid + " died!!!!");
-				registry.killPlayer(p, timestamp);
-				registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
-			} else {
-				p.score++;
+			if (!p.deathAck) {
+				if (p.heartbeat == 0) {
+					registry.killPlayer(p, timestamp);
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					p.deathAck = true;
+				} else {
+					p.heartbeat--;
+				}
+				if (p.y > (worldHeight + 200)) {
+					System.out.println("[World] Player " + p.playerid + " died!!!!");
+					registry.killPlayer(p, timestamp);
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					p.deathAck = true;
+				} else {
+					p.score++;
+				}
+				if(!p.session.isOpen()) {
+					registry.removePlayer(p);
+				}
 			}
 		}
 

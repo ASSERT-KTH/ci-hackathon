@@ -64,11 +64,12 @@ function createEphemeralFromMsg(event, ephemerals, players) {
 //----------------- Killing ray --------------------------- //
 
 function rayDraw(eph, ctx, width, players) {
-    let player = players.get(eph.playerId);
-
-    rayDrawLayer(ctx, player, eph.curSize, eph, eph.color, width);
-    if(eph.curSize > 6) {
-        rayDrawLayer(ctx, player, eph.curSize-5, eph, '#FFFFFF', width);
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
+        rayDrawLayer(ctx, player, eph.curSize, eph, eph.color, width);
+        if(eph.curSize > 3) {
+            rayDrawLayer(ctx, player, eph.curSize - 3, eph, '#FFFFFF', width);
+        }
     }
 
     if(eph.up) {
@@ -118,18 +119,22 @@ function rayDrawLayer(ctx, player, layerSize, eph, color, width) {
 }
 
 function rayContact(eph, other, players) {
-    let player = players.get(eph.playerId);
-    let x = player.x;
-    let y0 = player.y + 0.5 * player.h - eph.curSize;
-    let y1 = player.y + 0.5 * player.h + eph.curSize;
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
+        let x = player.x;
+        let y0 = player.y + 0.5 * player.h - eph.curSize;
+        let y1 = player.y + 0.5 * player.h + eph.curSize;
 
-    let xCol = (((other.x + other.w) > (x - eph.range) && other.x < x && !eph.right)
-                || (other.x < (x + eph.range) && other.x > x && eph.right));
-   let yCol = ((other.y > y0 && other.y < y1)
-                || ((other.y + other.h) > y0 && (other.y + other.h) < y1)
-                || (other.y < y0 && (other.y + other.h) > y1));
+        let xCol = (((other.x + other.w) > (x - eph.range) && other.x < x && !eph.right)
+                    || (other.x < (x + eph.range) && other.x > x && eph.right));
+       let yCol = ((other.y > y0 && other.y < y1)
+                    || ((other.y + other.h) > y0 && (other.y + other.h) < y1)
+                    || (other.y < y0 && (other.y + other.h) > y1));
 
-    return xCol && yCol;
+        return xCol && yCol;
+    } else {
+        return false;
+    }
 }
 
 function rayApply(eph, player) {
@@ -179,11 +184,13 @@ function rayCreate(player, socket, timestamp) {
 //----------------- Stop ray --------------------------- //
 
 function stoprayDraw(eph, ctx, width, players) {
-    let player = players.get(eph.playerId);
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
 
-    rayDrawLayer(ctx, player, eph.curSize, eph, eph.color, width);
-    if(eph.curSize > 2) {
-        rayDrawLayer(ctx, player, eph.curSize-2, eph, '#FFFFFF', width);
+        rayDrawLayer(ctx, player, eph.curSize, eph, eph.color, width);
+        if(eph.curSize > 2) {
+            rayDrawLayer(ctx, player, eph.curSize-2, eph, '#FFFFFF', width);
+        }
     }
 
     if(eph.up) {
@@ -202,18 +209,22 @@ function stoprayDraw(eph, ctx, width, players) {
 }
 
 function stoprayContact(eph, other, players) {
-    let player = players.get(eph.playerId);
-    let x = player.x;
-    let y0 = player.y + 0.5 * player.h - eph.curSize;
-    let y1 = player.y + 0.5 * player.h + eph.curSize;
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
+        let x = player.x;
+        let y0 = player.y + 0.5 * player.h - eph.curSize;
+        let y1 = player.y + 0.5 * player.h + eph.curSize;
 
-    let xCol = (((other.x + other.w) > (x - eph.range) && other.x < x && !eph.right)
+        let xCol = (((other.x + other.w) > (x - eph.range) && other.x < x && !eph.right)
                 || (other.x < (x + eph.range) && other.x > x && eph.right));
-   let yCol = ((other.y > y0 && other.y < y1)
+        let yCol = ((other.y > y0 && other.y < y1)
                 || ((other.y + other.h) > y0 && (other.y + other.h) < y1)
                 || (other.y < y0 && (other.y + other.h) > y1));
 
-    return xCol && yCol;
+        return xCol && yCol;
+   } else {
+       return false;
+   }
 }
 
 function stoprayApply(eph, player) {
@@ -267,68 +278,72 @@ function stoprayCreate(player, socket, timestamp) {
 //----------------- Dash --------------------------- //
 
 function dashDraw(eph, ctx, width, players) {
-    let player = players.get(eph.playerId);
-    let overf = 20;
-    if(eph.curSize == 0) {
-        eph.x = player.x;
-        eph.y = player.y;
-        player.maxSpeed = 20;
-    }
-
-    if(eph.curSize < eph.maxSize) {
-
-        ctx.fillStyle = eph.color;
-        if(eph.right) {
-            player.dx = player.maxSpeed;
-            player.dy = -player.gravity;
-
-            ctx.beginPath();
-            ctx.arc(player.x + (player.w * 0.5), player.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
-            ctx.fill();
-
-            //ctx.fillRect(eph.x + (player.w * 0.5), eph.y - overf, player.x - eph.x, player.h + 2 * overf);
-            ctx.beginPath();
-            ctx.moveTo(player.x + (player.w * 0.5), player.y - overf);
-            ctx.lineTo(player.x + (player.w * 0.5), player.y + player.h + overf);
-            ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) + 3);
-            ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) - 3);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.beginPath();
-            //ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
-            ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 3, 0, 2 * Math.PI);
-            ctx.fill();
-        } else {
-            player.dx = -player.maxSpeed;
-            player.dy = -player.gravity;
-
-            ctx.beginPath();
-            ctx.arc(player.x + (player.w * 0.5), player.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
-            ctx.fill();
-
-            //ctx.fillRect(eph.x + (player.w * 0.5), player.y - overf, player.x - eph.x, player.h + 2 * overf);
-            ctx.beginPath();
-            ctx.moveTo(player.x + (player.w * 0.5), player.y - overf);
-            ctx.lineTo(player.x + (player.w * 0.5), player.y + player.h + overf);
-            ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) + 3);
-            ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) - 3);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.beginPath();
-            //ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
-            ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 3, 0, 2 * Math.PI);
-            ctx.fill();
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
+        let overf = 20;
+        if(eph.curSize == 0) {
+            eph.x = player.x;
+            eph.y = player.y;
+            player.maxSpeed = 20;
         }
-        eph.curSize += eph.step;
+
+        if(eph.curSize < eph.maxSize) {
+
+            ctx.fillStyle = eph.color;
+            if(eph.right) {
+                player.dx = player.maxSpeed;
+                player.dy = -player.gravity;
+
+                ctx.beginPath();
+                ctx.arc(player.x + (player.w * 0.5), player.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
+                ctx.fill();
+
+                //ctx.fillRect(eph.x + (player.w * 0.5), eph.y - overf, player.x - eph.x, player.h + 2 * overf);
+                ctx.beginPath();
+                ctx.moveTo(player.x + (player.w * 0.5), player.y - overf);
+                ctx.lineTo(player.x + (player.w * 0.5), player.y + player.h + overf);
+                ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) + 3);
+                ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) - 3);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.beginPath();
+                //ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
+                ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 3, 0, 2 * Math.PI);
+                ctx.fill();
+            } else {
+                player.dx = -player.maxSpeed;
+                player.dy = -player.gravity;
+
+                ctx.beginPath();
+                ctx.arc(player.x + (player.w * 0.5), player.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
+                ctx.fill();
+
+                //ctx.fillRect(eph.x + (player.w * 0.5), player.y - overf, player.x - eph.x, player.h + 2 * overf);
+                ctx.beginPath();
+                ctx.moveTo(player.x + (player.w * 0.5), player.y - overf);
+                ctx.lineTo(player.x + (player.w * 0.5), player.y + player.h + overf);
+                ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) + 3);
+                ctx.lineTo(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h) - 3);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.beginPath();
+                //ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 0.5 * player.w + overf, 0, 2 * Math.PI);
+                ctx.arc(eph.x + (player.w * 0.5), eph.y + (0.5 * player.h), 3, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            eph.curSize += eph.step;
+        } else {
+            eph.toRemove = true;
+        }
     } else {
         eph.toRemove = true;
     }
 }
 
 function dashContact(eph, other, players) {
-    if(other.id != eph.playerId) {
+    if(players.has(eph.playerId) && other.id != eph.playerId) {
         let player = players.get(eph.playerId);
         let cx = player.x + player.w / 2;
         let cy = player.y + player.h / 2;
@@ -349,12 +364,14 @@ function dashApply(eph, player) {
 }
 
 function dashEnd(eph, players) {
-    let player = players.get(eph.playerId);
-    player.maxSpeed = 8;
-    if(eph.right) {
-        player.dx = 0;
-    } else {
-        player.dx = 0;
+    if(players.has(eph.playerId)) {
+        let player = players.get(eph.playerId);
+        player.maxSpeed = 8;
+        if(eph.right) {
+            player.dx = 0;
+        } else {
+            player.dx = 0;
+        }
     }
 }
 

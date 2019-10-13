@@ -57,6 +57,7 @@ var delta;
 document.body.addEventListener("keydown", function(e) {
     //Disallow perma jump
     if((e.keyCode == 32 || e.keyCode == 38) && !keys[e.keyCode]
+    && (players.has(myId))
     && (players.get(myId).sliding_right || players.get(myId).sliding_left || players.get(myId).grounded)) {
         doJump = true;
     }
@@ -223,12 +224,12 @@ function parseEvent(msg) {
          createEphemeralFromMsg(event, ephemerals, players);
     } else if (event.t == 255) {
         //HeartbeatMessage
-        console.log("[Server] heartbeat();")
+        //console.log("[Server] heartbeat();")
     }
 }
 
 function heartbeat() {
-    console.log("[Client] heartbeat();")
+    //console.log("[Client] heartbeat();")
     let msg = {
         t: 255,
         trajectory: {}
@@ -413,7 +414,7 @@ function processInputs() {
 }
 
 function physic() {
-    if (alive) {
+    if (alive && players.has(myId)) {
         if(players.get(myId).y > (height + 100)) {
             iamDead();
         }
@@ -421,7 +422,7 @@ function physic() {
 
     for (i in ephemerals) {
         var eph = ephemerals[i];
-        if(alive && eph.contact(eph, players.get(myId), players)) {
+        if(alive && players.has(myId) && eph.contact(eph, players.get(myId), players)) {
             eph.apply(eph, players.get(myId));
         }
     }
@@ -654,7 +655,7 @@ function updateRanks(playerList) {
         let player = copy[j];
         let score = Math.round(player.score/fps);
         table += "<tr><td>" + i + "</td>";
-        table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 +";\">&#x25a0;</td>";
+        table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 + ";\">&#x25a0;</td>";
         table += "<td>" + score + "</td></tr>";
         i++;
     }

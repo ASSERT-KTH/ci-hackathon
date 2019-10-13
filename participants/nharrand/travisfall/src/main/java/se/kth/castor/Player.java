@@ -12,6 +12,7 @@ public class Player {
 	public String nick;
 	public int heartbeat = TIMEOUT;
 	public int status = 0;
+	public boolean deathAck = false;
 
 	public int playerid;
 	public int color1;
