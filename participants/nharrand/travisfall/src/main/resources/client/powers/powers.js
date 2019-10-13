@@ -368,9 +368,9 @@ function dashEnd(eph, players) {
         let player = players.get(eph.playerId);
         player.maxSpeed = 8;
         if(eph.right) {
-            player.dx = 0;
+            //player.dx = 0;
         } else {
-            player.dx = 0;
+            //player.dx = 0;
         }
     }
 }
