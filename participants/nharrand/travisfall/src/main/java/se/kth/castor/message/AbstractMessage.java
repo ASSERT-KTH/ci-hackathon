@@ -4,6 +4,11 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.DelayQueue;
 
 
 public abstract class AbstractMessage {
@@ -64,12 +69,23 @@ public abstract class AbstractMessage {
 	}
 
 	public static void sendTo(Session session, AbstractMessage message) {
-		try {
-			if(session.isOpen()) {
-				session.getRemote().sendString(message.toJSONString());
+			messagesToSend.add(new HashMap.SimpleEntry<>(session, message));
+	}
+
+	static ConcurrentLinkedQueue<Map.Entry<Session, AbstractMessage>> messagesToSend = new ConcurrentLinkedQueue<>();
+
+	public synchronized static void sendMessages() {
+		while (!messagesToSend.isEmpty()) {
+			Map.Entry<Session, AbstractMessage> e = messagesToSend.poll();
+			Session session = e.getKey();
+			AbstractMessage message = e.getValue();
+			try {
+				if (session.isOpen()) {
+					session.getRemote().sendString(message.toJSONString());
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

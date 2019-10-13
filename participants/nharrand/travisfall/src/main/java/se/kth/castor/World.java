@@ -238,6 +238,8 @@ public class World {
 	Random r = new Random();
 
 	public void tic() {
+		AbstractMessage.sendMessages();
+
 		for (Block b : blocks.clone()) {
 			//b.dy += b.gravity;
 			b.y += b.gravity;
