@@ -7,6 +7,11 @@ import se.kth.castor.message.PlayerDeathMessage;
 import se.kth.castor.message.TrajectoryChangeMessage;
 
 public class Player {
+	public static int TIMEOUT = 5*30;
+
+	public String name;
+	public int heartbeat = TIMEOUT;
+
 	public int playerid;
 	public int color1;
 	public int color2;

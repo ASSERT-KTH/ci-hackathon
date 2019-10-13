@@ -217,7 +217,6 @@ function stoprayContact(eph, other, players) {
 }
 
 function stoprayApply(eph, player) {
-    //iamDead();
     player.dx = 0;
     if(player.dy < 0) {
         player.dy = 0;

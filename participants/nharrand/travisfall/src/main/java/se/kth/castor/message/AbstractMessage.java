@@ -14,6 +14,7 @@ public abstract class AbstractMessage {
 	public static final int IdAssignementMessage = 4;
 	public static final int DeleteBoxMessage = 5;
 	public static final int EphemeralMessage = 6;
+	public static final int HeartbeatMessage = 255;
 
 
 	public abstract JSONObject toJSON();

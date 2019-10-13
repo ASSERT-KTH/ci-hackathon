@@ -4,9 +4,7 @@
 })();
 
 //Establish the WebSocket connection and set up event handlers
-var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/game/");
-    webSocket.onmessage = function (msg) { events.push(msg) };
-    webSocket.onclose = function () { alert("WebSocket connection closed") };
+var webSocket = null;
 
 
 
@@ -17,6 +15,9 @@ var canvas = document.getElementById("canvas"),
     boxes = [],
     ephemerals = [],
     events = [];
+
+var state = 0;
+var nick;
 
 //var audio_power = new Audio('sound/power.mp3');
 //var audio_choc = new Audio('sound/choc.mp3');
@@ -64,8 +65,26 @@ document.body.addEventListener("keyup", function(e) {
 });
 
 window.addEventListener("load", function() {
-    update();
+    init();
+    //update();
 });
+
+function init() {
+    //Enter Init
+    nick = prompt("Please choose a name", "anonymous");
+    reset();
+    webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/game/");
+    webSocket.onmessage = function (msg) { events.push(msg) };
+    webSocket.onclose = function () { alert("WebSocket connection closed") };
+
+    //Transition to idle
+    state = 1;
+    //Start heartbeat
+    setInterval(heartbeat(), 1000);
+
+    //Start rendering
+    update();
+}
 
 function reset() {
     friction = 0.90;
@@ -74,7 +93,7 @@ function reset() {
     maxSlidingDy = 8;
     maxDy = 20;
     wallJumpTolerance = 2;
-    myId = 0;
+    //myId = 0;
     canJump = false;
     doJump = false;
     right = false;
@@ -116,7 +135,6 @@ function parseEvent(msg) {
         } else {
             console.log("[parseEvent][TrajectoryChange] no player: " + myId);
         }
-
     } else if (event.t == 1) {
         //log("box");
         //NewBlockMessageType
@@ -198,7 +216,17 @@ function parseEvent(msg) {
     } else if (event.t == 6) {
          //EphemeralMessage
          createEphemeralFromMsg(event, ephemerals, players);
-     }
+    } else if (event.t == 255) {
+        //HeartbeatMessage
+    }
+}
+
+function heartbeat() {
+    if(status > 0) {
+        if (alive) {
+            trajectoryChange();
+        }
+    }
 }
 
 function trajectoryChange() {
@@ -350,7 +378,7 @@ function physic() {
 
     for (i in ephemerals) {
         var eph = ephemerals[i];
-        if(eph.contact(eph, players.get(myId), players)) {
+        if(alive && eph.contact(eph, players.get(myId), players)) {
             eph.apply(eph, players.get(myId));
         }
     }
