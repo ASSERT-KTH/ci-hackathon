@@ -6,6 +6,7 @@ public class Colors {
 		int col;
 		switch (lang) {
 			case "java":
+			case "android":
 				col = 0x4444AA;
 				break;
 			case "node_js":
@@ -45,6 +46,8 @@ public class Colors {
 			case "bash":
 				col = 0x5555EE;
 				break;
+			case "":
+			case "minimal"://not sure what this is
 			case "shell":
 			case "sh":
 				col = 0xEE5555;

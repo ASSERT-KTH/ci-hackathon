@@ -331,6 +331,10 @@ function update() {
         if (timestamp % fps == 0) {
             updateRanks(Array.from(players.values()));
             heartbeat();
+
+            for (let player of players.values()) {
+                player.score++;
+            }
         }
 
         //Remove dead objects
@@ -441,7 +445,6 @@ function physic() {
     canJump = false;
 
     for (let player of players.values()) {
-        player.score++;
 
         //Reset context
         player.grounded = false;
@@ -655,7 +658,7 @@ function power(player, pid) {
 function updateRanks(playerList) {
     let copy = playerList;
     copy.sort(comparePlayer);
-    let table = "<thead><td>Rank</td><td>&#x25a0;</td><td>Player</td><td>Kill</td><td>Death</td></thead>";
+    let table = "<thead><td>Rank</td><td>&#x25a0;</td><td>Player</td><td>Score</td></thead>";//<td>Kill</td><td>Death</td>
     let i = 1;
     for (j in copy) {
         let player = copy[j];
@@ -663,8 +666,9 @@ function updateRanks(playerList) {
         table += "<tr><td>" + i + "</td>";
         table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 + ";\">&#x25a0;</td>";
         table += "<td>" + player.nick + "</td>";
-        table += "<td>" + player.kill + "</td>";
-        table += "<td>" + player.death + "</td></tr>";
+        table += "<td>" + player.score + "</td></tr>";
+        //table += "<td>" + player.kill + "</td>";
+        //table += "<td>" + player.death + "</td></tr>";
         i++;
     }
 

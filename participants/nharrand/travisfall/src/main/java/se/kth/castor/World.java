@@ -267,7 +267,9 @@ public class World {
 					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
 					p.deathAck = true;
 				} else {
-					p.score++;
+					if(timestamp % 30 == 0) {
+						p.score++;
+					}
 				}
 				if(!p.session.isOpen()) {
 					registry.removePlayer(p);
