@@ -633,9 +633,9 @@ function drawElements() {
 
 function power(player, pid) {
     if(pid == 1 && power_cd == power_cd_max) {
-        //ephemerals.push(rayCreate(player, webSocket));
+        ephemerals.push(rayCreate(player, webSocket));
         //ephemerals.push(dashCreate(player, webSocket));
-        ephemerals.push(stoprayCreate(player, webSocket));
+        //ephemerals.push(stoprayCreate(player, webSocket));
         power_cd = 0;
         //audio_power.play();
     } else if(pid == 2 && power2_cd == power2_cd_max) {
