@@ -264,7 +264,7 @@ function dashCreate(player, socket, timestamp) {
       step: 1,
       right: right,
       up: true,
-      color: '#0000FF',
+      color: '#42e6f5',
       toRemove: false
     }));
     return {
@@ -279,7 +279,7 @@ function dashCreate(player, socket, timestamp) {
         step: 1,
         right: right,
         up: true,
-        color: '#f5e642',
+        color: '#42e6f5',
         toRemove: false,
         contact: dashContact,
         draw: dashDraw,

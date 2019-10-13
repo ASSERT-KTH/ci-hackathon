@@ -17,6 +17,7 @@ public class Colors {
 			case "c":
 				col = 0x44AAAA;
 				break;
+			case "c++":
 			case "cpp":
 				col = 0xAA44AA;
 				break;
@@ -35,7 +36,6 @@ public class Colors {
 			case "generic":
 				col = 0xEE55EE;
 				break;
-
 			case "ruby":
 				col = 0xEEEE55;
 				break;
@@ -45,8 +45,27 @@ public class Colors {
 			case "bash":
 				col = 0x5555EE;
 				break;
+			case "shell":
 			case "sh":
 				col = 0xEE5555;
+				break;
+			case "r":
+				col = 0x55EE55;
+				break;
+			case "scala":
+				col = 0x555555;
+				break;
+			case "objective-c":
+				col = 0xEEAA55;
+				break;
+			case "julia":
+				col = 0xEE55AA;
+				break;
+			case "perl":
+				col = 0xAAEE55;
+				break;
+			case "csharp":
+				col = 0xAA55EE;
 				break;
 
 			default:

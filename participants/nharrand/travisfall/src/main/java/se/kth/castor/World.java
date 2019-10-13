@@ -114,7 +114,8 @@ public class World {
 		int timestamp = 0;
 
 		List<AbstractMessage> messages = new ArrayList<>();
-		registry.players.values().stream().map(p -> p.getMessage(timestamp)).forEach(m -> messages.add(m));
+		System.out.println("[World] getCurrentWorldStatus: " + registry.players.values().size() + " players.");
+		registry.players.values().stream().filter(p -> p.session.isOpen()).map(p -> p.getMessage(timestamp)).forEach(m -> messages.add(m));
 		blocks.stream().map(b -> b.getMessage(timestamp)).forEach(m -> messages.add(m));
 
 		return messages;
@@ -142,10 +143,10 @@ public class World {
 
 	@OnWebSocketMessage
 	public void onMessage(Session user, String message) {
-		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": \"" + message + "\"");
+		//System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": \"" + message + "\"");
 		try {
 			AbstractMessage msg = AbstractMessage.parseMessage(message);
-			System.out.println("[AbstractMessage] parsed " + msg.getClass().getName());
+			//System.out.println("[AbstractMessage] parsed " + msg.getClass().getName());
 			if(msg instanceof TrajectoryChangeMessage) {
 				TrajectoryChangeMessage tcm = (TrajectoryChangeMessage) msg;
 				getInstance().registry.broadCastMessageMinusSender(msg, user);
@@ -202,7 +203,7 @@ public class World {
 			b.y += b.gravity;
 			if (b.y > worldHeight) {
 				blocks.remove(b);
-				System.out.println("[World] remove block at (" + b.x + ", " + b.y + ")");
+				//System.out.println("[World] remove block at (" + b.x + ", " + b.y + ")");
 			}
 		}
 

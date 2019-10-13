@@ -18,6 +18,9 @@ var canvas = document.getElementById("canvas"),
     ephemerals = [],
     events = [];
 
+//var audio_power = new Audio('sound/power.mp3');
+//var audio_choc = new Audio('sound/choc.mp3');
+
 const fps = 30;
 const interval = 1000/fps;
 
@@ -533,9 +536,10 @@ function drawElements() {
 
 function power(player) {
     if(power_cd == power_cd_max) {
-        //ephemerals.push(rayCreate(player, webSocket));
-        ephemerals.push(dashCreate(player, webSocket));
+        ephemerals.push(rayCreate(player, webSocket));
+        //ephemerals.push(dashCreate(player, webSocket));
         power_cd = 0;
+        //audio_power.play();
     }
 }
 
