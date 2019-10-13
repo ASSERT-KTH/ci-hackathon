@@ -138,7 +138,9 @@ function rayContact(eph, other, players) {
 }
 
 function rayApply(eph, player) {
-    iamDead();
+    if(!isInvu) {
+        iamDead();
+    }
 }
 
 function rayEnd(eph, players) {
@@ -278,6 +280,9 @@ function stoprayCreate(player, socket, timestamp) {
 //----------------- Dash --------------------------- //
 
 function dashDraw(eph, ctx, width, players) {
+    if(eph.playerId == myId) {
+        isInvu = true;
+    }
     if(players.has(eph.playerId)) {
         let player = players.get(eph.playerId);
         let overf = 20;
@@ -364,6 +369,9 @@ function dashApply(eph, player) {
 }
 
 function dashEnd(eph, players) {
+    if(eph.playerId == myId) {
+        isInvu = false;
+    }
     if(players.has(eph.playerId)) {
         let player = players.get(eph.playerId);
         player.maxSpeed = 8;

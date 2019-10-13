@@ -7,6 +7,9 @@
 var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/game/");
     webSocket.onmessage = function (msg) { events.push(msg) };
     webSocket.onclose = function () { alert("WebSocket connection closed") };
+    webSocket.addEventListener('open', function (event) {
+        init();
+    });
 
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d"),
@@ -38,6 +41,7 @@ var width = 1400,
     doJump = false,
     right = false,
     alive = false,
+    isInvu = false,
     power_cd = 2 * fps,
     power_cd_max = 2 * fps,
     power2_cd = 3 * fps,
@@ -69,7 +73,7 @@ document.body.addEventListener("keyup", function(e) {
 });
 
 window.addEventListener("load", function() {
-    init();
+    //init();
     //update();
 });
 
@@ -100,6 +104,7 @@ function reset() {
     doJump = false;
     right = false;
     alive = false;
+    isInvu = false;
     power_cd = 2 * fps;
     power_cd_max = 2 * fps;
     power_type = 0;
@@ -341,12 +346,11 @@ function cleanUp() {
     }
     for (i in boxes) {
         let box = boxes[i];
-        if(box.ttl > 0) {
+        if (boxes[i].dead) {
+            delete boxes[i];
+        } else if(box.ttl > 0) {
             box.ttl--;
         } else if (box.ttl == 0) {
-            delete boxes[i];
-        }
-        if (boxes[i].dead) {
             delete boxes[i];
         }
     }
