@@ -25,6 +25,6 @@ public class DeleteBoxMessage extends AbstractMessage {
 
 	@Override
 	public int getType() {
-		return AbstractMessage.DeleteBoxMessage;
+		return AbstractMessage.DeleteBoxMessageType;
 	}
 }

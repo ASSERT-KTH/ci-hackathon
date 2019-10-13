@@ -27,10 +27,11 @@ public class PlayerRegistry {
 
 	public void killPlayer(Player p, int timestamp) {
 		//broadCastMessage(p.getPlayerDeathMessage(timestamp));
-		players.remove(p.session);
+		//players.remove(p.session);
+		p.status = 0;
 	}
 
-	public Player createNewPlayer(Session session) {
+	public Player createNewPlayer(Session session, int x) {
 		int col1 = r.nextInt(256*256*256-1);
 		int col2 = r.nextInt(256*256*256-1);
 
@@ -41,7 +42,7 @@ public class PlayerRegistry {
 				World.def_Player_Jump,
 				World.def_Player_h,
 				World.def_Player_w,
-				World.def_Player_x,
+				x,
 				World.def_Player_y,
 				World.def_Player_dx,
 				World.def_Player_dy,

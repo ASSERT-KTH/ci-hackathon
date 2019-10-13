@@ -35,3 +35,27 @@ body {
     background-color: #660000;
     color: #fffbc9;
 }
+
+#colors {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+}
+
+#sq {
+    vertical-align: middle;
+}
+
+
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  /* Get rid of default border in Firefox. */
+  border: none;
+  /* Dimensions */
+  width: 150px;
+  height: 20px;
+}

@@ -5,10 +5,13 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.JSONObject;
 import se.kth.castor.message.AbstractMessage;
 import se.kth.castor.message.EphemeralMessage;
+import se.kth.castor.message.HeartbeatMessage;
 import se.kth.castor.message.MessageParsingException;
 import se.kth.castor.message.PlayerDeathMessage;
+import se.kth.castor.message.RequestForLifeMessage;
 import se.kth.castor.message.TrajectoryChangeMessage;
 
 import java.util.ArrayDeque;
@@ -91,7 +94,7 @@ public class World {
 		blocks.add(left);
 		blocks.add(right);
 
-		blocks.add(b0);
+		/*blocks.add(b0);
 		blocks.add(b1);
 		blocks.add(b2);
 
@@ -101,7 +104,7 @@ public class World {
 
 		blocks.add(b01);
 		blocks.add(b11);
-		blocks.add(b21);
+		blocks.add(b21);*/
 
 
 		//blocks.add(b4);
@@ -115,7 +118,7 @@ public class World {
 
 		List<AbstractMessage> messages = new ArrayList<>();
 		System.out.println("[World] getCurrentWorldStatus: " + registry.players.values().size() + " players.");
-		registry.players.values().stream().filter(p -> p.session.isOpen()).map(p -> p.getMessage(timestamp)).forEach(m -> messages.add(m));
+		registry.players.values().stream().filter(p -> p.session.isOpen() && p.status > 0).map(p -> p.getMessage(timestamp)).forEach(m -> messages.add(m));
 		blocks.stream().map(b -> b.getMessage(timestamp)).forEach(m -> messages.add(m));
 
 		return messages;
@@ -123,13 +126,12 @@ public class World {
 
 	@OnWebSocketConnect
 	public void onConnect(Session user) throws Exception {
-		Player p = getInstance().registry.createNewPlayer(user);
-		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": connected");
-		AbstractMessage.sendTo(p.session, p.getIdAssignementMessage(getTimestamp()));
-		getInstance().registry.broadCastMessageMinusSender(p.getMessage(getTimestamp()), user);
-		for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
-			AbstractMessage.sendTo(p.session, m);
-		}
+		System.out.println("[WS] New user: connected");
+
+		//AbstractMessage.sendTo(p.session, p.getIdAssignementMessage(getTimestamp()));
+		//getInstance().registry.broadCastMessageMinusSender(p.getMessage(getTimestamp()), user);
+
+
 	}
 
 	@OnWebSocketClose
@@ -137,8 +139,25 @@ public class World {
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": leaving");
 		Player p = getInstance().registry.getPlayer(user);
 		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp());
+		int status = p.status;
 		getInstance().registry.killPlayer(p, timestamp);
-		getInstance().registry.broadCastMessage(pdm);
+
+		if(status > 0) {
+			getInstance().registry.broadCastMessage(pdm);
+		}
+	}
+
+	public void handleTrajectoryChangeMessage(Session user, TrajectoryChangeMessage tcm) {
+		getInstance().registry.broadCastMessageMinusSender(tcm, user);
+		AbstractMessage.sendTo(user, new HeartbeatMessage());
+
+		//trusting clients...
+		Player p = getInstance().registry.getPlayer(tcm.playerId);
+		p.x = tcm.x;
+		p.y = tcm.y;
+		p.dx = tcm.dx;
+		p.dy = tcm.dy;
+		p.heartbeat = Player.TIMEOUT;
 	}
 
 	@OnWebSocketMessage
@@ -149,14 +168,7 @@ public class World {
 			//System.out.println("[AbstractMessage] parsed " + msg.getClass().getName());
 			if(msg instanceof TrajectoryChangeMessage) {
 				TrajectoryChangeMessage tcm = (TrajectoryChangeMessage) msg;
-				getInstance().registry.broadCastMessageMinusSender(msg, user);
-
-				//trusting clients...
-				Player p = getInstance().registry.getPlayer(tcm.playerId);
-				p.x = tcm.x;
-				p.y = tcm.y;
-				p.dx = tcm.dx;
-				p.dy = tcm.dy;
+				handleTrajectoryChangeMessage(user, tcm);
 			} else if (msg instanceof PlayerDeathMessage) {
 				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
@@ -167,6 +179,34 @@ public class World {
 				}
 			} else if (msg instanceof EphemeralMessage) {
 				getInstance().registry.broadCastMessageMinusSender(msg, user);
+			} else if (msg instanceof RequestForLifeMessage) {
+
+				int x = r.nextInt(worldWidth - 2 * def_Block_w - def_Player_w) + def_Block_w;
+				Player p = getInstance().registry.createNewPlayer(user, x);
+				Block b = new Block(Colors.getColorForLang(""), def_Block_w, def_Block_w, def_Block_Gravity, x, def_Player_h,0,0,0);
+				blocks.add(b);
+
+
+				RequestForLifeMessage rflm = (RequestForLifeMessage) msg;
+				p.nick = rflm.nick;
+				p.status = 1;
+				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
+				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
+					AbstractMessage.sendTo(user, m);
+				}
+				getInstance().registry.broadCastMessage(b.getMessage(getTimestamp()));
+				getInstance().registry.broadCastMessage(p.getMessage(getTimestamp()));
+				AbstractMessage.sendTo(p.session, p.getIdAssignementMessage(getTimestamp()));
+			} else if (msg instanceof HeartbeatMessage) {
+				HeartbeatMessage hb = (HeartbeatMessage) msg;
+				//System.out.println("[World][MSG] HeartbeatMessage: " + hb.content.toString());
+				JSONObject o = hb.content.getJSONObject("trajectory");
+
+				if(o.length() > 0) {
+					//System.out.println("[World][MSG] HeartbeatMessage: contains tcm.");
+					TrajectoryChangeMessage tcm = new TrajectoryChangeMessage(o);
+					handleTrajectoryChangeMessage(user, tcm);
+				}
 			}
 		} catch (MessageParsingException e) {
 			e.printStackTrace();
@@ -209,9 +249,16 @@ public class World {
 
 		//checkCollision();
 		for (Player p: registry.players.values()) {
+			if(p.heartbeat == 0) {
+				registry.killPlayer(p, timestamp);
+				registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+			} else {
+				p.heartbeat--;
+			}
 			if (p.y > (worldHeight + 200)) {
 				System.out.println("[World] Player " + p.playerid + " died!!!!");
 				registry.killPlayer(p, timestamp);
+				registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
 			} else {
 				p.score++;
 			}
@@ -222,8 +269,10 @@ public class World {
 		if(!front.isEmpty() && timestamp % 30 == 0) {
 			//x,w,col
 			BlockInfo bi = front.pop();
-			int x = r.nextInt(worldWidth + 200) - 100;
+			int x = r.nextInt(worldWidth + 100 - 30 - def_Block_w) - 100;
+			x = x < def_Block_w ? def_Block_w : x;
 			int w = r.nextInt(120) + 30;
+			w = (x + w) > (worldWidth - def_Block_w) ? (w - (x + w + def_Block_w - worldWidth)) : w;
 			int col = Colors.getColorForLang(bi.lang);
 			Block b = new Block(col, def_Block_w, w, def_Block_Gravity, x, 0, 0, 0, bi.type);
 			registry.broadCastMessage(b.getMessage(timestamp));

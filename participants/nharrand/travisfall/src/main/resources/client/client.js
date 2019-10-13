@@ -4,9 +4,9 @@
 })();
 
 //Establish the WebSocket connection and set up event handlers
-var webSocket = null;
-
-
+var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/game/");
+    webSocket.onmessage = function (msg) { events.push(msg) };
+    webSocket.onclose = function () { alert("WebSocket connection closed") };
 
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d"),
@@ -40,8 +40,11 @@ var width = 1400,
     alive = false,
     power_cd = 2 * fps,
     power_cd_max = 2 * fps,
+    power2_cd = 3 * fps,
+    power2_cd_max = 3 * fps,
     power_type = 0,
-    timestamp = 0;
+    timestamp = 0,
+    rflSent = false;
 
 canvas.width = width;
 canvas.height = height;
@@ -73,14 +76,12 @@ function init() {
     //Enter Init
     nick = prompt("Please choose a name", "anonymous");
     reset();
-    webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/game/");
-    webSocket.onmessage = function (msg) { events.push(msg) };
-    webSocket.onclose = function () { alert("WebSocket connection closed") };
+    requestForLife();
 
     //Transition to idle
     state = 1;
     //Start heartbeat
-    setInterval(heartbeat(), 1000);
+    //setInterval(heartbeat(), 1000);
 
     //Start rendering
     update();
@@ -107,6 +108,7 @@ function reset() {
     boxes = [];
     ephemerals = [];
     events = [];
+    rflSent = false;
 }
 
 function getColor(raw) {
@@ -168,6 +170,7 @@ function parseEvent(msg) {
             dy: event.dy,
             color1: getColor(event.color1),
             color2: getColor(event.color2),
+            nick: event.nick,
             score: event.score,
             dead: false
         });
@@ -192,7 +195,8 @@ function parseEvent(msg) {
             let bo = document.body;
             bo.style["background-color"] = "#660000";
             let gameOver = document.getElementById('go');
-            gameOver.innerHTML = "<b>GAME OVER</b>";
+            gameOver.innerHTML = "<b>GAME OVER - Press Enter to respawn</b>";
+            rflSent = false;
 
         }
     } else if (event.t == 4) {
@@ -207,6 +211,7 @@ function parseEvent(msg) {
             colTd.style["color"] = players.get(myId).color2;
             let gameOver = document.getElementById('go');
             gameOver.innerHTML = "";
+            rflSent = false;
         }
 
     } else if (event.t == 5) {
@@ -218,15 +223,30 @@ function parseEvent(msg) {
          createEphemeralFromMsg(event, ephemerals, players);
     } else if (event.t == 255) {
         //HeartbeatMessage
+        console.log("[Server] heartbeat();")
     }
 }
 
 function heartbeat() {
-    if(status > 0) {
-        if (alive) {
-            trajectoryChange();
+    console.log("[Client] heartbeat();")
+    let msg = {
+        t: 255,
+        trajectory: {}
+    }
+
+    if (alive && players.has(myId)) {
+        let player = players.get(myId);
+        msg.trajectory = {
+          t: 0,
+          playerId: myId,
+          timestamp: timestamp,
+          x: player.x,
+          y: player.y,
+          dx: player.dx,
+          dy: player.dy
         }
     }
+    webSocket.send(JSON.stringify(msg));
 }
 
 function trajectoryChange() {
@@ -265,6 +285,13 @@ function iamDead() {
     }
 }
 
+function requestForLife() {
+    webSocket.send(JSON.stringify({
+        t: 7,
+        nick: nick
+    }));
+}
+
 
 // ------------------------ Main loop ----------------------------- //
 
@@ -293,8 +320,9 @@ function update() {
 
         updatePowerCd();
 
-        if (timestamp % 3*fps == 0) {
+        if (timestamp % fps == 0) {
             updateRanks(Array.from(players.values()));
+            heartbeat();
         }
 
         //Remove dead objects
@@ -365,6 +393,21 @@ function processInputs() {
         //power
         if (keys[17]){
             power(myPlayer);
+        }
+
+        //power
+        if (keys[17]){
+            power(myPlayer, 1);
+        }
+
+        //power
+        if (keys[16]){
+            power(myPlayer, 2);
+        }
+    } else {
+        if (keys[13] && !rflSent) {
+            rflSent = true;
+            requestForLife();
         }
     }
 }
@@ -546,6 +589,12 @@ function drawElements() {
 
     //Players
     for (let player of players.values()) {
+
+        //Player's name
+        ctx.fillStyle = player.color1;
+        ctx.font = "20px Georgia";
+        ctx.fillText(player.nick, player.x - ((player.nick.length - 2) * 5), player.y - 20);
+
         //Player's shadow
         ctx.fillStyle = player.color1;
         let smooth_dy = player.dy;
@@ -582,13 +631,16 @@ function drawElements() {
     }
 }
 
-function power(player) {
-    if(power_cd == power_cd_max) {
+function power(player, pid) {
+    if(pid == 1 && power_cd == power_cd_max) {
         //ephemerals.push(rayCreate(player, webSocket));
         //ephemerals.push(dashCreate(player, webSocket));
         ephemerals.push(stoprayCreate(player, webSocket));
         power_cd = 0;
         //audio_power.play();
+    } else if(pid == 2 && power2_cd == power2_cd_max) {
+        ephemerals.push(dashCreate(player, webSocket));
+        power2_cd = 0;
     }
 }
 
@@ -626,7 +678,13 @@ function updatePowerCd() {
     if(power_cd < power_cd_max) {
         power_cd++;
         let progress = document.getElementById('cd');
-        cd.setAttribute('max', power_cd_max);
-        cd.setAttribute('value', power_cd);
+        progress.setAttribute('max', power_cd_max);
+        progress.setAttribute('value', power_cd);
+    }
+    if(power2_cd < power2_cd_max) {
+        power2_cd++;
+        let progress = document.getElementById('cd2');
+        progress.setAttribute('max', power2_cd_max);
+        progress.setAttribute('value', power2_cd);
     }
 }

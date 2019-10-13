@@ -14,8 +14,11 @@ public class NewPlayerMessage extends AbstractMessage {
 	int h,w;
 	double x, y, dx, dy;
 	long score;
+	String nick;
 
-	public NewPlayerMessage(int timestamp, int playerId, int color1, int color2, double gravity, double speed, double maxSpeed, int jump, int h, int w, double x, double y, double dx, double dy, long score) {
+	public NewPlayerMessage(int timestamp, int playerId, int color1, int color2, double gravity, double speed,
+	                        double maxSpeed, int jump, int h, int w, double x, double y, double dx, double dy,
+	                        long score, String nick) {
 		this.timestamp = timestamp;
 		this.playerId = playerId;
 		this.color1 = color1;
@@ -31,6 +34,7 @@ public class NewPlayerMessage extends AbstractMessage {
 		this.dx = dx;
 		this.dy = dy;
 		this.score = score;
+		this.nick = nick;
 	}
 
 	public JSONObject toJSON() {
@@ -50,6 +54,7 @@ public class NewPlayerMessage extends AbstractMessage {
 		res.put("h", h);
 		res.put("w", w);
 		res.put("score", score);
+		res.put("nick", nick);
 		return res;
 	}
 
@@ -69,6 +74,7 @@ public class NewPlayerMessage extends AbstractMessage {
 		this.h = in.getInt("h");
 		this.w = in.getInt("w");
 		this.score = in.getLong("score");
+		this.nick = in.getString("nick");
 	}
 
 	@Override

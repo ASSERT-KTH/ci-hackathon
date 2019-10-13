@@ -3,7 +3,8 @@ package se.kth.castor.message;
 import org.json.JSONObject;
 
 public class HeartbeatMessage extends AbstractMessage {
-	JSONObject content;
+	public JSONObject content;
+
 	public HeartbeatMessage(JSONObject in) {
 		content = in;
 	}
@@ -18,6 +19,6 @@ public class HeartbeatMessage extends AbstractMessage {
 
 	@Override
 	public int getType() {
-		return AbstractMessage.HeartbeatMessage;
+		return AbstractMessage.HeartbeatMessageType;
 	}
 }

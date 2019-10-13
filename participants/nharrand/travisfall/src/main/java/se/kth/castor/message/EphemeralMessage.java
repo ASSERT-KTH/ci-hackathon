@@ -15,6 +15,6 @@ public class EphemeralMessage extends AbstractMessage {
 
 	@Override
 	public int getType() {
-		return AbstractMessage.EphemeralMessage;
+		return AbstractMessage.EphemeralMessageType;
 	}
 }

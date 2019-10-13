@@ -11,10 +11,11 @@ public abstract class AbstractMessage {
 	public static final int NewBlockMessageType = 1;
 	public static final int NewPlayerMessageType = 2;
 	public static final int PlayerDeathMessageType = 3;
-	public static final int IdAssignementMessage = 4;
-	public static final int DeleteBoxMessage = 5;
-	public static final int EphemeralMessage = 6;
-	public static final int HeartbeatMessage = 255;
+	public static final int IdAssignementMessageType = 4;
+	public static final int DeleteBoxMessageType = 5;
+	public static final int EphemeralMessageType = 6;
+	public static final int RequestForLifeMessageType = 7;
+	public static final int HeartbeatMessageType = 255;
 
 
 	public abstract JSONObject toJSON();
@@ -42,14 +43,20 @@ public abstract class AbstractMessage {
 			case PlayerDeathMessageType:
 				return new PlayerDeathMessage(in);
 
-			case IdAssignementMessage:
+			case IdAssignementMessageType:
 				return new IdAssignementMessage(in);
 
-			case DeleteBoxMessage:
+			case DeleteBoxMessageType:
 				return new DeleteBoxMessage(in);
 
-			case EphemeralMessage:
+			case EphemeralMessageType:
 				return new EphemeralMessage(in);
+
+			case RequestForLifeMessageType:
+				return new RequestForLifeMessage(in);
+
+			case HeartbeatMessageType:
+				return new HeartbeatMessage(in);
 
 			default:
 				throw new MessageParsingException();
@@ -58,7 +65,9 @@ public abstract class AbstractMessage {
 
 	public static void sendTo(Session session, AbstractMessage message) {
 		try {
-			session.getRemote().sendString(message.toJSONString());
+			if(session.isOpen()) {
+				session.getRemote().sendString(message.toJSONString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

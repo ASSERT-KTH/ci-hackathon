@@ -25,6 +25,6 @@ public class IdAssignementMessage extends AbstractMessage {
 
 	@Override
 	public int getType() {
-		return AbstractMessage.IdAssignementMessage;
+		return AbstractMessage.IdAssignementMessageType;
 	}
 }

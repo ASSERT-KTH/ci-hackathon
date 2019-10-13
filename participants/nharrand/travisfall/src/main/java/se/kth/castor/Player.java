@@ -9,8 +9,9 @@ import se.kth.castor.message.TrajectoryChangeMessage;
 public class Player {
 	public static int TIMEOUT = 5*30;
 
-	public String name;
+	public String nick;
 	public int heartbeat = TIMEOUT;
+	public int status = 0;
 
 	public int playerid;
 	public int color1;
@@ -40,10 +41,11 @@ public class Player {
 		this.dx = dx;
 		this.dy = dy;
 		this.session = session;
+		this.nick = "anonymous";
 	}
 
 	public NewPlayerMessage getMessage(int timestamp) {
-		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed, maxSpeed,jump,h,w,x,y,dx,dy,score);
+		return new NewPlayerMessage(timestamp,playerid,color1,color2,gravity,speed, maxSpeed,jump,h,w,x,y,dx,dy,score, nick);
 	}
 
 	public TrajectoryChangeMessage getTrajectoryChangeMessage(int timestamp) {
