@@ -1,7 +1,6 @@
 # The Gender of TravisCI
-I'd like to create a visualization using p5.js of the gender of people appearing in the TravisCI stream. This might be quite difficult and will (unfortunately) rely on normative assumptions because the stream doesn't provide information on the user's gender. Therefore, it will have to make use of the first name of users (for those who provide it) and search through a database of common male/female names.
-The visuals will change depending on male/female/undefined users.
+The Gender of TravisCI aims to highlight the lack of women in computer science.
 
-The aim of this project is to highlight the lack of women in computer science.
+This project (unfortunately) relies on normative assumptions because the stream doesn't provide information on the user's gender, and is also restricted to binary gender (non-binary and other genders should be represented too!). Therefore, it makes use of the first name of the user (for those who provide it) and searches through a database of common male/female names.
 
-Is this even possible? If you think you can help me do this, please join! :)
+The visualization uses p5.js and paints a blob for each commit message in the TravisCI stream. Female as purple and male as yellow.
