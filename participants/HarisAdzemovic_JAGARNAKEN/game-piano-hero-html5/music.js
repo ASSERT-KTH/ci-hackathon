@@ -1,7 +1,7 @@
 notaAtual=0;
 notas = [];
 
-function tock(){
+function tock(success){
     var delay = 0; // play one note every quarter second
     var note = 50; // the MIDI note
     var velocity = 127; // how hard the note hits
@@ -12,17 +12,32 @@ function tock(){
     velocity = notas[notaAtual].velocity;
     //
 
-    // play the note
-    MIDI.setVolume(0, 127);
-    MIDI.noteOn(0, note, velocity, delay);
+    if(success){
+        // play the note
+        MIDI.setVolume(0, 127);
+        MIDI.noteOn(0, note, velocity, delay);
 
-    delay = notas[notaAtual].deltaTime;
+        delay = notas[notaAtual].deltaTime;
 
-    MIDI.noteOff(0, note, delay);
+        MIDI.noteOff(0, note, delay);
 
-    notaAtual++;
-    if(notaAtual >= notas.length){
-        gameOver();
+        notaAtual++;
+        if(notaAtual >= notas.length){
+            gameOver();
+        }
+    }else{
+        MIDI.setVolume(0, 200);
+        rand = Math.floor(11) - 5;
+        MIDI.noteOn(0, note + rand, velocity, delay);
+
+        delay = notas[notaAtual].deltaTime;
+
+        MIDI.noteOff(0, note, delay);
+
+        notaAtual++;
+        if(notaAtual >= notas.length){
+            gameOver();
+        }
     }
 }
 

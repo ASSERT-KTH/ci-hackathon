@@ -177,9 +177,14 @@ function moveToNextFrame() {
       tempTile.bgColor != config.tile.color.white
     ) {
       if (tempTile.y + tempTile.height + config.speed >= config.height) {
+          //Play different notes depending on Travis state/color of tile
+          if(tempTile.bgColor == config.tile.color.limegreen){
+            tock(1);
+          }else{
+            tock(0);
+          }
         // Tile reaches end
         tempTile.bgColor = config.tile.color.white;
-        tock();
       }
     }
 
