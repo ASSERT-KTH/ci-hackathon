@@ -127,8 +127,8 @@
         <header class="masthead">
             <div class="container">
             <div class="intro-text">
-                <div class="intro-lead-in">CASTOR Software Days</div>
-                <div id="counter" class="intro-heading text-uppercase">CI Art Hackathon</div>
+                <div class="intro-lead-in">CI Art Hackathon</div>
+                <div id="counter" class="intro-heading text-uppercase"></div>
             </div>
             </div>
         </header>
@@ -1228,7 +1228,7 @@
 
 <script>
   // Set the date we're counting down to
-  var countDownDate = new Date("Oct 14, 2019 17:25:00").getTime();
+  var countDownDate = new Date("Oct 14, 2019 17:32:00").getTime();
 
   // Update the count down every 1 second
   var x = setInterval(function() {
@@ -1250,9 +1250,9 @@
     + minutes + "m " + seconds + "s ";
       
     // If the count down is over, write some text 
-    if (distance < 0) {
+    if (distance <= 0) {
       clearInterval(x);
-      document.getElementById("demo").innerHTML = "00:00:00";
+      document.getElementById("counter").innerHTML = "0D 0H 0M 0S";
     }
   }, 1000);
   </script>
