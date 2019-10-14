@@ -1,0 +1,23 @@
+{
+  "name": "🎶.haf.se",
+  "version": "1.0.0",
+  "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "elm-format": "^0.8.2"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "webaudiofont": "^2.5.48"
+  },
+  "scripts": {
+    "test": "elm-app test",
+    "autotest": "elm-app test --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
