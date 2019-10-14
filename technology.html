@@ -7,11 +7,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Organ emulator</title>
+    <title>Tech</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Art for continuous integration.">
 
-    <link rel="canonical" href="/organ.html">
+    <link rel="canonical" href="/technology.html">
 
 
     <meta name="title" content="CI art hackathon">
@@ -100,13 +100,13 @@
                 <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/lights.html">Lights</a></li>
               
               
-                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon/organ.html">Organ</a></li>
+                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/organ.html">Organ</a></li>
               
               
                 
               
               
-                <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/technology.html">technology</a></li>
+                <li class="nav-item"><a class="nav-link active" href="https://kth.github.io/ci-hackathon/technology.html">technology</a></li>
               
               
                 <li class="nav-item"><a class="nav-link " href="https://kth.github.io/ci-hackathon/travis.html">Travis CI</a></li>
@@ -123,30 +123,82 @@
       
 
 <div class="container" style="margin-top: 150px">
-    <h1 style="margin-bottom:50px">Organ emulator</h1>
-    <h3 id="warning-this-is-work-in-progress-the-following-instructions-and-specifications-may-be-subject-to-changes">:warning: This is work in progress. The following instructions and specifications may be subject to changes.</h3>
+    <h1 style="margin-bottom:50px">Tech</h1>
+    <p>The hackathon will involve Travis CI data, either online through a websocket, or offline with a <a href="https://zenodo.org/record/2560966">dump of 35M Travis jobs</a>.</p>
 
-<h3 id="prerequisites">Prerequisites</h3>
+<h2 id="input-stream--the-travis-ci-websocket">Input stream : the Travis CI WebSocket</h2>
+<p>A websocket with Travis builds is available at ws://travis.durieux.me. More information about the streamed objects is available <a href="https://github.com/KTH/ci-hackathon/blob/master/site/travis.md">here</a>. This tool uses <a href="https://www.npmjs.com/package/travis-ci">Travis-CI npm package</a> to gather jobs information. Job informations are gethered every 1.5 seconds and then exposed through the websocket channel in a “real-time” stream. More information about how Travis exposes information <a href="https://docs.travis-ci.com/api#jobs">here</a></p>
 
-<p>Docker is the preferred development environment for this project. If you have the Docker engine already installed and configured on your machine you can jump directly to the next section otherwise you can follow the steps below</p>
+<h3 id="python">PYTHON</h3>
 
-<ol>
-  <li>Download Docker
-    <ul>
-      <li>for Mac from https://docs.docker.com/docker-for-mac/</li>
-      <li>for Windows from https://docs.docker.com/docker-for-windows/</li>
-    </ul>
-  </li>
-  <li>Follow the instruction and install Docker</li>
-</ol>
+<p>Install the websocket client package</p>
 
-<h3 id="quick-start">Quick start</h3>
+<p><code class="highlighter-rouge">pip3 install websocket_client</code></p>
 
-<ol>
-  <li>In the root of this emulator folder (<code class="highlighter-rouge">/resources/emulators/organ/</code>) run the command <code class="highlighter-rouge">docker-compose up</code> in order to start the server.</li>
-  <li>Wait that the Docker container is built then open the page at the URL <a href="localhost:3000/">localhost:3000/</a> in the browser.</li>
-  <li>Test the emulator by opening the page at the URL <a href="localhost:3000/notes/C3/1">localhost:3000/notes/C3/1</a> in the browser. A sound should be produced equivalent to the note <em>C3</em> of length <em>1</em>. If no sound is emitted please try to refresh both open pages.</li>
-</ol>
+<p>Run the following code:</p>
+
+<pre><code class="language-Python">import websocket
+def on_message(ws, message):
+    print(message)
+
+websocket.enableTrace(True)
+ws = websocket.WebSocketApp("wss://travis.durieux.me/",on_message = on_message)
+ws.run_forever()
+</code></pre>
+
+<h3 id="javascript">JavaScript</h3>
+
+<pre><code class="language-Python">ws = new WebSocket('wss://travis.durieux.me’);
+ws.onmessage = console.log
+</code></pre>
+<p>More information is available <a href="/travis.html">here</a>.</p>
+
+<h2 id="travis-listener-nodejs">Travis Listener (NodeJS)</h2>
+
+<p><a href="https://github.com/tdurieux/travis-listener">Travis Listener</a> provides a websocket server for easier use (<a href="https://durieux.me/projects/travis_listener.html">documentation</a>)</p>
+
+<h2 id="tangible-output-technology">Tangible output technology</h2>
+
+<h3 id="reaktorhallen-unique-setup">Reaktorhallen unique setup</h3>
+
+<p>We have setup hardware bridges to exploit the unique space of reaktorhallen. Participants have the opportunity to hook on two hardware interfaces</p>
+<ul>
+  <li><a href="lights">Light fixtures</a>. We will setup 20 light fixtures in reaktorhallen, which can be controlled through a simple web interface. Hackathon participants can use the <a href="https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights">ligth fixtures emulator</a> to prepare their piece of CI art. The same code can be reused to control real light fixtures on the day of the hackathon. More documentation about this interface is available <a href="https://github.com/KTH/ci-hackathon/tree/master/resources/emulators/lights">here</a></li>
+  <li>The organ.</li>
+</ul>
+
+<h3 id="visualization">Visualization</h3>
+
+<p>Here are popular Javascript libraries for data vizualization</p>
+<ul>
+  <li><a href="https://d3js.org/">D3.js</a></li>
+  <li><a href="https://p5js.org/">P5.js</a></li>
+  <li><a href="https://vega.github.io/vega-lite/">Vega Lite</a></li>
+</ul>
+
+<p>For example, the <a href="https://github.com/KTH/ci-hackathon/tree/master/participants/oscarlvp/drum-machine">Travis CI drum machine</a> uses the <a href="https://p5js.org/">P5.js</a> library</p>
+
+<h3 id="sonification">Sonification</h3>
+
+<p>Here are examples of sound synthesis libraries</p>
+<ul>
+  <li><a href="https://tonejs.github.io/">tone.js</a></li>
+  <li><a href="https://faust.grame.fr/">Faust</a></li>
+  <li><a href="http://chuck.stanford.edu/">ChucK</a></li>
+</ul>
+
+<p>For example, the <a href="https://github.com/KTH/ci-hackathon/tree/master/participants/Jacarte_bbaudry/pulse_of_travis">Pulse of Travis</a> uses <a href="https://tonejs.github.io/">tone.js</a>.</p>
+
+<h3 id="other-resources">Other resources</h3>
+
+<p>A collection of libraries, code examples and papers that can serve to build CI-art pieces.</p>
+<ul>
+  <li><a href="https://github.com/chr15m/SyncJams">Network-synchronised metronome</a> a library to synchronize several device with respect to a common pulse, over wifi. Can be useful to syncrhonize the CI event and the media displays.</li>
+  <li><a href="https://github.com/Ant1r/ofxPof">Pure Data and openGL</a>. A set of Pure Data (Pd) externals written with openFrameworks API, that bring OpenGL graphics and utilities to Pd.</li>
+  <li><a href="https://codepen.io">CodePen</a> is a social development environment for front-end designers and developers. It includes various visual effects that can be remixed for the hackathon. Here a few curated examples</li>
+  <li><a href="https://codepen.io/ge1doot/pen/vOQZGG">Infinite tree of life</a></li>
+</ul>
+
 
 </div>
 

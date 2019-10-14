@@ -9,21 +9,14 @@
     "build": "webpack --config webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
     "dat.gui": "^0.7.6",
-    "fs": "^0.0.1-security",
     "isomorphic-ws": "^4.0.1",
     "lodash": "^4.17.14",
-    "queue-fifo": "^0.2.6",
-    "serve": "^11.2.0",
-    "string-hash": "^1.1.3",
     "three": "^0.106.2",
-    "tone": "^13.8.25",
     "ws": "^7.1.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.4",
-    "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.7.2"
