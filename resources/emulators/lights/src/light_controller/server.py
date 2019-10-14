@@ -19,7 +19,7 @@ app.config['BASIC_AUTH_USERNAME'] = os.environ.get("ADMIN_USER", 'admin')
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get("ADMIN_PASSWORD", 'admin')
 
 
-socketio = SocketIO(app, logger=False, engineio_logger=False, ping_interval=10, ping_timeout=30)
+socketio = SocketIO(app, logger=False, engineio_logger=False, ping_interval=100, ping_timeout=300)
 
 basic_auth = BasicAuth(app)
 
