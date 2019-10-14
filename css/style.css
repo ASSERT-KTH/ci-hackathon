@@ -38,7 +38,7 @@ img::-moz-selection { background: transparent; }
 #mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover { color: #fed136; }
 
 @media (min-width: 992px) { #mainNav { padding-top: 25px; padding-bottom: 25px; -webkit-transition: padding-top 0.3s, padding-bottom 0.3s; -moz-transition: padding-top 0.3s, padding-bottom 0.3s; transition: padding-top 0.3s, padding-bottom 0.3s; border: none; background-color: transparent; }
-  #mainNav .navbar-brand { font-size: 1.75em; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; transition: all 0.3s; }
+  #mainNav .navbar-brand { font-size: 1.25em; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; transition: all 0.3s; }
   #mainNav .navbar-nav .nav-item .nav-link { padding: 1.1em 1em !important; }
   #mainNav.navbar-shrink { padding-top: 0; padding-bottom: 0; background-color: #212529; }
   #mainNav.navbar-shrink .navbar-brand { font-size: 1.25em; padding: 12px 0; } }
@@ -117,8 +117,10 @@ header.masthead .intro-text .intro-heading { font-size: 50px; font-weight: 700; 
 .team-member h4 { margin-top: 25px; margin-bottom: 0; text-transform: none; }
 .team-member p { margin-top: 0; }
 
-.team-container { display: flex; flex-direction: row; margin: 50px; justify-content: center; }
-.team-container .team-member { zoom: 0.7; }
+.teams { display: flex; flex-direction: row; flex-flow: wrap; }
+
+.team-container { display: flex; flex-direction: row; flex: 1; margin: 20px; justify-content: center; }
+.team-container .team-member { zoom: 0.7; margin-right: -20px; }
 
 section#contact { background-color: #212529; background-image: url("../img/map-image.png"); background-repeat: no-repeat; background-position: center; }
 section#contact .section-heading { color: #fff; }

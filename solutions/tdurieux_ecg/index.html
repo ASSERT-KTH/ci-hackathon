@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script language="javascript" type="text/javascript" src="//travis.durieux.me/travisListener.js"></script>
+    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/redom@3.24.0/dist/redom.min.js"></script>
+    <style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color:black;
+  color: #eee;
+  height: 100%;
+}
+canvas { 
+  height: 100vh; 
+  width: 100vw; 
+  display: block;
+}
+#bpm {
+  border: 3px solid #dddddd;
+  line-height: 34px;
+  font-size: 34px;
+  position: fixed;
+  right: 0px;
+  top: -3px;
+  min-width: 100px;
+  padding: 7px;
+}
+    </style>
+    <title>Travis-CI ECG</title>
+</head>
+<body>
+  <div id="bpm"><span class="value">0</span> Job Per Minute</div>
+    <canvas id="test"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script language="javascript" type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="PlethGraph.js"></script>
+    <script language="javascript" type="text/javascript" src="script.js"></script>
+</body>
+</html>
