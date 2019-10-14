@@ -19,12 +19,16 @@ class SimulatorHandler(BaseHandler):
         self.socketio = socketio
 
     def getSiD(self, session_name):
-        if session_name in self.sessions:
+
+        session_copy = dict(self.sessions)
+
+        if session_name in session_copy:
             return self.sessions[session_name]
         return {}
 
     def illuminate_with(self, id, color, extra):
         
+
         for k, v in self.getSiD(extra).items():
             self.socketio.emit("single", dict(id=id, color=color) , json=True, room=k, namespace='/simulator')
 
