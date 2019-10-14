@@ -2,11 +2,11 @@ var tileHolder = [];
 var config = {
   playing: false,
   isGameOver: false,
-  cols: 7,
-  rows: 8,
+  cols: 20,
+  rows: 10,
   width: window.innerWidth,
   height: window.innerHeight,
-  speed: 10,
+  speed: 12,
   tile: {
     border: 0,
     color: {

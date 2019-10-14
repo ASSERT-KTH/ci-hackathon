@@ -26,9 +26,8 @@ function tock(success){
             gameOver();
         }
     }else{
-        MIDI.setVolume(0, 200);
-        rand = Math.floor(11) - 5;
-        MIDI.noteOn(0, note + rand, velocity, delay);
+        MIDI.setVolume(0, 250);
+        MIDI.noteOn(0, 30, velocity, delay);
 
         delay = notas[notaAtual].deltaTime;
 
