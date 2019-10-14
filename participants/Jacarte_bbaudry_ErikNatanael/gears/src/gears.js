@@ -15,8 +15,10 @@ let jobs = {
 
 }
 
-let sampler;
-let swooshSampler;
+let l_sampler;
+let r_sampler;
+let l_swooshSampler;
+let r_swooshSampler;
 let droneSampler;
 
 let audioInitiated = false;
@@ -169,20 +171,23 @@ function handleJob(message){
             jobs[ring.id] = message
             jobs[ring.id].ring = ring
 
-            // reuse the sampler synth, it is polyphonic
-            let synth = sampler
             let sound = soundForJob(message) // get the pitch associated with the language of the job
             
             if(audioInitiated) {
-              synth.triggerAttack(sound);
+              if(ring.center[0] < w/2) {
+                // left
+                l_sampler.triggerAttack(sound);
+              } else {
+                // right
+                r_sampler.triggerAttack(sound);
+              }
+              
             }
         }
          
     }
     else {
         if ((message.data.commit.id in jobs)) {
-
-
 
             if(message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed"){
                 
@@ -240,7 +245,18 @@ function handleJob(message){
             }
             pitch = Tone.Frequency(Math.random() * 30 + 31, "midi")
             if(audioInitiated) {
-              swooshSampler.triggerAttack(pitch);    
+              
+              let ring = getRing(key);
+              if(ring != undefined) {
+                if(ring.center[0] < w/2) {
+                  // left
+                  l_swooshSampler.triggerAttack(pitch);
+                } else {
+                  // right
+                  r_swooshSampler.triggerAttack(pitch);
+                }
+              }
+              
             }        
             }
             //delete jobs[message.data.commit.sha]
@@ -574,7 +590,7 @@ function draw(){
     //ctx.clearRect(0,0, w, h)
     //ctx.globalAlpha = 0.009;
     ctx.globalAlpha = Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011);
-    console.log("alpha: " + Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011));
+    //console.log("alpha: " + Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011));
     ctx.fillRect(0,0,w,h);
     ctx.globalAlpha = 1.0;
     for(var ring of rings){

@@ -16,8 +16,10 @@ let jobs = {
 
 }
 
-let sampler;
-let swooshSampler;
+let l_sampler;
+let r_sampler;
+let l_swooshSampler;
+let r_swooshSampler;
 let droneSampler;
 
 let audioInitiated = false;
@@ -170,20 +172,23 @@ function handleJob(message){
             jobs[ring.id] = message
             jobs[ring.id].ring = ring
 
-            // reuse the sampler synth, it is polyphonic
-            let synth = sampler
             let sound = soundForJob(message) // get the pitch associated with the language of the job
             
             if(audioInitiated) {
-              synth.triggerAttack(sound);
+              if(ring.center[0] < w/2) {
+                // left
+                l_sampler.triggerAttack(sound);
+              } else {
+                // right
+                r_sampler.triggerAttack(sound);
+              }
+              
             }
         }
          
     }
     else {
         if ((message.data.commit.id in jobs)) {
-
-
 
             if(message.data.state === "finished" || message.data.state === "errored" || message.data.state === "failed" || message.data.state === "passed"){
                 
@@ -241,7 +246,17 @@ function handleJob(message){
             }
             pitch = Tone.Frequency(Math.random() * 30 + 31, "midi")
             if(audioInitiated) {
-              swooshSampler.triggerAttack(pitch);    
+              if(key != undefined) {
+                let ring = getRing(key);
+                if(ring.center[0] < w/2) {
+                  // left
+                  l_swooshSampler.triggerAttack(pitch);
+                } else {
+                  // right
+                  r_swooshSampler.triggerAttack(pitch);
+                }
+              }
+              
             }        
             }
             //delete jobs[message.data.commit.sha]
@@ -382,8 +397,11 @@ function setup(){
 
     requestAnimationFrame(draw);
     
+    let l_panner = new Tone.Panner(-1);
+    let r_panner = new Tone.Panner(1);
+    
     // Setup sound
-    sampler = new Tone.Sampler({
+    l_sampler = new Tone.Sampler({
     	"G1" : "samples/bellg1-1.mp3",
     	"D2" : "samples/belld2-1.mp3",
     	"B3" : "samples/bellb3-1.mp3",
@@ -392,10 +410,21 @@ function setup(){
       "E2" : "samples/belle2-1.mp3",
     }, {
       "release" : 12,
-    }).toMaster();
-    sampler.volume.value = -24;
+    }).chain(l_panner, Tone.Master);
+    l_sampler.volume.value = -24;
+    r_sampler = new Tone.Sampler({
+    	"G1" : "samples/bellg1-1.mp3",
+    	"D2" : "samples/belld2-1.mp3",
+    	"B3" : "samples/bellb3-1.mp3",
+      "D4" : "samples/belld4-1.mp3",
+      "G4" : "samples/bellg4-1.mp3",
+      "E2" : "samples/belle2-1.mp3",
+    }, {
+      "release" : 12,
+    }).chain(r_panner, Tone.Master);
+    r_sampler.volume.value = -24;
     
-    swooshSampler = new Tone.Sampler({
+    l_swooshSampler = new Tone.Sampler({
     	"G1" : "swoosh1-1.mp3",
     	"F1" : "swoosh2-1.mp3",
     	"B1" : "swoosh3-1.mp3",
@@ -403,8 +432,18 @@ function setup(){
     }, {
       baseUrl : "samples/",
       "release" : 1,
-    }).toMaster();
-    swooshSampler.volume.value = -24;
+    }).chain(l_panner, Tone.Master);
+    l_swooshSampler.volume.value = -24;
+    r_swooshSampler = new Tone.Sampler({
+    	"G1" : "swoosh1-1.mp3",
+    	"F1" : "swoosh2-1.mp3",
+    	"B1" : "swoosh3-1.mp3",
+      "G#1" : "swoosh4-1.mp3",
+    }, {
+      baseUrl : "samples/",
+      "release" : 1,
+    }).chain(r_panner, Tone.Master);
+    r_swooshSampler.volume.value = -24;
     
     droneSampler = new Tone.Sampler({
     	"C1" : "drone.mp3",
@@ -550,8 +589,8 @@ function draw(){
 
     //ctx.clearRect(0,0, w, h)
     //ctx.globalAlpha = 0.009;
-    ctx.globalAlpha = (Math.sin(globalTime * 0.1) * 0.01) + 0.011;
-    console.log("alpha: " + (Math.sin(globalTime * 0.1) * 0.01) + 0.011);
+    ctx.globalAlpha = Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011);
+    //console.log("alpha: " + Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011));
     ctx.fillRect(0,0,w,h);
     ctx.globalAlpha = 1.0;
     for(var ring of rings){
