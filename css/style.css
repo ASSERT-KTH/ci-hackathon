@@ -119,7 +119,7 @@ header.masthead .intro-text .intro-heading { font-size: 50px; font-weight: 700; 
 
 .teams { display: flex; flex-direction: row; flex-flow: wrap; }
 
-.team-container { display: flex; flex-direction: row; flex: 1; margin: 50px; justify-content: center; }
+.team-container { display: flex; flex-direction: row; flex: 1; margin: 20px; justify-content: center; }
 .team-container .team-member { zoom: 0.7; margin-right: -50px; }
 
 section#contact { background-color: #212529; background-image: url("../img/map-image.png"); background-repeat: no-repeat; background-position: center; }
