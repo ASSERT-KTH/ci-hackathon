@@ -1,9 +1,9 @@
 notaAtual=0;
+visualIndex = -1;
 notas = [];
 
 function tock(success){
     var delay = 0; // play one note every quarter second
-    var note = 50; // the MIDI note
     var velocity = 127; // how hard the note hits
 
     // noteOn
@@ -39,6 +39,10 @@ function tock(success){
             gameOver();
         }
     }
+}
+function getVisualNote(){
+    visualIndex++;
+    return notas[visualIndex].noteNumber;
 }
 
 function dataURLtoFile(dataurl, filename) {

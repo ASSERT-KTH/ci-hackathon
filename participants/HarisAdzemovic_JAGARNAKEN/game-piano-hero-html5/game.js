@@ -65,38 +65,10 @@ function init() {
       tile.y = config.height - tile.height * i;
       tile.row = i;
       tile.col = j;
-      if (!selectedRandomTile) {
-        if (Math.ceil(Math.random() * 5) == 2 || j == config.cols - 1) {
-          selectedRandomTile = true;
-          /*
-           * Make starting some tile unclickable for game
-           */
-          if (i >= halfRow) {
-            if (startTile == null) {
-              startTile = tile;
-            }
-
-            makeTileClickable(tile, ACCEPTED_TRAVIS_STATES[0]);
-          }
-        }
-      }
-
       tileHolder.push(tile);
     }
   }
   draw();
-  drawStartTile(startTile);
-}
-
-function drawStartTile(tile) {
-  var c = _("gameCanvas").getContext("2d");
-  c.font = config.fontNormal;
-  c.fillStyle = config.tile.color.limegreen;
-  c.textAlign = "center";
-  c.textBaseline = "middle";
-  var x = tile.x + tile.width / 2;
-  var y = tile.y + tile.height / 2;
-  c.fillText("Start", x, y);
 }
 
 function startGame() {
@@ -199,7 +171,8 @@ function moveToNextFrame() {
 
   if (tempTileHolder.length > 0) {
     var randomeNumber = Math.ceil(Math.random() * config.cols - 1);
-    makeTileClickable(tempTileHolder[randomeNumber], popFirstMessage());
+    var col = getVisualNote() % config.cols;
+    makeTileClickable(tempTileHolder[col], popFirstMessage());
   }
 }
 function getMaxRowPosition() {
