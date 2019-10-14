@@ -96,7 +96,7 @@ def setup_site():
     clean_folder(solutionsFolder)
 
 def process_participants():
-
+    i = 0
     for folderName in os.listdir("%s/%s"%(BASE_DIR, PARTICIIPANTS_DIR)):
 
         if S_ISDIR(os.stat("%s/%s/%s"%(BASE_DIR, PARTICIIPANTS_DIR, folderName)).st_mode):
@@ -123,6 +123,9 @@ def process_participants():
             # print header
             teamPage.write("---\n")
             teamPage.write("layout: team\n")
+            teamPage.write("name: %s\n"%(folderName,))
+            teamPage.write("sort: %s\n"%(i,))
+            i += 1
             teamPage.write("team: \n")
 
             for k, v in meta.items():

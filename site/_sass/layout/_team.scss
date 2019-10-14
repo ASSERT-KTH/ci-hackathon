@@ -18,13 +18,21 @@
   }
 }
 
+.teams{
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
+
 .team-container{
   display: flex;
   flex-direction: row;
+  flex: 1;
   margin: 50px;
 
   .team-member{
     zoom: 0.7;
+    margin-right: -50px;
   }
 
   justify-content: center;
