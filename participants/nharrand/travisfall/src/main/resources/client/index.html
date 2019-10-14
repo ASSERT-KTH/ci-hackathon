@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Travisfall</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="sidebar">
+            <div>
+            <!--<h1>Travisfall</h1>-->
+                <div class="left">
+                    <div id="info">
+                        <table>
+                            <thead><td><b>You are</b></td>
+                            <td><div id="colors"><span id="sq">&#x25a0;</span></div></td>
+                            <td><progress id="cd" value="100" max="100"></progress></td>
+                            <td><progress id="cd2" value="100" max="100"></progress></td>
+                            <td id="go"></td></thead>
+                        </table>
+                    </div>
+                    <canvas id="canvas">
+                        <!--Something went wrong...-->
+                    </canvas>
+                </div>
+
+                <div class="right">
+                    <table id="ranktable">
+                        <thead><td>Rank</td><td>Player</td><td>Score</td></thead>
+                    </table>
+
+                    <div id="log">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="powers/powers.js"></script>
+        <script src="client.js"></script>
+    </body>
+</html>
+
+<!-- non-sidebar --><!-- sidebar -->
