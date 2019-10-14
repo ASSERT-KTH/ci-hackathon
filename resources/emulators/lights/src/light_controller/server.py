@@ -4,7 +4,7 @@ from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 from config import LIGTHS_MAP
 from flask_basicauth import BasicAuth
-
+from flask_cors import CORS
 
 import os
 import threading
@@ -12,6 +12,7 @@ import json
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
+CORS(app)
 
 # This is not the best solution, but its ok for the r-pi deployment
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get("ADMIN_USER", 'admin')
