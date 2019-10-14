@@ -207,6 +207,9 @@ public class World {
 				p.nick = rflm.nick;
 				p.status = 1;
 				p.deathAck = false;
+
+				//LightController.printPlayer(p.color1, p.color2);
+
 				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
 				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
 					AbstractMessage.sendTo(user, m);
