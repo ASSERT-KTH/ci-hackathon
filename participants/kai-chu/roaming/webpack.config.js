@@ -9,6 +9,7 @@ module.exports = {
         compress: true,
         port: 8080
     },
+    externals: ['tls', 'net', 'fs'],
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist')
