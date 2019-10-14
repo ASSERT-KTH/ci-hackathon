@@ -147,7 +147,7 @@ def initHandler():
 
     if HANDLER_TYPE == 'both':
         
-        return CompundHandler(sessions, socketio)
+        return CompundHandler(sessions, socketio, FILTERED)
 
     return SimulatorHandler(sessions, socketio)
 
