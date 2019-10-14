@@ -7,10 +7,6 @@
   speaker: Benoit Baudry
   icon: user-tie
 - time: "18:45" 
-  title: Reading of Code
-  speaker: Martin Monperrus
-  icon: book-reader
-- time: "19:00" 
   title: Coding
   speaker: everyone
   icon: laptop-code

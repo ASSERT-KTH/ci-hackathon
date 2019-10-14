@@ -4,7 +4,7 @@ from handlers import SimulatorHandler, ControllerHandler, CompundHandler
 from flask_socketio import SocketIO, emit, join_room, leave_room, send, Namespace
 from config import LIGTHS_MAP
 from flask_basicauth import BasicAuth
-
+from flask_cors import CORS
 
 import os
 import threading
@@ -12,13 +12,14 @@ import json
 
 app = Flask(__name__, template_folder='templates')
 app.config["SECRET_KEY"] = 'secret!'
+CORS(app)
 
 # This is not the best solution, but its ok for the r-pi deployment
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get("ADMIN_USER", 'admin')
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get("ADMIN_PASSWORD", 'admin')
 
 
-socketio = SocketIO(app, logger=False, engineio_logger=False, ping_interval=10, ping_timeout=30)
+socketio = SocketIO(app, logger=True, engineio_logger=True, ping_interval=10, ping_timeout=30)
 
 basic_auth = BasicAuth(app)
 
@@ -226,4 +227,5 @@ if __name__ == '__main__':
     APP_DEBUG = os.environ.get("APP_DEBUG", False)
 
     HANDLER = initHandler()
+    HANDLER.set_filter(FILTERED)
     socketio.run(app, debug=APP_DEBUG, host=APP_HOST , port=APP_PORT)

@@ -256,10 +256,9 @@ layout: layout_index
           <h3 class="section-subheading text-muted">We have {{site.participants.size}} teams up to now. Become a participant !! <a href="{{site.absolute}}/faq.html">How to?</a></h3>
         </div>
       </div>
-      <div class="row">
+      <div class="teams">
 
           {% for team in site.participants %}
-        <div class="col-sm-4">
           <div class="team-container">
           {% for member in team.team %}
           {% assign remainder = forloop.index | modulo:2 %}
@@ -295,13 +294,8 @@ layout: layout_index
               </li>
             </ul>-->
           </div>
-          {% if remainder == 0 %}
-          </div>
-          <div class="team-container" style="margin: -50px;">
-          {% endif %}
           {% endfor %}
 
-        </div>
         </div>
         {% endfor %}
       </div>
@@ -324,7 +318,7 @@ layout: layout_index
 
 <script>
   // Set the date we're counting down to
-  var countDownDate = new Date("Oct 14, 2019 18:00:00").getTime();
+  var countDownDate = new Date("Oct 14, 2019 18:30:00").getTime();
 
   // Update the count down every 1 second
   var x = setInterval(function() {

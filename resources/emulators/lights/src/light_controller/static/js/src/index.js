@@ -324,11 +324,16 @@ const roomCanvas = document.getElementById("map")
             $("#logs").append(`<div><label class='dot'>[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] </label><label class='log'>${JSON.stringify(msg)}</label><div>`);
         
             
+            try{
                 spotLights[msg.id].color = msg.color;
                 //console.log(spotLights[msg.id])
                 spotLights[msg.id].obj[0].color.setHex(rgbtoHex(msg.color));
                 spotLights[msg.id].obj[1].color.setHex(rgbtoHex(msg.color));
                 //spotLights[msg.id].obj[1].emissive.setHex(rgbtoHex(msg.color));
+            }
+            catch(e){
+                console.log(e)
+            }
             
 
             //enderer.render( scene, camera );

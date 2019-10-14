@@ -3,6 +3,7 @@ import { createOrbitController } from './controller';
 import { CinematicCamera } from 'three/examples/jsm/cameras/CinematicCamera.js';
 import * as dat from 'dat.gui';
 import animation from './animation';
+import Tone from 'tone';
 const WebSocket = require('isomorphic-ws');
 
 /**  Create a scene to be watched */
@@ -35,9 +36,6 @@ var camera = new THREE.OrthographicCamera(window.innerWidth / - 16, window.inner
 camera.position.set( 200, 200, -400 );
 camera.lookAt(0,0,0);
 
-var listener = new THREE.AudioListener();
-camera.add( listener );
-var audioLoader = new THREE.AudioLoader();
 /*********************************************/
 /**   Create a object and add it into scene **/
 /*********************************************/
@@ -101,12 +99,11 @@ document.body.appendChild(renderer.domElement);
  * Audio player
  */
 
-var sound1 = new THREE.Audio( listener );
-audioLoader.load( 'assets/358232_j_s_song.ogg', function ( buffer ) {
-  sound1.setBuffer( buffer );
-  sound1.setRefDistance( 20 );
-} );
-cube.add( sound1 );
+
+//create a synth and connect it to the master output (your speakers)
+var synth = new Tone.Synth().toMaster();
+
+//play a middle 'C' for the duration of an 8th note
 
 
 /**
@@ -191,13 +188,13 @@ wss.onmessage = (message => {
      */
     //scene.add(cube);
 
-    console.log(data.event, data.data.id, data.data.state)
+    //console.log(data.event, data.data.id, data.data.state)
     //console.log(data.data.id)
     // the execution of a job is finished
   }
   // job details, the structure of the job is available here: https://docs.travis-ci.com/api/#jobs
-  var job = data.data;
-  var commit = job.commit;
+  //var job = data.data;
+  //var commit = job.commit;
   //console.log(job)
 })
 
@@ -242,25 +239,51 @@ function updateCubeState(cube, state) {
   switch (state) {
     case passed: {
       cube.material = new THREE.MeshPhongMaterial({ color: 0x7ac74f });
+      Tone.Transport.schedule(passedSynth, "+0:1:0")
       break;
     }
     case failed: {
       cube.material = new THREE.MeshPhongMaterial({ color: 0xe87461 });
+      Tone.Transport.schedule(failedSynth, "+0:2:0")
       break;
     }
     case error: {
       cube.material = new THREE.MeshPhongMaterial({ color: 0xe0c879 });
+      Tone.Transport.schedule(errorSynth, "+0:3:0")
       break;
     }
     case canceled: {
       cube.material = new THREE.MeshPhongMaterial({ color: 0xdedede});
+      Tone.Transport.schedule(canceledSynth, "+0:3:2")
       break;
     }
     default: {
       cube.material = new THREE.MeshPhongMaterial({ color: 0x7eb09b });
+      Tone.Transport.schedule(passedSynth, "+0:1:0")
     }
   }
 }
+
+function passedSynth(time){
+	//the time is the sample-accurate time of the event
+	synth.triggerAttackRelease('C2', '8n', time)
+}
+
+function failedSynth(time){
+	//the time is the sample-accurate time of the event
+	synth.triggerAttackRelease('C3', '8n', time)
+}
+
+function errorSynth(time){
+	//the time is the sample-accurate time of the event
+	synth.triggerAttackRelease('C4', '8n', time)
+}
+
+function canceledSynth(time){
+	//the time is the sample-accurate time of the event
+	synth.triggerAttackRelease('C1', '8n', time)
+}
+
 
 function updateBuildCubes() {
   repoIdToCube.forEach( v => {
@@ -299,18 +322,18 @@ var FizzyText = function() {
   this.audio=false;
 };
 
-
-
 var text = new FizzyText();
   var gui = new dat.GUI();
   gui.add(text, 'title');
   gui.add(text, 'project');
   gui.add(text, 'numOfRepos', 0).listen();
-  gui.add(text, 'audio').onChange(value=> {
+  gui.add(text, 'audio', false).onChange(value=> {
     if(value) {
-      sound1.play();
+      //sound1.play();
+      Tone.Transport.toggle();
+      //synth.triggerAttackRelease("C4", "8n");
     }else{
-      sound1.stop();
+      //sound1.stop();
     }
   });
 // Resize
