@@ -6,11 +6,12 @@ import se.kth.castor.message.AbstractMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerRegistry {
 	Random r = new Random();
 	int nextID = 0;
-	Map<Session,Player> players = new HashMap<>();
+	Map<Session,Player> players = new ConcurrentHashMap<>();
 
 	public Player getPlayer(Session session) {
 		return players.get(session);

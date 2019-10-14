@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Executors;
 
 @WebSocket
@@ -67,7 +68,7 @@ public class World {
 	}
 
 	PlayerRegistry registry = new PlayerRegistry();
-	ArrayDeque<Block> blocks = new ArrayDeque<>();
+	ConcurrentLinkedDeque<Block> blocks = new ConcurrentLinkedDeque<>();
 
 
 	public void initWorld() {
@@ -242,7 +243,7 @@ public class World {
 	public void tic() {
 		AbstractMessage.sendMessages();
 
-		for (Block b : blocks.clone()) {
+		for (Block b : blocks) {
 			//b.dy += b.gravity;
 			b.y += b.gravity;
 			if (b.y > worldHeight) {
