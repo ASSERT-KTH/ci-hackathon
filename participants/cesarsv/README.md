@@ -7,7 +7,15 @@ This work is inspired by [Google Deep Dream algorithm](https://en.wikipedia.org/
 This is the result after 1000 iterations: 
 
 
+<div class="row">
+  <div class="column">
+    <img src="/participants/cesarsv/DeepTravis/img/travis-logo.jpg" alt="" style="width:50%">
+  </div>
+  <div class="column">
+    <img src="/participants/cesarsv/DeepTravis/img/style-2.jpg" alt="" style="width:50%">
+  </div>
+  <div class="column">
+    <img src="/participants/cesarsv/DeepTravis/img/result.gif" alt="" style="width:100%">
+  </div>
+</div> 
 
-
-
-![Screenshot](/participants/cesarsv/DeepTravis/img/travis-logo.jpg)  | + |  ![Screenshot](/participants/cesarsv/DeepTravis/img/style-2.jpg) | = | ![Screenshot](/participants/cesarsv/DeepTravis/img/result.gif) |
