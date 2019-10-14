@@ -9,17 +9,17 @@ It is based on [travis-api/.travis.yml](https://github.com/travis-ci/travis-api/
 
 ## Poem
 
-code is poetry
-and the question is whether
-one can also find inspiration
+code is poetry  
+and the question is whether  
+one can also find inspiration  
 in continuous integration
 
-let me read
-dot travis dot yml
-whose commit ed6ffd5
+let me read  
+dot travis dot yml  
+whose commit ed6ffd5  
 starts with a vowel
 
-code is language
+code is language  
 so is the spec
 
 ```yml
@@ -29,8 +29,8 @@ import:
   - travis-ci/build-configs/db-setup.yml
 ```
 
-code is power
-sharp and big
+code is power  
+sharp and big  
 that's the meaning of a number
 
 ```yml
@@ -50,8 +50,8 @@ matrix:
     - CI_NODE_INDEX=2
 ```
 
-going to infinity
-repetition repetition
+going to infinity  
+repetition repetition  
 is software for humanity?
 
 yes
@@ -61,7 +61,7 @@ services:
   - redis-server
 ```
 
-redis, read this,
+redis, read this,  
 poetry is
 
 
@@ -70,9 +70,9 @@ before_install:
   - 'gem update --system'
 ```
 
-poetry is rebooted
-it flies out of the repo
-and forever rooted
+poetry is rebooted  
+it flies out of the repo  
+and forever rooted  
 it ripples for an eternal echo
 
 ```yml
