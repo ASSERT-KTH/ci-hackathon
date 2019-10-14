@@ -6,13 +6,7 @@ This work is inspired by [Google Deep Dream algorithm](https://en.wikipedia.org/
 
 This is the result after 1000 iterations: 
 
-
-
-
-
-
-
-
-![Alt Text](/participants/cesarsv/DeepTravis/img/travis.jpg )
- | + | ![Alt Text](/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsv/DeepTravis/img/result.gif)
+| Original | Style | Result |
+|:-------------:|:--------------:|:-----:|:--------:|
+![Alt Text](/participants/cesarsv/DeepTravis/img/travis.jpg ) | + | ![Alt Text](/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsv/DeepTravis/img/result.gif) 
  
