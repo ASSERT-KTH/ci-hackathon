@@ -39,6 +39,7 @@ function tileObject() {
   this.isClicked = false;
   this.row = 0;
   this.col = 0;
+  this.language = "";
 }
 
 function _(id) {
@@ -101,6 +102,13 @@ function drawTile(tempTile) {
     tempTile.width - tempTile.border,
     tempTile.height - tempTile.border
   );
+  if(tempTile.clickable){
+      var x = tempTile.x + tempTile.width / 2;
+      var y = tempTile.y + tempTile.height / 2;
+      c.font = config.font;
+      c.fillStyle = config.tile.color.white;
+      c.fillText(tempTile.language, x, y);
+  }
   c.fill();
 }
 
@@ -124,12 +132,17 @@ function controleSpeed() {
   }
 }
 
-function makeTileClickable(tile, state) {
+function makeTileClickable(tile, build) {
   tile.clickable = true;
   tile.isClicked = false;
-  if (state === ACCEPTED_TRAVIS_STATES[0]) {
-    tile.bgColor = config.tile.color.limegreen;
-  } else {
+  if (typeof build !== 'undefined'){
+  tile.language = build.language;
+    if(build.state === ACCEPTED_TRAVIS_STATES[0]) {
+      tile.bgColor = config.tile.color.limegreen;
+    } else {
+      tile.bgColor = config.tile.color.red;
+    }
+  }else {
     tile.bgColor = config.tile.color.red;
   }
 }
@@ -199,19 +212,6 @@ function gameMouseClick(e) {
   console.log("x", x, "y", y);
 
   var leftButton = x < window.innerWidth / 2 && y > window.innerHeight / 2;
-
-  if (config.isGameOver) {
-    init();
-
-    if (leftButton) showMusics();
-
-    config.isGameOver = false;
-    return;
-  } else {
-    if (!config.playing) {
-      startGame();
-    }
-  }
   var clickedTile = getTileInPosition({ x: x, y: y });
 }
 
@@ -280,6 +280,6 @@ function selectSong(index) {
   var gameContainer = _("gameContainer");
   gameContainer.classList.remove("invisible");
   gameContainer.classList.toggle("visible");
-
+  setTimeout(function(){ startGame(); }, 1200);
   playSong(index);
 }
