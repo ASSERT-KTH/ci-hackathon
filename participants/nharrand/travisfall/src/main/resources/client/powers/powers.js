@@ -139,7 +139,7 @@ function rayContact(eph, other, players) {
 
 function rayApply(eph, player) {
     if(!isInvu) {
-        iamDead();
+        iamDead(eph.playerId);
     }
 }
 
@@ -365,7 +365,7 @@ function dashContact(eph, other, players) {
 }
 
 function dashApply(eph, player) {
-    iamDead();
+    iamDead(eph.playerId);
 }
 
 function dashEnd(eph, players) {

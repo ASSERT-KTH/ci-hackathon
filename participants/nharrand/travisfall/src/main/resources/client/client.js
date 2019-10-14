@@ -283,7 +283,7 @@ function trajectoryChange() {
     }
 }
 
-function iamDead() {
+function iamDead(responsibleId) {
     if (players.has(myId)) {
         let player = players.get(myId);
         webSocket.send(JSON.stringify({
@@ -295,7 +295,8 @@ function iamDead() {
           color1: player.color1,
           color2: player.color2,
           h: player.h,
-          w: player.w
+          w: player.w,
+          responsibleId: responsibleId
         }));
     } else {
         console.log("[iamDead] no player: " + myId);
@@ -435,7 +436,7 @@ function processInputs() {
 function physic() {
     if (alive && players.has(myId)) {
         if(players.get(myId).y > (height + 100)) {
-            iamDead();
+            iamDead(myId);
         }
     }
 

@@ -171,18 +171,25 @@ public class World {
 				TrajectoryChangeMessage tcm = (TrajectoryChangeMessage) msg;
 				handleTrajectoryChangeMessage(user, tcm);
 			} else if (msg instanceof PlayerDeathMessage) {
+				System.out.println("[World] PDM");
 				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
+				System.out.println("[World] PDM 1");
 				if(user ==  p.session) {
 					registry.killPlayer(p, timestamp);
+					System.out.println("[World] PDM 2");
 					if(pdm.responsibleId == p.playerid) {
 						p.kill--;
+						System.out.println("[World] PDM 3");
 					} else {
 						Player killer = registry.getPlayer(pdm.responsibleId);
+						System.out.println("[World] PDM 4");
 						if(killer != null) {
 							killer.kill++;
+							System.out.println("[World] PDM 5");
 						}
 					}
+					System.out.println("[World] PDM 1");
 					getInstance().registry.broadCastMessage(msg);
 					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");
 				}
