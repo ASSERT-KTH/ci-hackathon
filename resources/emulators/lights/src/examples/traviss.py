@@ -6,7 +6,7 @@ import random
 
 from json import loads
 
-jobs = [None]*26
+jobs = [None]*25
 
 def getEmpty():
     for index,j in enumerate(jobs):
@@ -38,7 +38,7 @@ def color_by_status(data):
     return [0,0,0]
 
 def on_message(ws, message):
-    URL = "https://ci-lights.azurewebsites.net/setcolor"
+    URL = "http://192.168.0.157:8000/setcolor"
 
     
     obj = loads(message)
@@ -88,7 +88,7 @@ def on_message(ws, message):
 
 
 def blackout():
-    URL = "https://ci-lights.azurewebsites.net/blackout"
+    URL = "http://192.168.0.157:8000/blackout"
 
         
         

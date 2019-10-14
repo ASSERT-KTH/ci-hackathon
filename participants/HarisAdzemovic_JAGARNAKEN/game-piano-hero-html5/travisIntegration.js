@@ -11,9 +11,9 @@ function travisIntegration() {
   };
 }
 const handleMessage = eventMessage => {
-  parsedState = JSON.parse(eventMessage.data).data.state;
-  if (spaceInMessageQueue() && acceptedMessageState(parsedState)) {
-    queuedMessages.push(parsedState);
+  parsedBuild = JSON.parse(eventMessage.data).data;
+  if (spaceInMessageQueue() && acceptedMessageState(parsedBuild)) {
+    queuedMessages.push(parsedBuild);
   }
 };
 
@@ -25,8 +25,8 @@ const spaceInMessageQueue = () => {
   return queuedMessages.length < MAX_MESSAGES;
 };
 
-const acceptedMessageState = state => {
-  return ACCEPTED_TRAVIS_STATES.includes(state);
+const acceptedMessageState = build => {
+  return ACCEPTED_TRAVIS_STATES.includes(build.state);
 };
 
 const popFirstMessage = () => {

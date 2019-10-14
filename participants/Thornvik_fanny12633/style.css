@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width:100%;
+    height: 100%;
+    overflow-x:hidden ;
+    overflow-y:hidden ;
+}
+
+body {
+    overflow: hidden;
+    background:#1c1c22;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #eee;
+    width:100%;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#rain {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+
+/* old css in text.css */
+a {
+    display: block;
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    color: #f4f4f4;
+    text-transform: uppercase;
+}
+
+.btn {
+    text-decoration: none;
+    border: 1px solid rgb(77, 223, 162);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    box-shadow: 1px 1px 25px 10px rgba(18, 170, 69, 0.4);
+}
+  
+.btn:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(146, 248, 146, 0.4),
+      transparent
+    );
+    transition: all 650ms;
+}
+  
+.btn:hover:before {
+    left: 100%;
+}
+
+/* trying new things */
+
+canvas {display:block;}
