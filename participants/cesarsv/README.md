@@ -13,5 +13,5 @@ This is the result after 1000 iterations:
 
 
 
-![Alt Text](/home/cesarsv/Documents/codes/github_repos/ci-hackathon/participants/cesarsv/DeepTravis/img/travis.jpg )
- | + | ![Alt Text](/home/cesarsv/Documents/codes/github_repos/ci-hackathon/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/home/cesarsv/Documents/codes/github_repos/ci-hackathon/participants/cesarsv/DeepTravis/img/result.gif)
+![Alt Text](/participants/cesarsv/DeepTravis/img/travis.jpg )
+ | + | ![Alt Text](/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsv/DeepTravis/img/result.gif)
