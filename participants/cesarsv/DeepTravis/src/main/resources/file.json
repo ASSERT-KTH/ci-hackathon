@@ -1,0 +1,51 @@
+{
+  "event": "job",
+  "data": {
+    "id": 595593564,
+    "repository_id": 541352,
+    "repository_slug": "RIOT-OS/RIOT",
+    "build_id": 595593563,
+    "stage_id": null,
+    "commit_id": 180549898,
+    "number": "32634.1",
+    "config": {
+      "os": "linux",
+      "dist": "xenial",
+      "sudo": "required",
+      "group": "stable",
+      "script": [
+        "docker run -a STDIN -a STDOUT -a STDERR --rm -u \"$(id -u)\" -e CI_BASE_BRANCH=\"${TRAVIS_BRANCH}\" -v \"${PWD}:/data/riotbuild\" -v /etc/localtime:/etc/localtime:ro riot/riotbuild make static-test"
+      ],
+      ".result": "configured",
+      "language": "minimal",
+      "services": [
+        "docker"
+      ],
+      "before_script": [
+        "git fetch origin \"${TRAVIS_BRANCH}:${TRAVIS_BRANCH}\""
+      ],
+      "before_install": [
+        "docker pull riot/riotbuild"
+      ]
+    },
+    "state": "created",
+    "started_at": null,
+    "finished_at": null,
+    "queue": null,
+    "allow_failure": false,
+    "tags": null,
+    "commit": {
+      "id": 180549898,
+      "sha": "c62b4141ae423fb464cb6f8c9baf2f242bc0ef6d",
+      "branch": "master",
+      "tag": null,
+      "message": "lwip: improve and fix documentation",
+      "committed_at": "2019-10-09T12:23:51Z",
+      "author_name": "Martine S. Lenders",
+      "author_email": "m.lenders@fu-berlin.de",
+      "committer_name": "Martine S. Lenders",
+      "committer_email": "m.lenders@fu-berlin.de",
+      "compare_url": "https://github.com/RIOT-OS/RIOT/pull/12403"
+    }
+  }
+}
