@@ -3,11 +3,6 @@ var host = 'travis.durieux.me';
 var protocol = "wss";
 var ws = null;
 
-var jobsPython = [];
-var jobsPhp = [];
-var jobsCpp = [];
-var jobsCsharp = [];
-
 var reduction = true;
 
 function reductionSwitch() {
