@@ -46,11 +46,9 @@ class ControllerHandler(BaseHandler):
 
 class CompundHandler(BaseHandler):
 
-    def __init__(self, sessions, socketio, FILTERED):
+    def __init__(self, sessions, socketio):
         self.simulator = SimulatorHandler(sessions, socketio)
         self.controller = ControllerHandler()
-
-        self.set_filter(FILTERED)
         
 
     def illuminate_with(self, id, color, extra):

@@ -147,7 +147,7 @@ def initHandler():
 
     if HANDLER_TYPE == 'both':
         
-        return CompundHandler(sessions, socketio, FILTERED)
+        return CompundHandler(sessions, socketio)
 
     return SimulatorHandler(sessions, socketio)
 
@@ -227,4 +227,5 @@ if __name__ == '__main__':
     APP_DEBUG = os.environ.get("APP_DEBUG", False)
 
     HANDLER = initHandler()
+    HANDLER.set_filter(FILTERED)
     socketio.run(app, debug=APP_DEBUG, host=APP_HOST , port=APP_PORT)
