@@ -1,0 +1,153 @@
+{
+  "id": 597768474,
+  "repository_id": 5632935,
+  "repository_slug": "fscherwi/tf-connected",
+  "build_id": 597768473,
+  "stage_id": null,
+  "commit_id": 181248551,
+  "number": "458.1",
+  "config": {
+    "os": "osx",
+    "cache": "npm",
+    "addons": {
+      "apt": {
+        "packages": [
+          "libusb-1.0-0",
+          "pm-utils"
+        ]
+      }
+    },
+    "script": [
+      "npm run lint",
+      "npm run test",
+      "node bin/tf-connected.js"
+    ],
+    ".result": "configured",
+    "install": [
+      "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then wget http://download.tinkerforge.com/tools/brickd/linux/brickd_linux_latest_amd64.deb && sudo dpkg -i brickd_linux_latest_amd64.deb; fi",
+      "npm ci"
+    ],
+    "node_js": "node",
+    "language": "node_js",
+    "after_script": [
+      "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+      "cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
+    ],
+    "notifications": {
+      "email": false
+    }
+  },
+  "state": "created",
+  "started_at": null,
+  "finished_at": null,
+  "queue": null,
+  "allow_failure": false,
+  "tags": null,
+  "commit": {
+    "id": 181248551,
+    "sha": "f8559191e8b73e5aac6ef3bc618b0b9fec93cd40",
+    "branch": "3.0.1",
+    "tag": "3.0.1",
+    "message": "3.0.1",
+    "committed_at": null,
+    "author_name": "fscherwi",
+    "author_email": "fscherwi@outlook.com",
+    "committer_name": "fscherwi",
+    "committer_email": "fscherwi@outlook.com",
+    "compare_url": "https://github.com/fscherwi/tf-connected/compare/3.0.1",
+    "user": {
+      "_id": "5da1020b018027001244c5de",
+      "login": "fscherwi",
+      "id": 9285971,
+      "node_id": "MDQ6VXNlcjkyODU5NzE=",
+      "gravatar_id": "",
+      "type": "User",
+      "site_admin": false,
+      "name": "fscherwi",
+      "company": null,
+      "blog": "",
+      "location": null,
+      "email": null,
+      "hireable": null,
+      "bio": null,
+      "public_repos": 69,
+      "public_gists": 1,
+      "followers": 1,
+      "following": 0,
+      "created_at": "2014-10-17T16:56:11.000Z",
+      "updated_at": "2019-10-09T20:22:39.000Z",
+      "place": null
+    }
+  },
+  "repository": {
+    "_id": "5d9e049136c75c0012d18bfa",
+    "id": 5632935,
+    "node_id": "MDEwOlJlcG9zaXRvcnk1NjMyOTM1",
+    "name": "test",
+    "full_name": "sidneyturtle/test",
+    "private": false,
+    "owner": {
+      "login": "sidneyturtle",
+      "id": 2256612,
+      "node_id": "MDQ6VXNlcjIyNTY2MTI=",
+      "gravatar_id": "",
+      "type": "User",
+      "site_admin": false
+    },
+    "description": null,
+    "fork": false,
+    "created_at": "2012-08-31T19:23:12.000Z",
+    "updated_at": "2013-01-12T01:28:32.000Z",
+    "pushed_at": "2012-08-31T19:25:55Z",
+    "homepage": null,
+    "size": 96,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": null,
+    "has_issues": true,
+    "has_projects": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 0,
+    "archived": false,
+    "disabled": false,
+    "open_issues_count": 0,
+    "license": null,
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 0,
+    "default_branch": "master",
+    "permissions": {
+      "admin": false,
+      "push": false,
+      "pull": true
+    },
+    "network_count": 0,
+    "subscribers_count": 0,
+    "user": {
+      "_id": "5d9e049236c75c0012d18c06",
+      "login": "sidneyturtle",
+      "id": 2256612,
+      "node_id": "MDQ6VXNlcjIyNTY2MTI=",
+      "gravatar_id": "",
+      "type": "User",
+      "site_admin": false,
+      "name": null,
+      "company": null,
+      "blog": "",
+      "location": null,
+      "email": null,
+      "hireable": null,
+      "bio": null,
+      "public_repos": 1,
+      "public_gists": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2012-08-31T18:42:20.000Z",
+      "updated_at": "2015-04-07T16:32:26.000Z",
+      "place": null
+    }
+  },
+  "language": "node_js"
+}
