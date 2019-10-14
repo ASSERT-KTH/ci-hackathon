@@ -6,7 +6,7 @@ We use [Neural Style Transfer](https://en.wikipedia.org/wiki/Neural_Style_Transf
 
 This is the result after 1000 iterations: 
 
-![Alt Text](/participants/cesarsv/DeepTravis/img/travis.jpg ) | + | ![Alt Text](/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsv/DeepTravis/img/result.gif)
+![Alt Text](/participants/cesarsotovalero_mabelc/DeepTravis/img/travis.jpg ) | + | ![Alt Text](/participants/cesarsotovalero_mabelc/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsotovalero_mabelc/DeepTravis/img/result.gif)
 
 This work is inspired by the [Google Deep Dream project](https://en.wikipedia.org/wiki/DeepDream). 
  
