@@ -1,96 +1,122 @@
-notaAtual=0;
+notaAtual = 0;
 visualIndex = -1;
 notas = [];
+octaves = ["-1", "-1", "0", "1", "2", "3", "4", "5", "6", "7", "8"];
+chords = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+const BAD_NOTE = 45;
+const URL_TO_ORGAN = "http://localhost:3000";
 
-function tock(success){
-    var delay = 0; // play one note every quarter second
-    var velocity = 127; // how hard the note hits
+const noteNumberToChord = noteNumber => {
+  chordPosition = noteNumber % 12;
+  return chords[chordPosition];
+};
 
-    // noteOn
-    // console.log('noteOn', notas[notaAtual])
-    note = notas[notaAtual].noteNumber;
-    velocity = notas[notaAtual].velocity;
-    //
+const noteToOcate = noteNumber => {
+  notePosition = Math.floor(noteNumber / 12);
+  console.log(notePosition);
+  return octaves[notePosition];
+};
 
-    if(success){
-        // play the note
-        MIDI.setVolume(0, 127);
-        MIDI.noteOn(0, note, velocity, delay);
+const playNote = noteNumber => {
+  noteToPlay = noteNumberToChord(noteNumber) + noteToOcate(noteNumber);
+  fetch(`${URL_TO_ORGAN}/notes/${noteToPlay}/1`, { mode: "no-cors" });
+};
 
-        delay = notas[notaAtual].deltaTime;
+function tock(success) {
+  var delay = 0; // play one note every quarter second
+  var velocity = 127; // how hard the note hits
 
-        MIDI.noteOff(0, note, delay);
+  // noteOn
+  // console.log('noteOn', notas[notaAtual])
+  note = notas[notaAtual].noteNumber;
+  velocity = notas[notaAtual].velocity;
+  //
 
-        notaAtual++;
-        if(notaAtual >= notas.length){
-            gameOver();
-        }
-    }else{
-        MIDI.setVolume(0, 250);
-        MIDI.noteOn(0, 30, velocity, delay);
+  if (success) {
+    // play the note
 
-        delay = notas[notaAtual].deltaTime;
+    playNote(note);
 
-        MIDI.noteOff(0, note, delay);
+    // MIDI.setVolume(0, 127);
+    // MIDI.noteOn(0, note, velocity, delay);
 
-        notaAtual++;
-        if(notaAtual >= notas.length){
-            gameOver();
-        }
+    // delay = notas[notaAtual].deltaTime;
+
+    // MIDI.noteOff(0, note, delay);
+
+    notaAtual++;
+    if (notaAtual >= notas.length) {
+      gameOver();
     }
+  } else {
+    playNote(BAD_NOTE);
+    // MIDI.setVolume(0, 250);
+    // MIDI.noteOn(0, 30, velocity, delay);
+
+    // delay = notas[notaAtual].deltaTime;
+
+    // MIDI.noteOff(0, note, delay);
+
+    notaAtual++;
+    if (notaAtual >= notas.length) {
+      gameOver();
+    }
+  }
 }
-function getVisualNote(){
-    visualIndex++;
-    return notas[visualIndex].noteNumber;
+function getVisualNote() {
+  visualIndex++;
+  return notas[visualIndex].noteNumber;
 }
 
 function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
+  var arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
+
+function playSong(index) {
+  var song = songs[index];
+  var file = dataURLtoFile(song.base64, "song" + index + ".midi");
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    midiFile = MidiFile(e.target.result);
+    console.log("midiFile", midiFile);
+
+    pegaNotas(song);
+  };
+  reader.readAsBinaryString(file);
+}
+
+function pegaNotas(song) {
+  var faixa = song.track;
+  // console.log('pegaNotas', midiFile.tracks[faixa].length)
+  const firstTrack = midiFile.tracks[0];
+  console.log({ firstTrack });
+  for (i = 0; i < midiFile.tracks[faixa].length; i++) {
+    nota = midiFile.tracks[faixa][i];
+    // console.log('nota', nota)
+    if (nota.noteNumber && nota.subtype == "noteOn") {
+      notas.push(nota);
     }
-    return new File([u8arr], filename, {type:mime});
+  }
 }
 
-function playSong(index){
-
-    var song = songs[index];
-    var file = dataURLtoFile(song.base64, 'song'+index + '.midi');
-
-    var reader = new FileReader();
-    reader.onload = function(e){
-        midiFile = MidiFile(e.target.result);
-        console.log('midiFile', midiFile);
-
-        pegaNotas(song);
-
+window.onload = function() {
+  MIDI.loadPlugin({
+    soundfontUrl: "./soundfont/",
+    instrument: "acoustic_grand_piano",
+    onprogress: function(state, progress) {
+      console.log("onprogress", state, progress);
+    },
+    onsuccess: function() {
+      console.log("Midi.js loaded!");
     }
-    reader.readAsBinaryString(file);
-
-}
-
-function pegaNotas(song){
-    var faixa = song.track;
-    // console.log('pegaNotas', midiFile.tracks[faixa].length)
-    for(i=0; i < midiFile.tracks[faixa].length; i++){
-        nota = midiFile.tracks[faixa][i];
-        // console.log('nota', nota)
-        if(nota.noteNumber && nota.subtype == 'noteOn'){
-            notas.push(nota);
-        }
-    }
-}
-
-window.onload = function () {
-    MIDI.loadPlugin({
-        soundfontUrl: "./soundfont/",
-        instrument: "acoustic_grand_piano",
-        onprogress: function(state, progress) {
-            console.log('onprogress', state, progress);
-        },
-        onsuccess: function() {
-            console.log('Midi.js loaded!')
-        }
-    });
-}
+  });
+};

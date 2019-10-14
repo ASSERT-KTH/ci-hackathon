@@ -6,7 +6,7 @@ var config = {
   rows: 10,
   width: window.innerWidth,
   height: window.innerHeight,
-  speed: 12,
+  speed: 6,
   tile: {
     border: 0,
     color: {
@@ -102,12 +102,12 @@ function drawTile(tempTile) {
     tempTile.width - tempTile.border,
     tempTile.height - tempTile.border
   );
-  if(tempTile.clickable){
-      var x = tempTile.x + tempTile.width / 2;
-      var y = tempTile.y + tempTile.height / 2;
-      c.font = config.font;
-      c.fillStyle = config.tile.color.white;
-      c.fillText(tempTile.language, x, y);
+  if (tempTile.clickable) {
+    var x = tempTile.x + tempTile.width / 2;
+    var y = tempTile.y + tempTile.height / 2;
+    c.font = config.font;
+    c.fillStyle = config.tile.color.white;
+    c.fillText(tempTile.language, x, y);
   }
   c.fill();
 }
@@ -135,14 +135,14 @@ function controleSpeed() {
 function makeTileClickable(tile, build) {
   tile.clickable = true;
   tile.isClicked = false;
-  if (typeof build !== 'undefined'){
-  tile.language = build.language;
-    if(build.state === ACCEPTED_TRAVIS_STATES[0]) {
+  if (typeof build !== "undefined") {
+    tile.language = build.language;
+    if (build.state === ACCEPTED_TRAVIS_STATES[0]) {
       tile.bgColor = config.tile.color.limegreen;
     } else {
       tile.bgColor = config.tile.color.red;
     }
-  }else {
+  } else {
     tile.bgColor = config.tile.color.red;
   }
 }
@@ -162,12 +162,12 @@ function moveToNextFrame() {
       tempTile.bgColor != config.tile.color.white
     ) {
       if (tempTile.y + tempTile.height + config.speed >= config.height) {
-          //Play different notes depending on Travis state/color of tile
-          if(tempTile.bgColor == config.tile.color.limegreen){
-            tock(1);
-          }else{
-            tock(0);
-          }
+        //Play different notes depending on Travis state/color of tile
+        if (tempTile.bgColor == config.tile.color.limegreen) {
+          tock(1);
+        } else {
+          tock(0);
+        }
         // Tile reaches end
         tempTile.bgColor = config.tile.color.white;
       }
@@ -280,6 +280,8 @@ function selectSong(index) {
   var gameContainer = _("gameContainer");
   gameContainer.classList.remove("invisible");
   gameContainer.classList.toggle("visible");
-  setTimeout(function(){ startGame(); }, 1200);
+  setTimeout(function() {
+    startGame();
+  }, 1200);
   playSong(index);
 }
