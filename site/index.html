@@ -258,7 +258,7 @@ layout: layout_index
       </div>
       <div class="teams">
 
-          {% for team in site.participants %}
+          {% for team in site.participants  %}
           <div class="team-container">
           {% for member in team.team %}
           {% assign remainder = forloop.index | modulo:2 %}

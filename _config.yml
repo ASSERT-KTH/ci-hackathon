@@ -6,6 +6,7 @@ collections:
     participants:
       permalink: "/participants/:path"
       output: true
+      sort_by: sort
     solutions:
       output: True
       permalink: "/solutions/:path"
