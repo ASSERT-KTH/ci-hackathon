@@ -37,23 +37,44 @@ public class PlayerRegistry {
 	}
 
 	public Player createNewPlayer(Session session, int x) {
-		int col1 = r.nextInt(256*256*256-1);
-		int col2 = r.nextInt(256*256*256-1);
+		Player player;
+		if(players.containsKey(session)) {
+			player = players.get(session);
+			player.status = 0;
+			player.score = 0;
 
-		Player player = new Player(nextID, col1, col2,
-				World.def_Player_Gravity,
-				World.def_Player_Speed,
-				World.def_Player_maxSpeed,
-				World.def_Player_Jump,
-				World.def_Player_h,
-				World.def_Player_w,
-				x,
-				World.def_Player_y,
-				World.def_Player_dx,
-				World.def_Player_dy,
-				session);
-		players.put(session, player);
-		nextID++;
+			player.gravity = World.def_Player_Gravity;
+			player.speed = World.def_Player_Speed;
+			player.maxSpeed = World.def_Player_maxSpeed;
+			player.jump = World.def_Player_Jump;
+			player.h = World.def_Player_h;
+			player.w = World.def_Player_w;
+			player.x = x;
+			player.y = World.def_Player_y;
+			player.dx = World.def_Player_dx;
+			player.dy = World.def_Player_dy;
+			player.heartbeat = Player.TIMEOUT;
+			player.deathAck = false;
+			player.death++;
+		} else {
+			int col1 = r.nextInt(256*256*256-1);
+			int col2 = r.nextInt(256*256*256-1);
+
+			player = new Player(nextID, col1, col2,
+					World.def_Player_Gravity,
+					World.def_Player_Speed,
+					World.def_Player_maxSpeed,
+					World.def_Player_Jump,
+					World.def_Player_h,
+					World.def_Player_w,
+					x,
+					World.def_Player_y,
+					World.def_Player_dx,
+					World.def_Player_dy,
+					session);
+			players.put(session, player);
+			nextID++;
+		}
 		return player;
 	}
 

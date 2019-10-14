@@ -193,8 +193,17 @@ function parseEvent(msg) {
     } else if (event.t == 3) {
         if(players.has(event.playerId)) {
             players.get(event.playerId).dead = true;
+            players.get(event.playerId).death++;
         } else {
             console.log("[parseEvent][PlayerDeath] no player: " + myId);
+        }
+        if(players.has(event.responsibleId)) {
+            let killer = players.get(event.responsibleId);
+            if(killer == event.playerId) {
+                killer.kill--;
+            } else {
+                killer.kill++;
+            }
         }
         updateRanks(Array.from(players.values()));
         //log("Player " + event.playerId + " died");
@@ -658,7 +667,7 @@ function power(player, pid) {
 function updateRanks(playerList) {
     let copy = playerList;
     copy.sort(comparePlayer);
-    let table = "<thead><td>Rank</td><td>&#x25a0;</td><td>Player</td><td>Score</td></thead>";//<td>Kill</td><td>Death</td>
+    let table = "<thead><td>Rank</td><td>&#x25a0;</td><td>Player</td><td>Kill</td><td>Death</td></thead>";//<td>Score</td>
     let i = 1;
     for (j in copy) {
         let player = copy[j];
@@ -666,9 +675,9 @@ function updateRanks(playerList) {
         table += "<tr><td>" + i + "</td>";
         table += "<td style=\"background-color: " + player.color1 + "; color: " + player.color2 + ";\">&#x25a0;</td>";
         table += "<td>" + player.nick + "</td>";
-        table += "<td>" + player.score + "</td></tr>";
-        //table += "<td>" + player.kill + "</td>";
-        //table += "<td>" + player.death + "</td></tr>";
+        //table += "<td>" + player.score + "</td></tr>";
+        table += "<td>" + player.kill + "</td>";
+        table += "<td>" + player.death + "</td></tr>";
         i++;
     }
 

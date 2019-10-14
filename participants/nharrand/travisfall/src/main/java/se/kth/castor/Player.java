@@ -54,8 +54,8 @@ public class Player {
 		return new TrajectoryChangeMessage(timestamp,playerid,x,y,dx,dy);
 	}
 
-	public PlayerDeathMessage getPlayerDeathMessage(int timestamp) {
-		return new PlayerDeathMessage(timestamp,playerid,h,w,x,y);
+	public PlayerDeathMessage getPlayerDeathMessage(int timestamp, int responsibleId) {
+		return new PlayerDeathMessage(timestamp,playerid,h,w,x,y, responsibleId);
 	}
 
 	public IdAssignementMessage getIdAssignementMessage(int timestamp) {

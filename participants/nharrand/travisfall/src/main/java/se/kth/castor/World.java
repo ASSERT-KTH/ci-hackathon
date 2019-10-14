@@ -139,7 +139,7 @@ public class World {
 	public void onClose(Session user, int statusCode, String reason) {
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": leaving");
 		Player p = getInstance().registry.getPlayer(user);
-		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp());
+		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp(), p.playerid);
 		int status = p.status;
 		getInstance().registry.killPlayer(p, timestamp);
 
@@ -174,8 +174,15 @@ public class World {
 				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
 				if(user ==  p.session) {
-					p.death++;
 					registry.killPlayer(p, timestamp);
+					if(pdm.responsibleId == p.playerid) {
+						p.kill--;
+					} else {
+						Player killer = registry.getPlayer(pdm.responsibleId);
+						if(killer != null) {
+							killer.kill++;
+						}
+					}
 					getInstance().registry.broadCastMessage(msg);
 					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");
 				}
@@ -257,7 +264,7 @@ public class World {
 			if (!p.deathAck) {
 				if (p.heartbeat == 0) {
 					registry.killPlayer(p, timestamp);
-					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp, p.playerid));
 					p.deathAck = true;
 				} else {
 					p.heartbeat--;
@@ -265,7 +272,7 @@ public class World {
 				if (p.y > (worldHeight + 200)) {
 					System.out.println("[World] Player " + p.playerid + " died!!!!");
 					registry.killPlayer(p, timestamp);
-					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp, p.playerid));
 					p.deathAck = true;
 				} else {
 					if(timestamp % 30 == 0) {
