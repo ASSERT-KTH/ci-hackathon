@@ -162,8 +162,10 @@ function moveToNextFrame() {
       if (tempTile.y + tempTile.height + config.speed >= config.height) {
         //Play different notes depending on Travis state/color of tile
         if (tempTile.bgColor == config.tile.color.limegreen) {
+          sendColorCommand(setAllGreen());
           tock(1);
         } else {
+          sendColorCommand(setAllRed());
           tock(0);
         }
         // Tile reaches end
