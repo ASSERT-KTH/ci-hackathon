@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <div style="font-family:Verdana, sans-serif;font-size: 3em;text-align: center;color: #222">
+        Commit <u>Par</u>allel <u>Cor</u>dinates
+    </div>
+
+    <!-- Create a div where the graph will take place -->
+    <div style="margin-top: 150px;text-align: center;" id="my_dataviz"></div>
+    
+    <!-- A bit of style -->
+    <style>
+    .axis {
+      opacity: 0.4;
+    }
+    .axis:hover {
+      opacity: 1;
+    }
+    </style>
+    
+</head>
+<body style="background-color: black;">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+$( document ).ready(function() {
+    var callback = function() {
+        // set the dimensions and margins of the graph
+        var margin = {top: 30, right: 50, bottom: 10, left: 50},
+          width = 1360 - margin.left - margin.right,
+          height = 400 - margin.top - margin.bottom;
+        
+        // append the svg object to the body of the page
+        var svg = d3.select("#my_dataviz")
+        .html("")
+        .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+        
+        // Parse the Data
+        $.getJSON("/data", function(parentdata) {
+            data = parentdata.Data
+            console.log(data);
+        
+          // Color scale: give me a specie name, I return a color
+          var color = d3.scaleLinear()
+            .domain([0, 30-1])
+            .range([ "#fff", "#000"])
+        
+          // Here I set the list of dimension manually to control the order of axis:
+          //dimensions = ["abbreviated_commit","abbreviated_parent","abbreviated_tree","author_date","author_email","author_name","commit","commit_notes","commiter_name","committer_date","committer_email","encoding","parent","refs","sanitized_subject_line","signer","signer_key","subject","tree","verification_flag"];
+          dimensions = ["abbreviated_commit","abbreviated_parent","abbreviated_tree","author_date","author_email","author_name","commit","commiter_name","committer_date","committer_email","parent","sanitized_subject_line","signer_key","subject","tree","verification_flag"];
+        
+          // For each dimension, I build a linear scale. I store all in a y object
+          var y = {}
+          for (i in dimensions) {
+            name = dimensions[i]
+            y[name] = d3.scaleLinear()
+              .domain( [0,1000000] ) // --> Same axis range for each group
+              // --> different axis range for each group --> .domain( [d3.extent(data, function(d) { return +d[name]; })] )
+              .range([height, 0])
+          }
+        
+          // Build the X scale -> it find the best position for each Y axis
+          x = d3.scalePoint()
+            .range([0, width])
+            .domain(dimensions);
+        
+          // Highlight the specie that is hovered
+          var highlight = function(d){
+        
+            selected_specie = d.index
+        
+            // first every group turns grey
+            d3.selectAll(".line")
+              .transition().duration(200)
+              .style("stroke", "lightgrey")
+              .style("opacity", "0.2")
+            // Second the hovered specie takes its color
+            d3.selectAll("." + selected_specie)
+              .transition().duration(200)
+              .style("stroke", color(selected_specie))
+              .style("opacity", "1")
+          }
+        
+          // Unhighlight
+          var doNotHighlight = function(d){
+            d3.selectAll(".line")
+              .transition().duration(200).delay(1000)
+              .style("stroke", function(d){ return( color(d.index))} )
+              .style("opacity", "1")
+          }
+        
+          // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+          function path(d) {
+              return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
+          }
+        
+          // Draw the lines
+          svg
+            .selectAll("myPath")
+            .data(data)
+            .enter()
+            .append("path")
+              .attr("class", function (d) { return "line " + d.Species } ) // 2 class for each line: 'line' and the group name
+              .attr("d",  path)
+              .style("fill", "none" )
+              .style("stroke", function(d){ return( color(d.index))} )
+              .style("opacity", 0.5)
+        
+          // Draw the axis:
+          svg.selectAll("myAxis")
+            // For each dimension of the dataset I add a 'g' element:
+            .data(dimensions).enter()
+            .append("g")
+            .attr("class", "axis")
+            // I translate this element to its right position on the x axis
+            .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+            // And I build the axis with the call function
+            .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(0).scale(y[d])); })
+            // Add axis title
+            .append("text")
+              .style("text-anchor", "middle")
+              .style("transform", "rotate(-15deg)")
+              .attr("y", -9)
+              .text(function(d) { return d; })
+              .style("fill", "#ccc")
+        
+        })
+        setTimeout(callback, 500);
+    }; 
+    callback();
+    });
+        </script>
+</body>
+</html>
