@@ -117,7 +117,7 @@ header.masthead .intro-text .intro-heading { font-size: 50px; font-weight: 700; 
 .team-member h4 { margin-top: 25px; margin-bottom: 0; text-transform: none; }
 .team-member p { margin-top: 0; }
 
-.team-container { display: flex; flex-direction: row; margin: 50px; justify-content: center; }
+.team-container { display: flex; flex-direction: row; justify-content: center; }
 .team-container .team-member { zoom: 0.7; }
 
 section#contact { background-color: #212529; background-image: url("../img/map-image.png"); background-repeat: no-repeat; background-position: center; }
