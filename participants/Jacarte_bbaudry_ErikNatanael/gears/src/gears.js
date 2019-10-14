@@ -381,8 +381,11 @@ function setup(){
 
     requestAnimationFrame(draw);
     
+    let l_panner = new Tone.Panner(-1);
+    let r_panner = new Tone.Panner(1);
+    
     // Setup sound
-    sampler = new Tone.Sampler({
+    l_sampler = new Tone.Sampler({
     	"G1" : "samples/bellg1-1.mp3",
     	"D2" : "samples/belld2-1.mp3",
     	"B3" : "samples/bellb3-1.mp3",
@@ -391,10 +394,21 @@ function setup(){
       "E2" : "samples/belle2-1.mp3",
     }, {
       "release" : 12,
-    }).toMaster();
-    sampler.volume.value = -24;
+    }).chain(l_panner, Tone.Master);
+    l_sampler.volume.value = -24;
+    r_sampler = new Tone.Sampler({
+    	"G1" : "samples/bellg1-1.mp3",
+    	"D2" : "samples/belld2-1.mp3",
+    	"B3" : "samples/bellb3-1.mp3",
+      "D4" : "samples/belld4-1.mp3",
+      "G4" : "samples/bellg4-1.mp3",
+      "E2" : "samples/belle2-1.mp3",
+    }, {
+      "release" : 12,
+    }).chain(r_panner, Tone.Master);
+    r_sampler.volume.value = -24;
     
-    swooshSampler = new Tone.Sampler({
+    l_swooshSampler = new Tone.Sampler({
     	"G1" : "swoosh1-1.mp3",
     	"F1" : "swoosh2-1.mp3",
     	"B1" : "swoosh3-1.mp3",
@@ -402,8 +416,18 @@ function setup(){
     }, {
       baseUrl : "samples/",
       "release" : 1,
-    }).toMaster();
-    swooshSampler.volume.value = -24;
+    }).chain(l_panner, Tone.Master);
+    l_swooshSampler.volume.value = -24;
+    r_swooshSampler = new Tone.Sampler({
+    	"G1" : "swoosh1-1.mp3",
+    	"F1" : "swoosh2-1.mp3",
+    	"B1" : "swoosh3-1.mp3",
+      "G#1" : "swoosh4-1.mp3",
+    }, {
+      baseUrl : "samples/",
+      "release" : 1,
+    }).chain(r_panner, Tone.Master);
+    r_swooshSampler.volume.value = -24;
     
     droneSampler = new Tone.Sampler({
     	"C1" : "drone.mp3",
@@ -429,9 +453,16 @@ let radius = []
 
 // To paint it
 function createRing(x, y, innerRadius, outerRadius, fromTheta, toTheta, color){
+  
+  let arcStart = fromTheta;
+  let arcMaxLength = toTheta - fromTheta;
+  let arcLength = 0.02;
+  let arcPosition = (Math.random() * arcMaxLength) + arcStart;
+  
 
     ctx.beginPath();
-    ctx.arc(x, y, innerRadius, fromTheta, toTheta);
+    //ctx.arc(x, y, innerRadius, fromTheta, toTheta);
+    ctx.arc(x, y, innerRadius, arcPosition, arcPosition + arcLength);
     ctx.strokeStyle = color;
     ctx.lineWidth = outerRadius - innerRadius - space;
     ctx.stroke();
@@ -536,20 +567,25 @@ function createSynth(position){
     return synth;
 }
 
-
 function draw(){
     
     globalTime += step
 
-    ctx.clearRect(0,0, w, h)
+    //ctx.clearRect(0,0, w, h)
+    //ctx.globalAlpha = 0.009;
+    ctx.globalAlpha = Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011);
+    console.log("alpha: " + Math.abs((Math.sin(globalTime * 0.1) * 0.01) + 0.011));
+    ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha = 1.0;
     for(var ring of rings){
         for(var chunk of ring.chunks){
-
+          for(let i = 0; i < 3; i++) {
             createRing(ring.center[0], ring.center[1], ring.innerRadius, 
                 
                 ring.outerRadius, chunk[0] + ring.direction*globalTime, 
                 chunk[1] + globalTime*ring.direction, 
                 ring.id === undefined? '#00000088': getColor(jobs[ring.id]))
+          }
         }
     }
 

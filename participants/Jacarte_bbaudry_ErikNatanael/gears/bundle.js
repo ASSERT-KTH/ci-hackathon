@@ -430,9 +430,16 @@ let radius = []
 
 // To paint it
 function createRing(x, y, innerRadius, outerRadius, fromTheta, toTheta, color){
+  
+  let arcStart = fromTheta;
+  let arcMaxLength = toTheta - fromTheta;
+  let arcLength = 0.02;
+  let arcPosition = (Math.random() * arcMaxLength) + arcStart;
+  
 
     ctx.beginPath();
-    ctx.arc(x, y, innerRadius, fromTheta, toTheta);
+    //ctx.arc(x, y, innerRadius, fromTheta, toTheta);
+    ctx.arc(x, y, innerRadius, arcPosition, arcPosition + arcLength);
     ctx.strokeStyle = color;
     ctx.lineWidth = outerRadius - innerRadius - space;
     ctx.stroke();
@@ -537,20 +544,25 @@ function createSynth(position){
     return synth;
 }
 
-
 function draw(){
     
     globalTime += step
 
-    ctx.clearRect(0,0, w, h)
+    //ctx.clearRect(0,0, w, h)
+    //ctx.globalAlpha = 0.009;
+    ctx.globalAlpha = (Math.sin(globalTime * 0.1) * 0.01) + 0.011;
+    console.log("alpha: " + (Math.sin(globalTime * 0.1) * 0.01) + 0.011);
+    ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha = 1.0;
     for(var ring of rings){
         for(var chunk of ring.chunks){
-
+          for(let i = 0; i < 3; i++) {
             createRing(ring.center[0], ring.center[1], ring.innerRadius, 
                 
                 ring.outerRadius, chunk[0] + ring.direction*globalTime, 
                 chunk[1] + globalTime*ring.direction, 
                 ring.id === undefined? '#00000088': getColor(jobs[ring.id]))
+          }
         }
     }
 
