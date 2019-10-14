@@ -15,3 +15,4 @@ This is the result after 1000 iterations:
 
 ![Alt Text](/participants/cesarsv/DeepTravis/img/travis.jpg )
  | + | ![Alt Text](/participants/cesarsv/DeepTravis/img/style.jpg) | = | ![Alt Text](/participants/cesarsv/DeepTravis/img/result.gif)
+ 
