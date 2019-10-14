@@ -13,7 +13,6 @@ const noteNumberToChord = noteNumber => {
 
 const noteToOcate = noteNumber => {
   notePosition = Math.floor(noteNumber / 12);
-  console.log(notePosition);
   return octaves[notePosition];
 };
 
@@ -98,7 +97,6 @@ function pegaNotas(song) {
   var faixa = song.track;
   // console.log('pegaNotas', midiFile.tracks[faixa].length)
   const firstTrack = midiFile.tracks[0];
-  console.log({ firstTrack });
   for (i = 0; i < midiFile.tracks[faixa].length; i++) {
     nota = midiFile.tracks[faixa][i];
     // console.log('nota', nota)

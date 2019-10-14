@@ -135,15 +135,13 @@ function controleSpeed() {
 function makeTileClickable(tile, build) {
   tile.clickable = true;
   tile.isClicked = false;
-  if (typeof build !== "undefined") {
+  tile.bgColor = config.tile.color.limegreen;
+
+  if (areThereMessages()) {
     tile.language = build.language;
-    if (build.state === ACCEPTED_TRAVIS_STATES[0]) {
-      tile.bgColor = config.tile.color.limegreen;
-    } else {
+    if (build.state !== ACCEPTED_TRAVIS_STATES[0]) {
       tile.bgColor = config.tile.color.red;
     }
-  } else {
-    tile.bgColor = config.tile.color.red;
   }
 }
 
