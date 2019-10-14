@@ -23,7 +23,7 @@ class SimulatorHandler(BaseHandler):
         session_copy = dict(self.sessions)
 
         if session_name in session_copy:
-            return session_copy[session_name]
+            return dict(session_copy[session_name])
         return {}
 
     def illuminate_with(self, id, color, extra):
