@@ -139,7 +139,7 @@ function rayContact(eph, other, players) {
 
 function rayApply(eph, player) {
     if(!isInvu) {
-        iamDead();
+        iamDead(eph.playerId);
     }
 }
 
@@ -365,7 +365,7 @@ function dashContact(eph, other, players) {
 }
 
 function dashApply(eph, player) {
-    iamDead();
+    iamDead(eph.playerId);
 }
 
 function dashEnd(eph, players) {
@@ -402,6 +402,61 @@ function dashCreate(player, socket, timestamp) {
     return {
         t: 6,
         type: 1,
+        playerId: player.id,
+        x: player.x,
+        y: player.y,
+        range: 0,
+        maxSize: 12,
+        curSize: 0,
+        step: 1,
+        right: right,
+        up: true,
+        color: '#42e6f5',
+        toRemove: false,
+        contact: dashContact,
+        draw: dashDraw,
+        apply: dashApply,
+        end: dashEnd
+   };
+}
+
+//----------------- TeleportTop --------------------------- //
+
+function teleportTopDraw(eph, ctx, width, players) {
+
+}
+
+function teleportTopContact(eph, other, players) {
+    return false;
+}
+
+function teleportTopApply(eph, player) {
+
+}
+
+function teleportTopEnd(eph, players) {
+
+}
+
+function teleportTopCreate(player, socket, timestamp) {
+    socket.send(JSON.stringify({
+      t: 6,
+      type: 3,
+      playerId: player.id,
+      x: player.x,
+      y: player.y,
+      range: 0,
+      maxSize: 12,
+      curSize: 0,
+      step: 1,
+      right: right,
+      up: true,
+      color: '#42e6f5',
+      toRemove: false
+    }));
+    return {
+        t: 6,
+        type: 3,
         playerId: player.id,
         x: player.x,
         y: player.y,

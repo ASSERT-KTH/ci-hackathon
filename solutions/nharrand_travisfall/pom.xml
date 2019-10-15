@@ -38,6 +38,12 @@
       <artifactId>websocket-client</artifactId>
       <version>9.3.6.v20151106</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.konghq</groupId>
+      <artifactId>unirest-java</artifactId>
+      <version>3.1.00</version>
+    </dependency>
   </dependencies>
 
   <build>

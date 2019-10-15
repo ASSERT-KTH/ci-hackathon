@@ -17,6 +17,8 @@ public class App  {
         port(PORT);
         staticFileLocation("/client");
 
+        LightController.init();
+
         World.initInstance();
 
         webSocket("/game", World.class);
@@ -33,5 +35,6 @@ public class App  {
         }, 0, 1000/fps);
 
         WebsocketClient.init(new String[0]);
+
     }
 }

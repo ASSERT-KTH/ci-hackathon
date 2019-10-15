@@ -55,12 +55,10 @@ public class ClientSocket {
 			} else if (World.getInstance().back.size() < World.MAX_BACK) {
 				World.getInstance().back.add(new World.BlockInfo(lang, type));
 			}
-			//System.out.println("lang: " + lang);
 
 		} catch (Exception _ignore) {
 			System.out.printf("Got msg: %s%n", msg);
 		}
-		//System.out.printf("Got msg: %s%n", msg);
 	}
 
 	@OnWebSocketError
@@ -72,11 +70,16 @@ public class ClientSocket {
 
 	public static int typeFromState(String state) {
 		if(state == null) return 0;
+
+		//System.out.println("caught build status: \"" + state + "\"");
 		switch (state) {
 			case "passed":
 				return 1;
+
+			case "errored":
 			case "failed":
 				return 2;
+
 			default:
 				return 0;
 		}
