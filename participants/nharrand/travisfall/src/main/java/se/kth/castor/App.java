@@ -17,7 +17,7 @@ public class App  {
         port(PORT);
         staticFileLocation("/client");
 
-        //init();
+        LightController.init();
 
         World.initInstance();
 

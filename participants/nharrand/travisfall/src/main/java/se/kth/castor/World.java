@@ -176,6 +176,7 @@ public class World {
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
 				System.out.println("[World] PDM 1");
 				if(user ==  p.session) {
+					LightController.printAllRed();
 					registry.killPlayer(p, timestamp);
 					System.out.println("[World] PDM 2");
 					if(pdm.responsibleId == p.playerid) {
@@ -208,7 +209,7 @@ public class World {
 				p.status = 1;
 				p.deathAck = false;
 
-				//LightController.printPlayer(p.color1, p.color2);
+				LightController.printPlayer(p.color1, p.color2);
 
 				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
 				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {

@@ -33,7 +33,8 @@ public class LightController {
 		to.start();
 	}
 
-	static String url = "http://localhost:8000/setcolor";
+	//static String url = "http://localhost:8000/setcolor";
+	static String url = "http://192.168.0.157:8000/setcolor";
 	static String session = "main";
 	static int first = 1;
 	static int last = 24;
