@@ -21,3 +21,5 @@ At 22h00 we start performing ci art pieces prepared for the ci art hackathon. We
 - parcor
 - pliX
 - harrand
+- the teens
+- S. Stefani
