@@ -11,7 +11,7 @@ At 22h00 we start performing ci art pieces prepared for the ci art hackathon. We
 - [HareX](https://github.com/KTH/ci-hackathon/tree/master/participants/HarisAdzemovic_JAGARNAKEN), H. Adzemovic, A. Sandor
 - [music masters](https://xn--nl8h.haf.se/), Henrik & Axel
 - [ci trees](https://github.com/KTH/ci-hackathon/tree/master/participants/TomBacklof_JoakimHellgren_emiliohell_ArlindPestisha_VicTholerus98), Tom et al.
-- Travis time zones, Lina & Jakob
+- [Travis time zones](https://github.com/KTH/ci-hackathon/tree/master/participants/LPlox), Lina & Jakob
 - [CI nebula](https://github.com/KTH/ci-hackathon/tree/master/participants/strazan_johanwennerstrom_quena_emelieedman_carlhernek), team Nebula
 - [Travis gender](https://github.com/KTH/ci-hackathon/tree/master/participants/nadiacw), N. Campo Woytuk
 - [ci morpheus](https://github.com/KTH/ci-hackathon/tree/master/participants/Thornvik_fanny12633), team morpheus
@@ -21,5 +21,5 @@ At 22h00 we start performing ci art pieces prepared for the ci art hackathon. We
 - [lifeline](https://github.com/KTH/ci-hackathon/tree/master/participants/parcor), parcor
 - [Travis dog](https://github.com/KTH/ci-hackathon/tree/master/participants/plix), pliX
 - [CI game](https://github.com/KTH/ci-hackathon/tree/master/participants/nharrand/travisfall), N. Harrand
-- the teens
+- [We are teenagers](https://github.com/KTH/ci-hackathon/tree/master/participants/Madeleine_Beatriz), the teens
 - S. Stefani
