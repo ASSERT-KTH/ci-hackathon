@@ -1,0 +1,136 @@
+{
+  "event": "job_updated",
+  "data": {
+    "id": 597733457,
+    "repository_id": 25204128,
+    "repository_slug": "furkanyesiler/acoss",
+    "build_id": 597733455,
+    "stage_id": null,
+    "commit_id": 181237493,
+    "number": "17.2",
+    "config": {
+      "os": "linux",
+      "env": "DOCKER_IMAGE=acorreya/acoss-builds:manylinux1_i686 PRE_CMD=linux32 PLAT=manylinux1_i686",
+      "dist": "xenial",
+      "sudo": "required",
+      "cache": "pip",
+      "group": "stable",
+      "addons": {},
+      "script": [
+        "docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh",
+        "ls wheelhouse/",
+        "if [ ! \"$TRAVIS_PULL_REQUEST\" = \"false\" ]; then python setup.py sdist; travis/deploy_transfer.sh; fi"
+      ],
+      ".result": "configured",
+      "install": [
+        "docker pull $DOCKER_IMAGE"
+      ],
+      "language": "python",
+      "services": [
+        "docker"
+      ],
+      "notifications": {
+        "email": false
+      }
+    },
+    "state": "failed",
+    "started_at": "2019-10-14T16:50:39.000Z",
+    "finished_at": "2019-10-14T16:53:52.000Z",
+    "queue": "builds.gce",
+    "allow_failure": false,
+    "tags": null,
+    "commit": {
+      "id": 181237493,
+      "sha": "3370bf6afbdb3f8beb9f6460ac65690ffce379a7",
+      "branch": "packaging",
+      "tag": null,
+      "message": "only compile wheels with python3.6**",
+      "committed_at": "2019-10-14T16:50:10.000Z",
+      "author_name": "Albin",
+      "author_email": "albin.a.correya@gmail.com",
+      "committer_name": "Albin",
+      "committer_email": "albin.a.correya@gmail.com",
+      "compare_url": "https://github.com/furkanyesiler/acoss/compare/a4ee8dba8607...3370bf6afbdb",
+      "user": null
+    },
+    "repository": {
+      "_id": "5da46a2b87401206e06b2ee7",
+      "id": 25204128,
+      "node_id": "MDEwOlJlcG9zaXRvcnkyNTIwNDEyOA==",
+      "name": "kuplat_server",
+      "full_name": "HataidaAppProject/kuplat_server",
+      "private": false,
+      "owner": {
+        "login": "HataidaAppProject",
+        "id": 9027666,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjkwMjc2NjY=",
+        "gravatar_id": "",
+        "type": "Organization",
+        "site_admin": false
+      },
+      "description": null,
+      "fork": false,
+      "created_at": "2014-10-14T11:55:57.000Z",
+      "updated_at": "2014-10-14T12:05:32.000Z",
+      "pushed_at": "2014-11-09T17:21:10Z",
+      "homepage": null,
+      "size": 376,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": "Ruby",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": true,
+      "has_pages": false,
+      "forks_count": 0,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 8,
+      "license": null,
+      "forks": 0,
+      "open_issues": 8,
+      "watchers": 0,
+      "default_branch": "master",
+      "permissions": {
+        "admin": false,
+        "push": false,
+        "pull": true
+      },
+      "organization": {
+        "login": "HataidaAppProject",
+        "id": 9027666,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjkwMjc2NjY=",
+        "gravatar_id": "",
+        "type": "Organization",
+        "site_admin": false
+      },
+      "network_count": 0,
+      "subscribers_count": 4,
+      "user": {
+        "_id": "5da46a9b87401206e06b2eee",
+        "login": "HataidaAppProject",
+        "id": 9027666,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjkwMjc2NjY=",
+        "gravatar_id": "",
+        "type": "Organization",
+        "site_admin": false,
+        "name": null,
+        "company": null,
+        "blog": "",
+        "location": null,
+        "email": null,
+        "hireable": null,
+        "bio": null,
+        "public_repos": 2,
+        "public_gists": 0,
+        "followers": 0,
+        "following": 0,
+        "created_at": "2014-10-05T17:24:57.000Z",
+        "updated_at": "2014-11-19T17:02:51.000Z",
+        "place": null
+      }
+    },
+    "language": "python"
+  }
+}
