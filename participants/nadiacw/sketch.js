@@ -37,7 +37,7 @@ function draw() {
     }));
     fill(colorM);
     // ellipse(random(width), random(height), 100, 100);
-    blob(100, random(width), random(height), 0.75, t);
+    blob(50, random(width), random(height), 0.75, t);
     drawM = false;
   }
 
@@ -48,7 +48,7 @@ function draw() {
     }));
     fill(colorF);
     // ellipse(random(width), random(height), 100, 100);
-    blob(100, random(width), random(height), 0.75, t);
+    blob(50, random(width), random(height), 0.75, t);
     drawF = false;
   }
 
@@ -74,7 +74,7 @@ function blob(size, xCenter, yCenter, k, t) {
       r1 = 1;
       r2 = cos(theta);
     }
-    let r = size + noise(k * r1, k * r2, t) * (1/3) * size;
+    let r = size + noise(k * r1, k * r2, t) * size;
     let x = xCenter + r * cos(theta);
     let y = yCenter + r * sin(theta);
     curveVertex(x, y);
