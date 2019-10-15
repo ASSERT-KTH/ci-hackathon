@@ -13,7 +13,6 @@ KEEP_RUNNING = True
 WINDOW_NAME = "Default - Wine desktop"
 WINDOW_ID = -1
 QUEUE_TRAVIS = Queue.Queue()
-THREADS = list()
 
 def websocket_listener():
     websocket.enableTrace(True)
@@ -40,28 +39,28 @@ def build_id_consumer():
 
             if passed_count == 0:
                 logging.info("passed_count: %d, total failure!"%passed_count)
-                action("Left Left Left", 100, 0.1)
-                action("Down+Right Down+Left+KP_1", 35, 3)
+                action("Left Left Left", 100, 0.2)
+                action("Down+Right Down+Left+KP_1", 40, 3)
             elif passed_count == 1:
                 logging.info("passed_count: %d, big failure!"%passed_count)
-                action("Left Left Left", 100, 0.1)
+                action("Left Left Left", 100, 0.2)
                 action("KP_4", 50, 0)
             elif passed_count == 2:
                 logging.info("passed_count: %d, small failure!"%passed_count)
-                action("Left Left Left", 100, 0.1)
+                action("Left Left Left", 100, 0.2)
                 action("KP_1", 50, 0)
             elif passed_count == 3:
                 logging.info("passed_count: %d, small success!"%passed_count)
-                action("d d d", 100, 0.1)
+                action("d d d", 100, 0.2)
                 action("u u", 50, 0)
             elif passed_count == 4:
                 logging.info("passed_count: %d, big success!"%passed_count)
-                action("d d d", 100, 0.1)
+                action("d d d", 100, 0.2)
                 action("j j", 50, 0)
             elif passed_count == 5:
                 logging.info("passed_count: %d, total success!"%passed_count)
-                action("d d d", 100, 0.1)
-                action("s+d s+a+u", 35, 4)
+                action("d d d", 100, 0.2)
+                action("s+d s+a+u", 40, 4)
         else:
             action("d d d", 100, 0)
             action("Left Left Left", 100, 0)
@@ -89,23 +88,27 @@ def main():
         WINDOW_ID = int(target_window)
         code = subprocess.call('xdotool windowactivate %d'%WINDOW_ID, shell=True)
 
-        time.sleep(8) # wait for the start scene to be finished
-
         websocket_thread = threading.Thread(target=websocket_listener)
+        websocket_thread.setDaemon(True)
+        websocket_thread.start()
+
+        while KEEP_RUNNING and QUEUE_TRAVIS.qsize() < 100:
+            logging.info("The controller is warming up...")
+            time.sleep(1)
+
+        logging.info("Warming up completed. Let's go?")
+        raw_input("Press Enter to continue...")
+
+        code = subprocess.call('xdotool windowactivate %d'%WINDOW_ID, shell=True)
         build_id_thread = threading.Thread(target=build_id_consumer)
-
-        THREADS.append(websocket_thread)
-        THREADS.append(build_id_thread)
-
-        for t in THREADS:
-            t.setDaemon(True)
-            t.start()
+        build_id_thread.setDaemon(True)
+        build_id_thread.start()
 
         while KEEP_RUNNING:
             time.sleep(3)
 
-        for t in THREADS:
-            t.join()
+        websocket_thread.join()
+        build_id_thread.join()
 
         logging.info("bye!")
 
