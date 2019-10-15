@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Executors;
 
 @WebSocket
@@ -67,7 +68,7 @@ public class World {
 	}
 
 	PlayerRegistry registry = new PlayerRegistry();
-	ArrayDeque<Block> blocks = new ArrayDeque<>();
+	ConcurrentLinkedDeque<Block> blocks = new ConcurrentLinkedDeque<>();
 
 
 	public void initWorld() {
@@ -138,7 +139,7 @@ public class World {
 	public void onClose(Session user, int statusCode, String reason) {
 		System.out.println("[WS] " + getInstance().registry.getPlayer(user).playerid + ": leaving");
 		Player p = getInstance().registry.getPlayer(user);
-		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp());
+		PlayerDeathMessage pdm = p.getPlayerDeathMessage(getTimestamp(), p.playerid);
 		int status = p.status;
 		getInstance().registry.killPlayer(p, timestamp);
 
@@ -170,11 +171,26 @@ public class World {
 				TrajectoryChangeMessage tcm = (TrajectoryChangeMessage) msg;
 				handleTrajectoryChangeMessage(user, tcm);
 			} else if (msg instanceof PlayerDeathMessage) {
+				System.out.println("[World] PDM");
 				PlayerDeathMessage pdm = (PlayerDeathMessage) msg;
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
+				System.out.println("[World] PDM 1");
 				if(user ==  p.session) {
-					p.death++;
+					LightController.printAllRed();
 					registry.killPlayer(p, timestamp);
+					System.out.println("[World] PDM 2");
+					if(pdm.responsibleId == p.playerid) {
+						p.kill--;
+						System.out.println("[World] PDM 3");
+					} else {
+						Player killer = registry.getPlayer(pdm.responsibleId);
+						System.out.println("[World] PDM 4");
+						if(killer != null) {
+							killer.kill++;
+							System.out.println("[World] PDM 5");
+						}
+					}
+					System.out.println("[World] PDM 1");
 					getInstance().registry.broadCastMessage(msg);
 					System.out.println("[World][MSG] Player " + p.playerid + " died!!!!");
 				}
@@ -192,6 +208,9 @@ public class World {
 				p.nick = rflm.nick;
 				p.status = 1;
 				p.deathAck = false;
+
+				LightController.printPlayer(p.color1, p.color2);
+
 				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
 				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
 					AbstractMessage.sendTo(user, m);
@@ -242,7 +261,7 @@ public class World {
 	public void tic() {
 		AbstractMessage.sendMessages();
 
-		for (Block b : blocks.clone()) {
+		for (Block b : blocks) {
 			//b.dy += b.gravity;
 			b.y += b.gravity;
 			if (b.y > worldHeight) {
@@ -256,7 +275,7 @@ public class World {
 			if (!p.deathAck) {
 				if (p.heartbeat == 0) {
 					registry.killPlayer(p, timestamp);
-					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp, p.playerid));
 					p.deathAck = true;
 				} else {
 					p.heartbeat--;
@@ -264,7 +283,7 @@ public class World {
 				if (p.y > (worldHeight + 200)) {
 					System.out.println("[World] Player " + p.playerid + " died!!!!");
 					registry.killPlayer(p, timestamp);
-					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp));
+					registry.broadCastMessage(p.getPlayerDeathMessage(timestamp, p.playerid));
 					p.deathAck = true;
 				} else {
 					if(timestamp % 30 == 0) {

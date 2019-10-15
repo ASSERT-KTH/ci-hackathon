@@ -73,7 +73,7 @@ public class Colors {
 
 			default:
 				System.out.println("no col for " + lang);
-				col = 0x999999;
+				col = 0xEEAAAA;
 		}
 		return col;
 	}

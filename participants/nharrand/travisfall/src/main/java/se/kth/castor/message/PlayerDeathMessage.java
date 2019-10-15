@@ -8,13 +8,16 @@ public class PlayerDeathMessage extends AbstractMessage {
 	public int h,w;
 	public double x, y;
 
-	public PlayerDeathMessage(int timestamp, int playerId, int h, int w, double x, double y) {
+	public int responsibleId;
+
+	public PlayerDeathMessage(int timestamp, int playerId, int h, int w, double x, double y, int responsibleId) {
 		this.timestamp = timestamp;
 		this.playerId = playerId;
 		this.h = h;
 		this.w = w;
 		this.x = x;
 		this.y = y;
+		this.responsibleId = responsibleId;
 	}
 
 	@Override
@@ -26,6 +29,7 @@ public class PlayerDeathMessage extends AbstractMessage {
 		res.put("y", y);
 		res.put("h", h);
 		res.put("w", w);
+		res.put("responsibleId", responsibleId);
 		return res;
 	}
 
@@ -38,6 +42,7 @@ public class PlayerDeathMessage extends AbstractMessage {
 		this.y = in.getDouble("y");
 		this.h = in.getInt("h");
 		this.w = in.getInt("w");
+		this.responsibleId = in.getInt("responsibleId");
 	}
 
 	@Override
