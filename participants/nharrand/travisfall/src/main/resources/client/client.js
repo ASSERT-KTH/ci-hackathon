@@ -605,6 +605,12 @@ function drawElements() {
         let box = boxes[i];
         ctx.fillStyle = box.color;
         ctx.fillRect(box.x, box.y, box.w, box.h);
+
+        let margin = 5;
+        ctx.strokeStyle = '#EEEEEE';
+        ctx.beginPath();
+        ctx.rect(box.x + margin, box.y + margin, box.w - 2*margin, box.h - 2*margin);
+        ctx.stroke();
     }
 
     //Players

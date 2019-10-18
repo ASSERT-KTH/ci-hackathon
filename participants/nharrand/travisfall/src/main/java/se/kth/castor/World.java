@@ -88,8 +88,8 @@ public class World {
 
 
 		Block bottom = new Block(0x999999,def_Block_w, worldWidth, 0, def_Block_w, 770, 0, 0, 0);
-		Block left = new Block(0x999999, worldHeight+500, 10 * def_Block_w, 0, - 9 * def_Block_w, -500, 0, 0, 0);
-		Block right = new Block(0x999999, worldHeight+500, 10 * def_Block_w, 0, worldWidth - def_Block_w, -500, 0, 0, 0);
+		Block left = new Block(0x999999, worldHeight + 800, 10 * def_Block_w, 0, - 9 * def_Block_w, -400, 0, 0, 0);
+		Block right = new Block(0x999999, worldHeight + 800, 10 * def_Block_w, 0, worldWidth - def_Block_w, -400, 0, 0, 0);
 
 		//blocks.add(bottom);
 		blocks.add(left);
@@ -176,7 +176,7 @@ public class World {
 				Player p = getInstance().registry.getPlayer(pdm.playerId);
 				System.out.println("[World] PDM 1");
 				if(user ==  p.session) {
-					LightController.printAllRed();
+					//LightController.printAllRed();
 					registry.killPlayer(p, timestamp);
 					System.out.println("[World] PDM 2");
 					if(pdm.responsibleId == p.playerid) {
@@ -209,7 +209,7 @@ public class World {
 				p.status = 1;
 				p.deathAck = false;
 
-				LightController.printPlayer(p.color1, p.color2);
+				//LightController.printPlayer(p.color1, p.color2);
 
 				System.out.println("[World][MSG] RequestForLifeMessage from " + rflm.nick);
 				for(AbstractMessage m: getInstance().getCurrentWorldStatus()) {
@@ -296,22 +296,41 @@ public class World {
 			}
 		}
 
+
 		//create new Blocks
 
 		if(!front.isEmpty() && timestamp % 30 == 0) {
-			//x,w,col
-			BlockInfo bi = front.pop();
-			int x = r.nextInt(worldWidth + 100 - 30 - def_Block_w) - 100;
-			x = x < def_Block_w ? def_Block_w : x;
-			int w = r.nextInt(120) + 30;
-			w = (x + w) > (worldWidth - def_Block_w) ? (w - (x + w + def_Block_w - worldWidth)) : w;
-			int col = Colors.getColorForLang(bi.lang);
-			Block b = new Block(col, def_Block_w, w, def_Block_Gravity, x, 0, 0, 0, bi.type);
+			int[] xw = createBlock(0, 0);
+			createBlock(xw[0], xw[1]);
+		}
+
+		timestamp++;
+	}
+
+	public int[] createBlock(int x0, int w0) {
+		//x,w,col
+		BlockInfo bi = front.pop();
+
+		int x1 = r.nextInt(worldWidth + 100 - 30 - def_Block_w) - 100;
+		x1 = x1 < def_Block_w ? def_Block_w : x1;
+		x1 = (x1 > x0) ? (
+				(x1 > x0 + w0) ? x1 : x0 + w0
+				) : x1;
+
+		int w1 = r.nextInt(120) + 30;
+		w1 = (x1 + w1) > (worldWidth - def_Block_w) ? (w1 - (x1 + w1 + def_Block_w - worldWidth)) : w1;
+		w1 = (x1 + w1 < x0) ? w1 : ((x1 > (x0 + w0)) ? w1 : 0);
+
+		int col = Colors.getColorForLang(bi.lang);
+
+		Block b = new Block(col, def_Block_w, w1, def_Block_Gravity, x1, 0, 0, 0, bi.type);
+
+		if(w1 > 5) {
 			registry.broadCastMessage(b.getMessage(timestamp));
 			blocks.add(b);
 		}
 
-		timestamp++;
+		return new int[]{x1, w1};
 	}
 
 	public void checkCollision() {
