@@ -32,7 +32,7 @@ public class Colors {
 				col = 0xAAAAAA;
 				break;
 			case "go":
-				col = 0xEEEEEE;
+				col = 0xEE00EE;
 				break;
 			case "generic":
 				col = 0xEE55EE;
@@ -73,7 +73,7 @@ public class Colors {
 
 			default:
 				System.out.println("no col for " + lang);
-				col = 0xEEAAAA;
+				col = 0xEEAA00;
 		}
 		return col;
 	}

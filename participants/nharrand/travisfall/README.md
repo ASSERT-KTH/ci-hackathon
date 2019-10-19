@@ -12,7 +12,9 @@ Try it at http://130.237.67.252:8060/
  * **Right and left arrows:** direction
  * **Up arrow and space**: jump
 
-![Screenshot](/participants/nharrand/travisfall/img/screenshot.png)
+![Screenshot](/participants/nharrand/travisfall/img/screenshot_0.png)
+
+![Screenshot](/participants/nharrand/travisfall/img/screenshot_1.png)
 
 ### Build
 
