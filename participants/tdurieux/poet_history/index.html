@@ -1,6 +1,7 @@
 <html>
     <head> 
-        <title>Continuous Integration Poet</title>
+        <title>Continuous Integration Poem</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
         <style>
             html, body {
                 margin: 0;
@@ -9,19 +10,67 @@
                 color: #ffffff;
             }
             h1 {
+                position: absolute;
                 text-align: center;
                 font-size: 40px;
                 margin-top: 5px;
+                margin-bottom: 5px;
+                font-family: Karma, serif;
+                left: 15%;
+                top: 50%;
             }
             .poet {
                 width: 300px;
-                margin: auto;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20pxg;
                 font-size: 20px;
             }
             .line {
-                min-height: 24px;
+                min-height: 28px;
+                line-height: 28px;
                 padding: 0;
                 margin: 0;
+                font-family: Karma, serif;
+            }
+            #time_travel {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                overflow-y: auto;
+                overflow-x: visible;
+            }
+            .time {
+                width: 60px;
+                position: relative;
+                content: ' ';
+                height: 2px;
+            }
+            .time::after {
+                content: ' ';
+                height: 2px;
+                width: 15px;
+                bottom: 0;
+                border-top: 2px solid #ffffff;
+                position: absolute;
+                left: 0;
+            }
+            .time:hover, .time.active {
+                /* margin-left: 6px;
+                margin-right: 6px; */
+            }
+            .time:hover::after, .time.active::after {
+                width: 60px;
+            }
+            .time:hover span {
+                display: block;
+            }
+            .time span {
+                position: fixed;
+                display: none;
+                left: 60px;
+                margin-top: -10px;
             }
         </style>
     </head>
@@ -53,7 +102,16 @@
             <pre class="line" id="target-23"></pre>
             <pre class="line" id="target-24"></pre>
         </div>
-        <script type="module" src="history.js"></script>
+        <div id="time_travel"></div>
+        <script src="history.js"></script>
+
+        <script>
+const dates = Object.keys(poems).map(t => parseInt(t)).sort()
+let index = 0;
+function activate(e) {
+    index = dates.indexOf(parseInt(e.getAttribute('data-value'))) - 1
+}
+        </script>
         <script type="module" src="script.mjs"></script>
     </body>
 </html>
