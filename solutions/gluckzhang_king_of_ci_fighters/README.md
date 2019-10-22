@@ -27,7 +27,7 @@ Every action in the fight is determined by 5 finished jobs in Travis CI:
 
 A short video to show such an interesting fight:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/94_OSJQFY9Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=VXH2rB6QsXQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## How Is This Implemented?
 
