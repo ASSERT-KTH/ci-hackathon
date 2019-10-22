@@ -35,6 +35,9 @@ import { type } from './typical.js';
         if (isActive) {
             return;
         }
+        if (index >= dates.length) {
+            index = 0;
+        }
         isActive = true;
         document.getElementById("id").innerText = "#" + (index+1);
         await write(dates[index], poems[dates[index]])
