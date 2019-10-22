@@ -3,27 +3,42 @@
         <title>Continuous Integration Poem</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
         <style>
-            html, body {
+            html {
                 margin: 0;
                 padding: 0;
                 background: #000;
                 color: #ffffff;
+                height: 100%;
+                width: 100%;
+            }
+            body {
+                display: flex; 
+                width: 100%; 
+                height: 100%;
+                flex-direction: row;
+                align-items: center;
+                margin: 0;
             }
             h1 {
-                position: absolute;
+                width: calc(50% - 70px);
+                margin-right: 70px;
                 text-align: center;
-                font-size: 40px;
-                margin-top: 5px;
-                margin-bottom: 5px;
+                font-size: 50px;
                 font-family: Karma, serif;
-                left: 15%;
-                top: 50%;
+            }
+            h1 span {
+                display: inline-block;
+                text-align: center;
+                min-width: 100px;
+                padding: 4px 7px;
+                color: #000000;
+                background: #ffffff;
+                line-height: 75px;
+                height: 65px;
+                white-space: pre;
             }
             .poet {
-                width: 300px;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 20pxg;
+                width: 60%;
                 font-size: 20px;
             }
             .line {
@@ -34,48 +49,45 @@
                 font-family: Karma, serif;
             }
             #time_travel {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
+                max-height: 100%;
+                width: 150px;
                 overflow-y: auto;
-                overflow-x: visible;
+                overflow-x: hidden;
             }
             .time {
-                width: 60px;
                 position: relative;
                 content: ' ';
-                height: 2px;
+                height: 1px;
+                overflow-x: visible;
             }
             .time::after {
-                content: ' ';
-                height: 2px;
-                width: 15px;
-                bottom: 0;
-                border-top: 2px solid #ffffff;
                 position: absolute;
+                top: 0;
                 left: 0;
-            }
-            .time:hover, .time.active {
-                /* margin-left: 6px;
-                margin-right: 6px; */
+                content: ' ';
+                height: 1px;
+                width: 15px;
+                border-top: 1px solid #ffffff;
             }
             .time:hover::after, .time.active::after {
                 width: 60px;
+                border-top: 2px solid #ffffff;
             }
             .time:hover span {
                 display: block;
             }
             .time span {
-                position: fixed;
+                position: absolute;
                 display: none;
+                top: 0;
                 left: 60px;
-                margin-top: -10px;
+                margin-top: -6px;
             }
         </style>
     </head>
-    <body>
-        <h1> Poet #<span id="id">1</span></h1>
+    <body onmousedown="isRunning = false;" onmouseup="isRunning = true;display()">
+        <div id="time_travel"></div>
+        <h1> Poem <span id="id">#1</span></h1>
         <div class="poet">
             <pre class="line" id="target-1"></pre>
             <pre class="line" id="target-2"></pre>
@@ -102,12 +114,15 @@
             <pre class="line" id="target-23"></pre>
             <pre class="line" id="target-24"></pre>
         </div>
-        <div id="time_travel"></div>
         <script src="history.js"></script>
 
         <script>
 const dates = Object.keys(poems).map(t => parseInt(t)).sort()
 let index = 0;
+let display = null;
+let isRunning = true;
+let isActive = false;
+
 function activate(e) {
     index = dates.indexOf(parseInt(e.getAttribute('data-value'))) - 1
 }

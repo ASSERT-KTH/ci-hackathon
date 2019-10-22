@@ -1,21 +1,5 @@
 import { type } from './typical.js';
 
-function changeTimezone(date, ianatz) {
-    return date;
-    // suppose the date is 12:00 UTC
-    var invdate = new Date(date.toLocaleString('en-GB', {
-      timeZone: ianatz
-    }));
-    console.log(invdate)
-  
-    // then invdate will be 07:00 in Toronto
-    // and the diff is 5 hours
-    var diff = date.getTime() - invdate.getTime();
-  
-    // so 12:00 in Toronto is 17:00 UTC
-    return new Date(date.getTime() - diff);
-}
-
 (async () => {
     const lines = []
 
@@ -45,9 +29,20 @@ function changeTimezone(date, ianatz) {
         content += '<div id="time-' + t + '" class="time" onclick="activate(this)" data-value="' + t + '"><span>' + datestring + '</span></div>'
     }
     time_travel.innerHTML = content;
-    await write(dates[0], poems[dates[0]])
-    for (index; index < dates.length; index ++) {
-        document.getElementById("id").innerText = index
+
+    
+    display = async function() {
+        if (isActive) {
+            return;
+        }
+        isActive = true;
+        document.getElementById("id").innerText = "#" + (index+1);
         await write(dates[index], poems[dates[index]])
+        isActive = false;
+        if (isRunning) {
+            await display(++index);
+        }
     }
+
+    await display()
 })()
