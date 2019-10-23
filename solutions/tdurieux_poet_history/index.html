@@ -1,111 +1,20 @@
 <html>
-    <head> 
+    <head>
         <title>Continuous Integration Poem</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
         <link rel="stylesheet" href="odometer-theme-minimal.css">
-        <style>
-            html {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                width: 100%;
-            }
-            body {
-                display: flex; 
-                width: 100%; 
-                height: 100%;
-                flex-direction: row;
-                align-items: center;
-                margin: 0;
-                background: #000;
-                color: #ffffff;
-                transition: all 2s ease;
-            }
-            h1 {
-                width: 50%;
-                margin-left: -150px;
-                text-align: center;
-                font-size: 50px;
-                font-family: Karma, serif;
-            }
-            h1 > span {
-                display: inline-block;
-                text-align: center;
-                min-width: 100px;
-                padding: 4px 7px;
-                color: #000000;
-                background: #ffffff;
-                line-height: 75px;
-                height: 65px;
-                white-space: pre;
-            }
-            .poet {
-                width: 60%;
-                font-size: 20px;
-            }
-            .line {
-                min-height: 28px;
-                line-height: 28px;
-                padding: 0;
-                margin: 0;
-                font-family: Karma, serif;
-            }
-            #time_travel {
-                max-height: 100%;
-                width: 150px;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            .time {
-                position: relative;
-                content: ' ';
-                height: 1px;
-                overflow-x: visible;
-            }
-            .time::after {
-                position: absolute;
-                top: 0;
-                left: 0;
-                content: ' ';
-                height: 1px;
-                width: 15px;
-                border-top: 1px solid #ffffff;
-                transition: all 0.3s ease;
-            }
-            .time:hover::after, .time.active::after {
-                width: 60px;
-                border-top-width: 2px;
-            }
-            .time:hover span {
-                display: block;
-            }
-            .time span {
-                position: absolute;
-                display: none;
-                top: 0;
-                left: 60px;
-                margin-top: -6px;   
-            }
-
-            .pause {
-                color: #000;
-                background: #ffffff;
-            }
-            .pause h1 > span {
-                background: #000;
-                color: #ffffff;
-                transition: all 2s ease;
-            }
-
-            .pause .time::after {
-                border-top-color: #000;
-                transition: all 2s ease;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
+
     <body onmousedown="pause()" onmouseup="resume();">
         <div id="time_travel"></div>
-        <h1> Poem <span>#<span class="odometer" id="id">1</span></span></h1>
+        <div class="center">
+            <h1> Poem <span>#<span class="odometer" id="id">1</span></span></h1>
+            <div class="author">
+                by <span><a href="http://nadiacw.com">Nadia Campo Woytuk</a> & <a href="https://eriknatanael.com/">Erik Natanael Gustafsson</a>
+                </span>
+            </div>
+        </div>
         <div class="poet">
             <pre class="line" id="target-1"></pre>
             <pre class="line" id="target-2"></pre>
@@ -132,49 +41,10 @@
             <pre class="line" id="target-23"></pre>
             <pre class="line" id="target-24"></pre>
         </div>
+
+        <script src="typical.js"></script>
         <script src="history.js"></script>
-
-        <script>
-const dates = Object.keys(poems).map(t => parseInt(t)).sort()
-let index = 0;
-let display = null;
-let isRunning = true;
-let isActive = false;
-const synth = window.speechSynthesis;
-let read = null;
-let onClick = null;
-document.body.onkeypress = function (e) {
-    // space
-    if (e.charCode == 32) {
-        if (isRunning) {
-            pause();
-        } else {
-            resume();
-        }
-    }
-}
-let pause = function (e) {
-    onClick = setTimeout(() => {
-        document.body.className = 'pause';
-        isRunning = false;
-        read();
-    }, 250)
-};
-let resume = function () {
-    clearTimeout(onClick)
-    if (synth.speaking) {
-        synth.cancel()
-    }
-    document.body.className = '';
-    isRunning = true;
-    display();
-};
-
-function activate(e) {
-    index = dates.indexOf(parseInt(e.getAttribute('data-value'))) - 1
-}
-        </script>
-        <script type="module" src="script.mjs"></script>
+        <script src="script.js"></script>
         <script src="odometer.min.js"></script>
     </body>
 </html>
