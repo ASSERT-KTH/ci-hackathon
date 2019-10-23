@@ -54,7 +54,7 @@ h1 > span {
 .author a:hover {
     text-decoration: underline;
 }
-.poet {
+.poem {
     width: 60%;
     font-size: 20px;
 }

@@ -32,6 +32,18 @@ let read = function () {
         synth.speak(utterThis);
     }
 };
+document.body.onmousedown = document.body.ontouchstart = function (e) {
+    if (e.target.className.indexOf('time') > -1) {
+        return;
+    }
+    pause();
+}
+document.body.onmouseup = document.body.ontouchend = function (e) {
+    if (e.target.className.indexOf('time') > -1) {
+        return;
+    }
+    resume();
+}
 document.body.onkeydown = function (e) {
     // space
     if (e.keyCode == 32) {
@@ -62,7 +74,7 @@ let pause = function (e) {
         document.body.className = 'pause';
         isRunning = false;
         read();
-    }, 250)
+    }, 150)
 };
 
 let resume = function () {
