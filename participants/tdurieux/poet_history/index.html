@@ -2,6 +2,7 @@
     <head> 
         <title>Continuous Integration Poem</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+        <link rel="stylesheet" href="odometer-theme-minimal.css">
         <style>
             html {
                 margin: 0;
@@ -27,7 +28,7 @@
                 font-size: 50px;
                 font-family: Karma, serif;
             }
-            h1 span {
+            h1 > span {
                 display: inline-block;
                 text-align: center;
                 min-width: 100px;
@@ -69,6 +70,7 @@
                 height: 1px;
                 width: 15px;
                 border-top: 1px solid #ffffff;
+                transition: all 0.3s ease;
             }
             .time:hover::after, .time.active::after {
                 width: 60px;
@@ -82,14 +84,14 @@
                 display: none;
                 top: 0;
                 left: 60px;
-                margin-top: -6px;
+                margin-top: -6px;   
             }
 
             .pause {
                 color: #000;
                 background: #ffffff;
             }
-            .pause h1 span {
+            .pause h1 > span {
                 background: #000;
                 color: #ffffff;
                 transition: all 2s ease;
@@ -103,7 +105,7 @@
     </head>
     <body onmousedown="pause()" onmouseup="resume();">
         <div id="time_travel"></div>
-        <h1> Poem <span id="id">#1</span></h1>
+        <h1> Poem <span>#<span class="odometer" id="id">1</span></span></h1>
         <div class="poet">
             <pre class="line" id="target-1"></pre>
             <pre class="line" id="target-2"></pre>
@@ -141,6 +143,16 @@ let isActive = false;
 const synth = window.speechSynthesis;
 let read = null;
 let onClick = null;
+document.body.onkeypress = function (e) {
+    // space
+    if (e.charCode == 32) {
+        if (isRunning) {
+            pause();
+        } else {
+            resume();
+        }
+    }
+}
 let pause = function (e) {
     onClick = setTimeout(() => {
         document.body.className = 'pause';
@@ -163,5 +175,6 @@ function activate(e) {
 }
         </script>
         <script type="module" src="script.mjs"></script>
+        <script src="odometer.min.js"></script>
     </body>
 </html>
