@@ -19,6 +19,17 @@ import { type } from './typical.js';
         document.getElementById('time-'+ t).className = 'time active'
         await Promise.all(promises)
     }
+
+    read = function () {
+        const voices = synth.getVoices().filter(v => v.default)
+        for (let line of lines) {
+            var utterThis = new SpeechSynthesisUtterance(line);
+            utterThis.voice = voices[voices.length - 1];
+            utterThis.pitch = 0.75;
+            utterThis.rate = Math.min(Math.random() + 0.75, 1.25);
+            synth.speak(utterThis);
+        }
+    }
     
     let content = '';
     for (let t of dates) {

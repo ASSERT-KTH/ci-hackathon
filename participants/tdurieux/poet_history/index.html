@@ -6,8 +6,6 @@
             html {
                 margin: 0;
                 padding: 0;
-                background: #000;
-                color: #ffffff;
                 height: 100%;
                 width: 100%;
             }
@@ -18,10 +16,13 @@
                 flex-direction: row;
                 align-items: center;
                 margin: 0;
+                background: #000;
+                color: #ffffff;
+                transition: all 0.75s ease;
             }
             h1 {
-                width: calc(50% - 70px);
-                margin-right: 70px;
+                width: 50%;
+                margin-left: -150px;
                 text-align: center;
                 font-size: 50px;
                 font-family: Karma, serif;
@@ -71,7 +72,7 @@
             }
             .time:hover::after, .time.active::after {
                 width: 60px;
-                border-top: 2px solid #ffffff;
+                border-top-width: 2px;
             }
             .time:hover span {
                 display: block;
@@ -83,9 +84,24 @@
                 left: 60px;
                 margin-top: -6px;
             }
+
+            .pause {
+                color: #000;
+                background: #ffffff;
+            }
+            .pause h1 span {
+                background: #000;
+                color: #ffffff;
+                transition: all 0.75s ease;
+            }
+
+            .pause .time::after {
+                border-top-color: #000;
+                transition: all 0.75s ease;
+            }
         </style>
     </head>
-    <body onmousedown="isRunning = false;" onmouseup="isRunning = true;display()">
+    <body onmousedown="pause()" onmouseup="resume();">
         <div id="time_travel"></div>
         <h1> Poem <span id="id">#1</span></h1>
         <div class="poet">
@@ -122,6 +138,25 @@ let index = 0;
 let display = null;
 let isRunning = true;
 let isActive = false;
+const synth = window.speechSynthesis;
+let read = null;
+let onClick = null;
+let pause = function (e) {
+    onClick = setTimeout(() => {
+        document.body.className = 'pause';
+        isRunning = false;
+        read();
+    }, 250)
+};
+let resume = function () {
+    clearTimeout(onClick)
+    if (synth.speaking) {
+        synth.cancel()
+    }
+    document.body.className = '';
+    isRunning = true;
+    display();
+};
 
 function activate(e) {
     index = dates.indexOf(parseInt(e.getAttribute('data-value'))) - 1
