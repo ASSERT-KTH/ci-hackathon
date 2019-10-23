@@ -21,12 +21,12 @@ import { type } from './typical.js';
     }
 
     read = function () {
-        const voices = synth.getVoices().filter(v => v.default)
+        const voices = synth.getVoices().filter(v => v.localService && v.lang.indexOf('en-') == 0)
         for (let line of lines) {
             var utterThis = new SpeechSynthesisUtterance(line);
-            utterThis.voice = voices[voices.length - 1];
-            utterThis.pitch = 0.75;
-            utterThis.rate = Math.min(Math.random() + 0.75, 1.25);
+            utterThis.voice = voices[0];
+            utterThis.pitch = 1;
+            utterThis.rate = Math.min(Math.random() + 0.85, 1.15);
             synth.speak(utterThis);
         }
     }
@@ -50,7 +50,7 @@ import { type } from './typical.js';
             index = 0;
         }
         isActive = true;
-        document.getElementById("id").innerText = "#" + (index+1);
+        document.getElementById("id").innerHTML = (index+1);
         await write(dates[index], poems[dates[index]])
         isActive = false;
         if (isRunning) {
