@@ -52,9 +52,12 @@ gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
   <section>
     <h1>Travis CI Data visualization</h1>
     <p>The purpose of this visualization tool is to estimate where the amount of commits happens in the world, calculated from the timezone the commit is updated from.</p>
-    <p>With every commit the time is documented. The timestamps from each commit...</p>
+    <p>With every commit the time is documented. The timestamps from each commit gives us a different timezone. With the data we calculate approximately where the user is in the world. The points outside the globe are commits from a different year (or from another dimention). The yellow ones are from 2018. The red ones are from 2017.</p>
   </section>
 
+  <section class="counter">
+    <p>Commits: <span id="commits"></span> </p>
+  </section>
   <script src="script.js"></script>
 </body>
 
