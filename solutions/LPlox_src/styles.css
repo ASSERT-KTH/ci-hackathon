@@ -14,7 +14,7 @@ body {
   background: black;
   overflow: hidden;
   height: 100%;
-  font-family: Arial;
+  /* font-family: Arial; */
   font-family: "Didact Gothic", sans-serif;
 }
 canvas {
@@ -42,6 +42,19 @@ h1 {
 }
 p {
   margin-bottom: 20px;
+}
+
+.counter{
+  position: absolute;
+  top: 10%;
+  left: 80%;
+  padding: 0 20px;
+  max-width: 350px;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 9999;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 @media (min-width: 1300px) {

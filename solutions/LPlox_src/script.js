@@ -1,8 +1,7 @@
 /*
-resources:
-https://codepen.io/b29/pen/vQwrNZ
-https://www.solarsystemscope.com/textures/
-https://www.gsmlondon.ac.uk/global-oil-map/#1995-importers-392
+Resources:
+Made with the help of: https://codepen.io/b29/pen/vQwrNZ
+Textures from: https://www.gsmlondon.ac.uk/global-oil-map/#1995-importers-392
 */
 //===================================================== Travis data
 let host = 'localhost';
@@ -282,12 +281,6 @@ camera.position.x = 0;
 camera.position.y = 1;
 camera.position.z = 275;
 
-//===================================================== add Grid
-// var plane = new THREE.GridHelper(5000, 100);
-//   plane.material.color = new THREE.Color( 'white');
-//   plane.rotation.x = Math.PI / 2;
-//   scene.add(plane);
-
 //===================================================== add front & back lighting
 
 var light = new THREE.AmbientLight(new THREE.Color("white"), 0.3); //soft white light
@@ -309,24 +302,6 @@ var renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.LinearToneMapping;
 document.body.appendChild(renderer.domElement);
-
-//===================================================== adding a new sphere
-// var geometry = new THREE.SphereGeometry(150, 60, 60);
-// var material = new THREE.MeshPhongMaterial();
-// var earthMesh = new THREE.Mesh(geometry, material);
-// material.map = THREE.ImageUtils.loadTexture("2k_earth_nightmap.jpg");
-// scene.add(earthMesh);
-
-var path = new THREE.Shape();
-path.ellipse(0, 0, 200, 200, 0, Math.PI * 2, false, 0);
-var points = path.getPoints(500);
-var geometry = new THREE.BufferGeometry().setFromPoints(points);
-var material = new THREE.LineBasicMaterial({
-  color: 0xffffff
-});
-var ellipse = new THREE.Line(geometry, material);
-scene.add(ellipse);
-ellipse.rotation.x = Math.PI/2;
 
 //===================================================== add controls
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -377,20 +352,7 @@ function pushData(obj1, obj2) {
   })
 }
 //===================================================== data
-const our_data = [
-  // {
-  //   origin: {
-  //     name: "Stockholm",
-  //     latitude: 59,
-  //     longitude: 18
-  //   },
-  //   destination: {
-  //     name: "Sydney",
-  //     latitude: -34,
-  //     longitude: 151
-  //   }
-  // }
-];
+const our_data = [];
 
 //===================================================== helper functions
 const clamp = (num, min, max) => (num <= min ? min : num >= max ? max : num);
@@ -485,20 +447,6 @@ d3.json(
     earthMesh.name = "earth";
     group.add(earthMesh);
 
-    //===================================================== add glow effect to globe
-    // var customMaterial = new THREE.ShaderMaterial({
-    //   uniforms: {},
-    //   vertexShader: document.getElementById("vertexShader").textContent,
-    //   fragmentShader: document.getElementById("fragmentShader").textContent,
-    //   side: THREE.BackSide,
-    //   blending: THREE.AdditiveBlending,
-    //   transparent: true
-    // });
-    //
-    // var ballGeometry = new THREE.SphereGeometry(180, 60, 60);
-    // var ball = new THREE.Mesh(ballGeometry, customMaterial);
-    // scene.add(ball);
-
     //===================================================== lng & lat
     function Destination(array) {
       array.map((d, i) => {
@@ -548,7 +496,7 @@ d3.json(
           colorOne = "yellow";
         }
         if(startRadius === 260){
-          colorOne = "skyblue";
+          colorOne = "red";
         }
         if(endRadius === 140){
           colorTwo = "white";
@@ -557,7 +505,7 @@ d3.json(
           colorTwo = "yellow";
         }
         if(endRadius === 260){
-          colorTwo = "skyblue";
+          colorTwo = "red";
         }
 
         var pointGeom = new THREE.SphereGeometry(1, 15, 15);
@@ -609,17 +557,6 @@ d3.json(
           midCoord2[0],
           endRadius + altitude
         );
-
-        //create bezier curve from the lng & lat positions
-        // var curve = new THREE.CubicBezierCurve3(start, mid1, mid2, end);
-        // var g = new THREE.TubeGeometry(curve, 100, 0.35, 10, false);
-        // var m = new THREE.MeshBasicMaterial({
-        //   color: new THREE.Color(
-        //     "hsl(" + Math.floor(Math.random() * 360) + ",50%,50%)"
-        //   )
-        // });
-        // curveObject = new THREE.Mesh(g, m);
-        // group.add(curveObject);
       });
     } //end Destination()
 
@@ -634,6 +571,7 @@ d3.json(
         Destination(our_data);
         notDrawn = false;
       }
+      document.getElementById('commits').innerHTML = commitArray.length;
     }
     animate();
   }
