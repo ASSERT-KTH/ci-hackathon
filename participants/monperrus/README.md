@@ -7,7 +7,11 @@ It is based on [travis-api/.travis.yml](https://github.com/travis-ci/travis-api/
 
 --Martin Monperrus, october 2019
 
-## Poem
+## Audio version
+
+See https://github.com/KTH/ci-hackathon/blob/master/participants/monperrus/continuous-integration-poem.ogg
+
+## Text version
 
 code is poetry  
 and the question is whether  
