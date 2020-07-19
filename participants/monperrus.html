@@ -134,7 +134,96 @@
         </div>
         
     </div>    
-    <h2 id="solutions">Solutions</h2>
+    <h1 id="continuous-integration-poetry">Continuous Integration Poetry</h1>
+
+<h2 id="intro">Intro</h2>
+
+<p>The is a poem made for the <a href="https://github.com/KTH/ci-hackathon/">continuous integration hackathon</a> organized at KTH Royal Institute of Technology.
+It is based on <a href="https://github.com/travis-ci/travis-api/blob/ed6ffd5c306282e0c4e189cd9490efabc02a0795/.travis.yml">travis-api/.travis.yml</a> and is entitled <code class="highlighter-rouge">dot travis dot yml</code>.</p>
+
+<p>–Martin Monperrus, october 2019</p>
+
+<h2 id="audio-version">Audio version</h2>
+
+<p>See https://github.com/KTH/ci-hackathon/blob/master/participants/monperrus/continuous-integration-poem.ogg</p>
+
+<h2 id="text-version">Text version</h2>
+
+<p>code is poetry<br />
+and the question is whether<br />
+one can also find inspiration<br />
+in continuous integration</p>
+
+<p>let me read<br />
+dot travis dot yml<br />
+whose commit ed6ffd5<br />
+starts with a vowel</p>
+
+<p>code is language<br />
+so is the spec</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">language</span><span class="pi">:</span> <span class="s">ruby</span>
+
+<span class="na">import</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">travis-ci/build-configs/db-setup.yml</span>
+</code></pre></div></div>
+
+<p>code is power<br />
+sharp and big<br />
+that’s the meaning of a number</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">rvm</span><span class="pi">:</span> <span class="s">2.5.1</span>
+
+<span class="na">script</span><span class="pi">:</span> <span class="s2">"</span><span class="s">bundle</span><span class="nv"> </span><span class="s">exec</span><span class="nv"> </span><span class="s">rake</span><span class="nv"> </span><span class="s">knapsack:rspec"</span>
+<span class="na">env</span><span class="pi">:</span>
+  <span class="na">global</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">RUBY_GC_MALLOC_LIMIT=90000000</span>
+    <span class="pi">-</span> <span class="s">RUBY_GC_HEAP_FREE_SLOTS=200000</span>
+    <span class="pi">-</span> <span class="s">CI_NODE_TOTAL=3</span>
+
+
+<span class="na">matrix</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">CI_NODE_INDEX=0</span>
+    <span class="pi">-</span> <span class="s">CI_NODE_INDEX=1</span>
+    <span class="pi">-</span> <span class="s">CI_NODE_INDEX=2</span>
+</code></pre></div></div>
+
+<p>going to infinity<br />
+repetition repetition<br />
+is software for humanity?</p>
+
+<p>yes</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">redis-server</span>
+</code></pre></div></div>
+
+<p>redis, read this,<br />
+poetry is</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">before_install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">gem</span><span class="nv"> </span><span class="s">update</span><span class="nv"> </span><span class="s">--system'</span>
+</code></pre></div></div>
+
+<p>poetry is rebooted<br />
+it flies out of the repo<br />
+and forever rooted<br />
+it ripples for an eternal echo</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">include</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">stage</span><span class="pi">:</span> <span class="s2">"</span><span class="s">:ship:</span><span class="nv"> </span><span class="s">it</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">Quay.io"</span>
+      <span class="na">install</span><span class="pi">:</span> <span class="s">echo skip</span>
+      <span class="na">before_script</span><span class="pi">:</span> <span class="s">echo skip</span>
+      <span class="na">script</span><span class="pi">:</span> <span class="s">make ship</span>
+</code></pre></div></div>
+
+<h2 id="see-also">See also</h2>
+
+<ul>
+  <li><a href="https://amandagiles.com/blog/talks/code-is-poetry-rap/">Code is poetry rap</a></li>
+  <li><a href="https://vimeo.com/48294959">Data Murmur</a></li>
+</ul>
 
 </div>
 
